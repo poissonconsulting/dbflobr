@@ -26,7 +26,7 @@ To install the latest development version from
     devtools::install_github("poissonconsulting/dbflobr")
 
 To install the latest development version from the Poisson
-[drat](https://github.com/poissonconsulting/drat) repository
+[drat](https://github.com/poissonconsulting/drat) repository.
 
     # install.packages("drat")
     drat::addRepo("poissonconsulting")
@@ -34,23 +34,24 @@ To install the latest development version from the Poisson
 
 ## Citation
 
-    Warning in citation(package = "dbflobr"): no date field in DESCRIPTION file
-    of package 'dbflobr'
-    Warning in citation(package = "dbflobr"): could not determine year for
-    'dbflobr' from package DESCRIPTION file
-    
-    To cite package 'dbflobr' in publications use:
-    
-      First Last (NA). dbflobr: What the Package Does (One Line, Title
-      Case). R package version 0.0.0.9000.
-    
-    A BibTeX entry for LaTeX users is
-    
-      @Manual{,
-        title = {dbflobr: What the Package Does (One Line, Title Case)},
-        author = {First Last},
-        note = {R package version 0.0.0.9000},
-      }
+``` 
+
+To cite package 'dbflobr' in publications use:
+
+  Sebastian Dalgarno (2018). dbflobr: Read and Write Files to
+  Databases as BLOBs. R package version 0.0.0.9001.
+  https://github.com/poissonconsulting/dbflobr
+
+A BibTeX entry for LaTeX users is
+
+  @Manual{,
+    title = {dbflobr: Read and Write Files to Databases as BLOBs},
+    author = {Sebastian Dalgarno},
+    year = {2018},
+    note = {R package version 0.0.0.9001},
+    url = {https://github.com/poissonconsulting/dbflobr},
+  }
+```
 
 ## Contribution
 

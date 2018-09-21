@@ -30,7 +30,7 @@ To install the latest development version from [GitHub](https://github.com/poiss
 devtools::install_github("poissonconsulting/dbflobr")
 ```
 
-To install the latest development version from the Poisson [drat](https://github.com/poissonconsulting/drat) repository
+To install the latest development version from the Poisson [drat](https://github.com/poissonconsulting/drat) repository.
 ```
 # install.packages("drat")
 drat::addRepo("poissonconsulting")
