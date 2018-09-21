@@ -1,0 +1,9 @@
+^CODE_OF_CONDUCT\.md$
+^appveyor\.yml$
+^codecov\.yml$
+^\.travis\.yml$
+^LICENSE\.md$
+^dbflobr\.Rproj$
+^\.Rproj\.user$
+^README\.Rmd$
+^README-.*\.png$
