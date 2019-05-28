@@ -7,7 +7,7 @@
 [![Travis build
 status](https://travis-ci.com/poissonconsulting/dbflobr.svg?branch=master)](https://travis-ci.com/poissonconsulting/dbflobr)
 [![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/dbflobr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/dbflobr)
+status](https://ci.appveyor.com/api/projects/status/4yop2q92batu2e25/branch/master?svg=true)](https://ci.appveyor.com/project/poissonconsulting/dbflobr/branch/master)
 [![Coverage
 status](https://codecov.io/gh/poissonconsulting/dbflobr/branch/master/graph/badge.svg)](https://codecov.io/github/poissonconsulting/dbflobr?branch=master)
 [![License:
