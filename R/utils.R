@@ -1,17 +1,3 @@
-#' Collapse flob
-#'
-#' Collapse flob into format readable by SQLite
-#'
-#' @param x A flob.
-#'
-#' @return a string.
-#' @export
-collapse_flob <- function(x) {
-  flobr::check_flob(x)
-  y <- glue_collapse(unlist(x), "")
-  glue("x'{y}'")
-}
-
 #' Add blob column
 #'
 #' Add named empty blob column to SQLite database
@@ -46,6 +32,12 @@ to_upper <- function(x) {
   is_quoted <- is_quoted(x)
   x[!is_quoted] <- toupper(x[!is_quoted])
   x
+}
+
+collapse_flob <- function(x) {
+  flobr::check_flob(x)
+  y <- glue_collapse(unlist(x), "")
+  glue("x'{y}'")
 }
 
 
