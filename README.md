@@ -1,15 +1,18 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<!-- badges: start -->
+
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis build
 status](https://travis-ci.org/poissonconsulting/dbflobr.svg?branch=master)](https://travis-ci.org/poissonconsulting/dbflobr)
-[![Coverage
-status](https://codecov.io/gh/poissonconsulting/dbflobr/branch/master/graph/badge.svg)](https://codecov.io/github/poissonconsulting/dbflobr?branch=master)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/dbflobr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/dbflobr)
+[![Coverage
+status](https://codecov.io/gh/poissonconsulting/dbflobr/branch/master/graph/badge.svg)](https://codecov.io/github/poissonconsulting/dbflobr?branch=master)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+<!-- badges: end -->
 
 # dbflobr
 
@@ -73,27 +76,6 @@ str(x)
 #>  - attr(*, "class")= chr [1:2] "flob" "blob"
 
 DBI::dbDisconnect(conn)
-```
-
-## Citation
-
-``` 
-
-To cite package 'dbflobr' in publications use:
-
-  Sebastian Dalgarno (2018). dbflobr: Read and Write Files to
-  Databases as BLOBs. R package version 0.0.0.9001.
-  https://github.com/poissonconsulting/dbflobr
-
-A BibTeX entry for LaTeX users is
-
-  @Manual{,
-    title = {dbflobr: Read and Write Files to Databases as BLOBs},
-    author = {Sebastian Dalgarno},
-    year = {2018},
-    note = {R package version 0.0.0.9001},
-    url = {https://github.com/poissonconsulting/dbflobr},
-  }
 ```
 
 ## Contribution
