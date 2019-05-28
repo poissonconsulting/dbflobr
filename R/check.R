@@ -55,7 +55,7 @@ check_flob_query <- function(x){
   if(is.null(unlist(x)))
     err("there is no flob to retrieve")
   class(x) <- c("flob", "blob")
-  y <- flobr::check_flob(x)
+  flobr::check_flob(x)
 }
 
 
