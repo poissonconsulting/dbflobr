@@ -17,6 +17,24 @@ MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org
 [flobs](https://poissonconsulting.github.io/flobr/reference/flob.html).
 A flob is a special type of BLOB that includes the file extension type.
 
+## Installation
+
+To install the latest development version from
+[GitHub](https://github.com/poissonconsulting/dbflobr)
+
+    # install.packages("devtools")
+    devtools::install_github("poissonconsulting/checkr")
+    devtools::install_github("poissonconsulting/err")
+    devtools::install_github("poissonconsulting/flobr")
+    devtools::install_github("poissonconsulting/dbflobr")
+
+To install the latest development version from the Poisson
+[drat](https://github.com/poissonconsulting/drat) repository.
+
+    # install.packages("drat")
+    drat::addRepo("poissonconsulting")
+    install.packages("dbflobr")
+
 ## Usage
 
 Create a connection and populate it with a table of fake data
@@ -56,24 +74,6 @@ str(x)
 
 DBI::dbDisconnect(conn)
 ```
-
-## Installation
-
-To install the latest development version from
-[GitHub](https://github.com/poissonconsulting/dbflobr)
-
-    # install.packages("devtools")
-    devtools::install_github("poissonconsulting/checkr")
-    devtools::install_github("poissonconsulting/err")
-    devtools::install_github("poissonconsulting/flobr")
-    devtools::install_github("poissonconsulting/dbflobr")
-
-To install the latest development version from the Poisson
-[drat](https://github.com/poissonconsulting/drat) repository.
-
-    # install.packages("drat")
-    drat::addRepo("poissonconsulting")
-    install.packages("dbflobr")
 
 ## Citation
 
