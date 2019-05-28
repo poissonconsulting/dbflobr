@@ -47,3 +47,7 @@ to_upper <- function(x) {
   x[!is_quoted] <- toupper(x[!is_quoted])
   x
 }
+
+err <- function (...) stop(..., call. = FALSE, domain = NA)
+
+p0 <- function (..., collapse = NULL) paste0(..., collapse = collapse)

@@ -1,2 +1,2 @@
-#' @import checkr err glue RSQLite magrittr
+#' @import checkr glue RSQLite
 NULL

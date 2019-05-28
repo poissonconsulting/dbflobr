@@ -8,7 +8,6 @@ Description: Reads and writes files to databases as flobs
     (a special type of BLOB that includes the file extension type).
 License: MIT + file LICENSE
 Imports:
-    err,
     checkr,
     flobr,
     glue,
