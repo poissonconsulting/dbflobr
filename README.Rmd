@@ -20,13 +20,51 @@ knitr::opts_chunk$set(
 
 # dbflobr
 
-`dbflobr` reads and writes files to databases as [flobs](https://poissonconsulting.github.io/flobr/reference/flob.html) (a special type of BLOB that includes the file extension type).
+`dbflobr` reads and writes files to databases as [flobs](https://poissonconsulting.github.io/flobr/reference/flob.html).
+A flob is a special type of BLOB that includes the file extension type.
+
+## Usage
+Create a connection and populate it with a table of fake data
+```{r}
+library(dbflobr)
+library(flobr)
+library(DBI)
+
+conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+
+df <- data.frame(char = c("a", "b", "b"),
+                   num = c(1.1, 2.2, 2.2),
+                   stringsAsFactors = FALSE)
+
+DBI::dbWriteTable(conn, "df", df)
+```
+
+Add a flob to a newly created BLOB column called 'file'
+```{r}
+# use demo flob from flobr package
+x <- flobr::flob_obj
+
+# a new BLOB column is created when exists = FALSE
+# specify which observation to add the flob to by providing a key. 
+
+key <- data.frame(num = 1.1)
+write_flob(x, column_name = "file", table_name = "df", exists = FALSE, key = key, conn = conn)
+
+# read flob
+x <- read_flob(column_name = "file", table_name = "df", key = key, conn = conn)
+str(x)
+
+DBI::dbDisconnect(conn)
+```
 
 ## Installation
 
 To install the latest development version from [GitHub](https://github.com/poissonconsulting/dbflobr)
 ```
 # install.packages("devtools")
+devtools::install_github("poissonconsulting/checkr")
+devtools::install_github("poissonconsulting/err")
+devtools::install_github("poissonconsulting/flobr")
 devtools::install_github("poissonconsulting/dbflobr")
 ```
 
