@@ -1,81 +1,37 @@
-#' Add blob column
-#'
-#' Add named empty blob column to SQLite database
-#'
-#' @param conn A connection object.
-#' @param table_name A string of the name of the table.
-#' @param column_name A string of the name of the column.
-#'
-#' @return Modified SQLite database.
-#'
-#' @export
-blob_column <- function(table_name, column_name, conn) {
-  check_string(table_name)
-  check_string(column_name)
-  check_sqlite_connection(conn)
-
-  check_table_name(conn, table_name)
-  columns <- DBI::dbListFields(conn, table_name)
-  if(column_name %in% columns)
-    err("'", column_name, "' already exists")
-
-  sql <- paste("ALTER TABLE ?table_name ADD ?column_name BLOB")
-  query <- DBI::sqlInterpolate(conn, sql, table_name = table_name,
-                          column_name = column_name)
-
-  result <- DBI::dbSendQuery(conn, query)
-  DBI::dbClearResult(result)
-
-  invisible(TRUE)
-}
-
-#' Collapse flob
-#'
-#' Collapse flob into format readable by SQLite
-#'
-#' @param x A flob.
-#'
-#' @return Modified SQLite database.
-#' @export
-flob_collapse <- function(x) {
-  flobr::check_flob(x)
-  paste0("x'", paste(unlist(x), collapse = ""), "'")
-}
-
 #' Write flob
 #'
 #' Write a flob to column of type BLOB in database.
 #'
 #' @param flob A flob.
-#' @param conn A connection object.
+#' @param column_name A string of the name of the BLOB column.
 #' @param table_name A string of the name of the table.
-#' @param column_name A string of the name of the column.
-#' @param rowid An integer of the table rowid.
+#' @param exists A flag specifying whether the column must already exist.
+#' IF FALSE, a new BLOB column is created.
+#' @param key A data.frame with column names and values which filter table to a single row.
+#' @param conn A connection object.
 #'
 #' @return Modified database.
 #' @export
-write_flob <- function(flob, conn, table_name, column_name, rowid) {
+write_flob <- function(flob, column_name, table_name, exists, key, conn) {
 
   flobr::check_flob(flob)
-  check_string(column_name)
-  check_string(table_name)
   check_sqlite_connection(conn)
-  check_int(rowid)
+  check_table_name(table_name, conn)
 
-  check_table_name(conn, table_name)
-  check_column_name(conn, table_name, column_name)
-  check_column_blob(conn, table_name, column_name)
-  check_rowid_column(conn, table_name)
-  check_rowid(conn, table_name, rowid)
+  if(isTRUE(exists))
+    check_column_blob(column_name, table_name, conn)
+  if(isFALSE(exists))
+    add_blob_column(column_name, table_name, conn)
 
-  sql <- paste("UPDATE ?table_name SET ?column_name = ", flob_collapse(flob), "WHERE rowid = ?rowid")
-  query <- DBI::sqlInterpolate(conn, sql,
-                               table_name = table_name,
-                               column_name = column_name,
-                               rowid = as.integer(rowid)[1])
-  result <- DBI::dbSendQuery(conn, query)
-  DBI::dbClearResult(result)
+  check_filter_key(table_name, key, conn)
 
+  sql <- glue_sql("UPDATE {`table_name`} SET {`column_name`}",
+                  column_name = column_name,
+                  table_name = table_name,
+                  .con = conn)
+  sql <- glue("{sql} = {collapse_flob(flob)} WHERE {safe_key(key, conn)}")
+
+  execute(sql, conn)
   invisible(TRUE)
 }
 
@@ -83,37 +39,27 @@ write_flob <- function(flob, conn, table_name, column_name, rowid) {
 #'
 #' Read a blob from SQLite database into flob.
 #'
-#' @param conn An connection object.
-#' @param table_name A string of the name of the table.
-#' @param column_name A string of the name of the column.
-#' @param rowid An integer of the table rowid.
+#' @inheritParams write_flob
 #'
 #' @return A flob.
 #' @export
-read_flob <- function(conn, table_name, column_name, rowid) {
+read_flob <- function(column_name, table_name, key, conn) {
 
-  check_string(column_name)
-  check_string(table_name)
   check_sqlite_connection(conn)
-  check_int(rowid)
+  check_table_name(table_name, conn)
+  check_column_blob(column_name, table_name, conn)
+  check_filter_key(table_name, key, conn)
 
-  check_table_name(conn, table_name)
-  check_column_name(conn, table_name, column_name)
-  check_column_blob(conn, table_name, column_name)
-  check_rowid_column(conn, table_name)
-  check_rowid(conn, table_name, rowid)
+  sql <- glue_sql("SELECT {`column_name`} FROM {`table_name`} WHERE",
+                  column_name = column_name,
+                  table_name = table_name,
+                  .con = conn)
+  sql <- glue("{sql} {safe_key(key, conn)}")
 
-  sql <- "SELECT ?column_name FROM ?table_name WHERE rowid = ?rowid"
-  query <- DBI::sqlInterpolate(conn, sql,
-                               column_name = column_name,
-                               table_name = table_name,
-                               rowid = as.integer(rowid)[1])
-  query <- gsub("'", "", query)
-
-  x <- DBI::dbGetQuery(conn, query)[[1]]
-  if(is.na(x))
-    err("There is no flob to retrieve")
-  class(x) <- c("flob", "blob")
-  flobr::check_flob(x)
+  x <- get_query(sql, conn) %>%
+    unlist(recursive = FALSE)
+  x <- check_flob_query(x)
   x
 }
+
+

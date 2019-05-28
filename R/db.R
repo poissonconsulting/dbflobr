@@ -1,0 +1,62 @@
+column_names <- function(table_name, conn) {
+  DBI::dbListFields(conn, table_name)
+}
+
+column_exists <- function(column_name, table_name, conn){
+  columns <- column_names(table_name, conn)
+  to_upper(column_name) %in% to_upper(columns)
+}
+
+table_names <- function(conn){
+  DBI::dbListTables(conn)
+}
+
+table_exists <- function(table_name, conn) {
+  tables <- table_names(conn)
+  to_upper(table_name) %in% to_upper(tables)
+}
+
+get_query <- function(sql, conn) {
+  DBI::dbGetQuery(conn, sql)
+}
+
+execute <- function(sql, conn) {
+  DBI::dbExecute(conn, sql)
+}
+
+sql_interpolate <- function(sql, conn, ...) {
+  DBI::sqlInterpolate(conn, sql, ...)
+}
+
+table_info <- function(table_name, conn) {
+  sql <- p0("PRAGMA table_info('", table_name, "');")
+  table_info <- get_query(sql, conn)
+  table_info
+}
+
+table_column_type <- function(column_name, table_name, conn) {
+  table_info <- table_info(table_name, conn)
+  table_info$type[to_upper(table_info$name) == to_upper(column_name)]
+}
+
+is_column_blob <- function(column_name, table_name, conn) {
+  toupper(table_column_type(column_name, table_name, conn)) == "BLOB"
+}
+
+# prevents injection attack from values
+safe_key <- function(key, conn){
+  lapply(colnames(key), function(y){
+    value <- key[,y]
+    sql <- glue_sql("{`y`} = ?value", .con = conn)
+    sql_interpolate(sql, conn,
+                    value = value)
+  }) %>%
+    glue_collapse(" AND ")
+}
+
+filter_key <- function(table_name, key, conn){
+  sql <- glue("SELECT * FROM ?table_name WHERE {safe_key(key, conn)}")
+  sql <- sql_interpolate(sql, conn,
+                           table_name = table_name)
+  get_query(sql, conn)
+}

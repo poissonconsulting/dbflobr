@@ -4,16 +4,16 @@
 \alias{read_flob}
 \title{Read flob}
 \usage{
-read_flob(conn, table_name, column_name, rowid)
+read_flob(column_name, table_name, key, conn)
 }
 \arguments{
-\item{conn}{An connection object.}
+\item{column_name}{A string of the name of the BLOB column.}
 
 \item{table_name}{A string of the name of the table.}
 
-\item{column_name}{A string of the name of the column.}
+\item{key}{A data.frame with column names and values which filter table to a single row.}
 
-\item{rowid}{An integer of the table rowid.}
+\item{conn}{A connection object.}
 }
 \value{
 A flob.
