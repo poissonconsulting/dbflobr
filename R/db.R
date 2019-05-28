@@ -29,7 +29,7 @@ sql_interpolate <- function(sql, conn, ...) {
 }
 
 table_info <- function(table_name, conn) {
-  sql <- p0("PRAGMA table_info('", table_name, "');")
+  sql <- glue("PRAGMA table_info('{table_name}');")
   table_info <- get_query(sql, conn)
   table_info
 }
