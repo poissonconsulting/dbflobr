@@ -56,8 +56,8 @@ read_flob <- function(column_name, table_name, key, conn) {
                   .con = conn)
   sql <- glue("{sql} {safe_key(key, conn)}")
 
-  x <- get_query(sql, conn) %>%
-    unlist(recursive = FALSE)
+  x <- get_query(sql, conn)
+  x <- unlist(x, recursive = FALSE)
   x <- check_flob_query(x)
   x
 }
