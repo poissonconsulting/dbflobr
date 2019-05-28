@@ -16,7 +16,8 @@ Imports:
     err,
     flobr,
     RSQLite,
-    glue
+    glue,
+    magrittr
 Suggests: 
     testthat,
     covr
