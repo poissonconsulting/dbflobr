@@ -5,23 +5,25 @@
 #' @param flob A flob.
 #' @param column_name A string of the name of the BLOB column.
 #' @param table_name A string of the name of the table.
-#' @param exists A flag specifying whether the column must already exist.
-#' IF FALSE, a new BLOB column is created.
 #' @param key A data.frame with column names and values which filter table to a single row.
 #' @param conn A connection object.
+#' @param exists A flag specifying whether the column must already exist.
+#' IF FALSE, a new BLOB column is created.
 #'
 #' @return Modified database.
 #' @export
-write_flob <- function(flob, column_name, table_name, exists, key, conn) {
+write_flob <- function(flob, column_name, table_name, key, conn, exists = TRUE) {
 
   flobr::check_flob(flob)
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
+  check_flag(exists)
 
-  if(isTRUE(exists))
+  if(exists) {
     check_column_blob(column_name, table_name, conn)
-  if(isFALSE(exists))
+  } else {
     add_blob_column(column_name, table_name, conn)
+  }
 
   check_filter_key(table_name, key, conn)
 
@@ -56,10 +58,8 @@ read_flob <- function(column_name, table_name, key, conn) {
                   .con = conn)
   sql <- glue("{sql} {safe_key(key, conn)}")
 
-  x <- get_query(sql, conn) %>%
-    unlist(recursive = FALSE)
+  x <- get_query(sql, conn)
+  x <- unlist(x, recursive = FALSE)
   x <- check_flob_query(x)
   x
 }
-
-

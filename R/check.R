@@ -57,9 +57,3 @@ check_flob_query <- function(x){
   class(x) <- c("flob", "blob")
   flobr::check_flob(x)
 }
-
-
-
-
-
-

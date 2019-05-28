@@ -45,13 +45,13 @@ is_column_blob <- function(column_name, table_name, conn) {
 
 # prevents injection attack from values
 safe_key <- function(key, conn){
-  lapply(colnames(key), function(y){
+  key <- lapply(colnames(key), function(y){
     value <- key[,y]
     sql <- glue_sql("{`y`} = ?value", .con = conn)
     sql_interpolate(sql, conn,
                     value = value)
-  }) %>%
-    glue_collapse(" AND ")
+  })
+  glue_collapse(key, " AND ")
 }
 
 filter_key <- function(table_name, key, conn){

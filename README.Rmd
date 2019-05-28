@@ -12,11 +12,13 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+<!-- badges: start -->
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![Travis build status](https://travis-ci.org/poissonconsulting/dbflobr.svg?branch=master)](https://travis-ci.org/poissonconsulting/dbflobr)
+[![Travis build status](https://travis-ci.com/poissonconsulting/dbflobr.svg?branch=master)](https://travis-ci.com/poissonconsulting/dbflobr)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/4yop2q92batu2e25/branch/master?svg=true)](https://ci.appveyor.com/project/poissonconsulting/dbflobr/branch/master)
 [![Coverage status](https://codecov.io/gh/poissonconsulting/dbflobr/branch/master/graph/badge.svg)](https://codecov.io/github/poissonconsulting/dbflobr?branch=master)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/dbflobr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/dbflobr)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+<!-- badges: end -->
 
 # dbflobr
 
@@ -73,12 +75,6 @@ x <- read_flob(column_name = "file", table_name = "df", key = key, conn = conn)
 str(x)
 
 DBI::dbDisconnect(conn)
-```
-
-## Citation
-
-```{r, comment="", echo=FALSE}
-citation(package = "dbflobr")
 ```
 
 ## Contribution

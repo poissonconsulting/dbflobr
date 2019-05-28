@@ -1,30 +1,23 @@
 Package: dbflobr
 Title: Read and Write Files to Databases as BLOBs
-Version: 0.0.0.9001
-Date: 2018-09-21
+Version: 0.0.0.9003
 Authors@R: c(
     person("Sebastian", "Dalgarno", role = c("aut", "cre"), email = "seb@poissonconsulting.ca"),
     person("Joe", "Thorley", role = "ctb", email = "joe@poissonconsulting.ca", comment = c(ORCID = "0000-0002-7683-4592")))
 Description: Reads and writes files to databases as flobs 
     (a special type of BLOB that includes the file extension type).
 License: MIT + file LICENSE
-URL: https://github.com/poissonconsulting/dbflobr
-BugReports: https://github.com/poissonconsulting/dbflobr/issues
 Imports:
     checkr,
-    DBI,
-    err,
     flobr,
-    RSQLite,
     glue,
-    magrittr
+    DBI,
+    RSQLite
 Suggests: 
     testthat,
     covr
-Remotes: 
-  poissonconsulting/checkr,
-  poissonconsulting/err,
-  poissonconsulting/flobr
+URL: https://github.com/poissonconsulting/dbflobr
+BugReports: https://github.com/poissonconsulting/dbflobr/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

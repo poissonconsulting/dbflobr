@@ -40,7 +40,6 @@ collapse_flob <- function(x) {
   glue("x'{y}'")
 }
 
+err <- function (...) stop(..., call. = FALSE, domain = NA)
 
-
-
-
+p0 <- function (..., collapse = NULL) paste0(..., collapse = collapse)

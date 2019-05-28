@@ -4,7 +4,7 @@
 \alias{write_flob}
 \title{Write flob}
 \usage{
-write_flob(flob, column_name, table_name, exists, key, conn)
+write_flob(flob, column_name, table_name, key, conn, exists = TRUE)
 }
 \arguments{
 \item{flob}{A flob.}
@@ -13,12 +13,12 @@ write_flob(flob, column_name, table_name, exists, key, conn)
 
 \item{table_name}{A string of the name of the table.}
 
-\item{exists}{A flag specifying whether the column must already exist.
-IF FALSE, a new BLOB column is created.}
-
 \item{key}{A data.frame with column names and values which filter table to a single row.}
 
 \item{conn}{A connection object.}
+
+\item{exists}{A flag specifying whether the column must already exist.
+IF FALSE, a new BLOB column is created.}
 }
 \value{
 Modified database.
