@@ -61,5 +61,3 @@ read_flob <- function(column_name, table_name, key, conn) {
   x <- check_flob_query(x)
   x
 }
-
-

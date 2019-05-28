@@ -47,8 +47,3 @@ to_upper <- function(x) {
   x[!is_quoted] <- toupper(x[!is_quoted])
   x
 }
-
-
-
-
-
