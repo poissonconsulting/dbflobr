@@ -24,5 +24,5 @@ IF FALSE, a new BLOB column is created.}
 Modified database.
 }
 \description{
-Write a flob to column of type BLOB in database.
+Write a flob to a column (of type BLOB) in a database table.
 }

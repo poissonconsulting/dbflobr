@@ -1,6 +1,6 @@
 #' Write flob
 #'
-#' Write a flob to column of type BLOB in database.
+#' Write a flob to a column (of type BLOB) in a database table.
 #'
 #' @param flob A flob.
 #' @param column_name A string of the name of the BLOB column.
