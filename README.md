@@ -5,7 +5,7 @@
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis build
-status](https://travis-ci.org/poissonconsulting/dbflobr.svg?branch=master)](https://travis-ci.org/poissonconsulting/dbflobr)
+status](https://travis-ci.com/poissonconsulting/dbflobr.svg?branch=master)](https://travis-ci.com/poissonconsulting/dbflobr)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/poissonconsulting/dbflobr?branch=master&svg=true)](https://ci.appveyor.com/project/poissonconsulting/dbflobr)
 [![Coverage
