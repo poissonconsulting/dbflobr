@@ -16,7 +16,7 @@ MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org
 
 # dbflobr
 
-`dbflobr` reads and writes files to databases as
+`dbflobr` reads and writes files to SQLite databases as
 [flobs](https://poissonconsulting.github.io/flobr/reference/flob.html).
 A flob is a special type of BLOB that includes the file extension type.
 
@@ -66,7 +66,7 @@ x <- flobr::flob_obj
 # specify which observation to add the flob to by providing a key. 
 
 key <- data.frame(num = 1.1)
-write_flob(x, column_name = "file", table_name = "df", exists = FALSE, key = key, conn = conn)
+write_flob(x, column_name = "file", table_name = "df", key = key, conn = conn, exists = FALSE)
 
 # read flob
 x <- read_flob(column_name = "file", table_name = "df", key = key, conn = conn)
