@@ -25,7 +25,7 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = TRUE) 
     add_blob_column(column_name, table_name, conn)
   }
 
-  check_filter_key(table_name, key, conn)
+  check_key(table_name, key, conn)
 
   sql <- glue_sql("UPDATE {`table_name`} SET {`column_name`}",
                   column_name = column_name,
@@ -50,7 +50,34 @@ read_flob <- function(column_name, table_name, key, conn) {
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_blob(column_name, table_name, conn)
-  check_filter_key(table_name, key, conn)
+  check_key(table_name, key, conn)
+
+  sql <- glue_sql("SELECT {`column_name`} FROM {`table_name`} WHERE",
+                  column_name = column_name,
+                  table_name = table_name,
+                  .con = conn)
+  sql <- glue("{sql} {safe_key(key, conn)}")
+
+  x <- get_query(sql, conn)
+  x <- unlist(x, recursive = FALSE)
+  x <- check_flob_query(x)
+  x
+}
+
+#' Delete blob
+#'
+#' Delete a blob from SQLite database.
+#'
+#' @inheritParams write_flob
+#'
+#' @return A flob.
+#' @export
+delete_flob <- function(column_name, table_name, key, conn) {
+
+  check_sqlite_connection(conn)
+  check_table_name(table_name, conn)
+  check_column_blob(column_name, table_name, conn)
+  check_key(table_name, key, conn)
 
   sql <- glue_sql("SELECT {`column_name`} FROM {`table_name`} WHERE",
                   column_name = column_name,

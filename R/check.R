@@ -42,7 +42,7 @@ check_column_blob <- function(column_name, table_name, conn){
   column_name
 }
 
-check_filter_key <- function(table_name, key, conn){
+check_key <- function(table_name, key, conn){
   check_data(key, nrow = 1L)
   x <- filter_key(table_name, key, conn)
   if(nrow(x) != 1L){

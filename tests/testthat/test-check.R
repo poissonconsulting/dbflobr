@@ -64,7 +64,7 @@ test_that("check_column_blob", {
   expect_identical(check_column_blob("blob", table_name = "local", conn), "blob")
 })
 
-test_that("check_filter_key", {
+test_that("check_key", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
 
@@ -77,11 +77,11 @@ test_that("check_filter_key", {
   key2 <- "a"
   key3 <- data.frame(num = 1.1, key = 2)
 
-  expect_error(check_filter_key(table_name = "df", key = key2, conn),
+  expect_error(check_key(table_name = "df", key = key2, conn),
                "key must inherit from class data.frame")
-  expect_error(check_filter_key(table_name = "df", key = key3, conn),
+  expect_error(check_key(table_name = "df", key = key3, conn),
                "filtering table by key must result in a single observation")
-  expect_identical(check_filter_key(table_name = "df", key = key, conn), key)
+  expect_identical(check_key(table_name = "df", key = key, conn), key)
 })
 
 test_that("check_flob_query", {
