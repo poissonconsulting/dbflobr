@@ -20,6 +20,7 @@ test_that("utils functions work", {
 
   result <- DBI::dbSendQuery(conn = conn, statement = paste("SELECT flob FROM df LIMIT 1"))
   expect_identical(DBI::dbColumnInfo(result)$type, "list")
+  DBI::dbClearResult(result)
 
   ## flob
   flob <- flobr::flob_obj
