@@ -51,9 +51,9 @@ check_key <- function(table_name, key, conn){
   key
 }
 
-check_flob_query <- function(x){
+check_flob_query <- function(x, y = "retrieve"){
   if(is.null(unlist(x)))
-    err("there is no flob to retrieve")
+    err("there is no flob to ", y)
   class(x) <- c("flob", "blob")
   flobr::check_flob(x)
 }

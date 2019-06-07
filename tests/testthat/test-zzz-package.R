@@ -44,7 +44,7 @@ test_that("write flob works", {
   expect_identical(df[,c("char", "num", "key")], df2[,c("char", "num", "key")])
   expect_equal(df2$flob[1], flob, check.names = FALSE, check.attributes = FALSE)
 
-  ### unslob
+  ### read flob
   expect_error(read_flob("flob", table_name = "test", key = key, conn = conn),
                "table 'test' does not exist")
   expect_error(read_flob("blob", table_name = "df", key = key, conn = conn),
@@ -57,4 +57,19 @@ test_that("write flob works", {
   flob2 <- read_flob("flob", table_name = "df", key = key, conn = conn)
   expect_identical(flobr::flob_ext(flob2), flobr::flob_ext(flob))
   expect_identical(flob2[[1]], flob[[1]])
+
+  ### delete flob
+  # expect_error(delete_flob("flob", table_name = "test", key = key, conn = conn),
+  #              "table 'test' does not exist")
+  # expect_error(delete_flob("blob", table_name = "df", key = key, conn = conn),
+  #              "column 'blob' does not exist")
+  # expect_error(delete_flob("flob", table_name = "df", key = key2, conn = conn),
+  #              "filtering table by key must result in a single observation")
+  #
+  # expect_true(delete_flob("flob", table_name =  "df",
+  #                         key = key, conn = conn))
+  # expect_error(read_flob("flob", table_name = "df", key = key, conn = conn),
+  #              "there is no flob to retrieve")
+  # expect_error(delete_flob("flob", table_name = "df", key = key, conn = conn),
+  #              "there is no flob to delete")
 })

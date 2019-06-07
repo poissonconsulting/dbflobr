@@ -60,3 +60,14 @@ filter_key <- function(table_name, key, conn){
                            table_name = table_name)
   get_query(sql, conn)
 }
+
+query_flob <- function(column_name, table_name, key, conn){
+  sql <- glue_sql("SELECT {`column_name`} FROM {`table_name`} WHERE",
+                  column_name = column_name,
+                  table_name = table_name,
+                  .con = conn)
+  sql <- glue("{sql} {safe_key(key, conn)}")
+
+  x <- get_query(sql, conn)
+  unlist(x, recursive = FALSE)
+}

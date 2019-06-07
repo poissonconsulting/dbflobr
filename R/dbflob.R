@@ -52,14 +52,7 @@ read_flob <- function(column_name, table_name, key, conn) {
   check_column_blob(column_name, table_name, conn)
   check_key(table_name, key, conn)
 
-  sql <- glue_sql("SELECT {`column_name`} FROM {`table_name`} WHERE",
-                  column_name = column_name,
-                  table_name = table_name,
-                  .con = conn)
-  sql <- glue("{sql} {safe_key(key, conn)}")
-
-  x <- get_query(sql, conn)
-  x <- unlist(x, recursive = FALSE)
+  x <- query_flob(column_name, table_name, key, conn)
   x <- check_flob_query(x)
   x
 }
@@ -79,14 +72,16 @@ delete_flob <- function(column_name, table_name, key, conn) {
   check_column_blob(column_name, table_name, conn)
   check_key(table_name, key, conn)
 
-  sql <- glue_sql("SELECT {`column_name`} FROM {`table_name`} WHERE",
+  # first check that there is a flob there
+  x <- query_flob(column_name, table_name, key, conn)
+  x <- check_flob_query(x, "delete")
+
+  sql <- glue_sql("UPDATE {`table_name`} SET {`column_name`}",
                   column_name = column_name,
                   table_name = table_name,
                   .con = conn)
-  sql <- glue("{sql} {safe_key(key, conn)}")
+  sql <- glue("{sql} = NULL WHERE {safe_key(key, conn)}")
 
-  x <- get_query(sql, conn)
-  x <- unlist(x, recursive = FALSE)
-  x <- check_flob_query(x)
-  x
+  execute(sql, conn)
+  invisible(TRUE)
 }

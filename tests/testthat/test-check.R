@@ -4,6 +4,7 @@ test_that("check_sqlite_connection", {
   expect_error(check_sqlite_connection(1),
                "1 must inherit from class SQLiteConnection")
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+
   expect_identical(check_sqlite_connection(conn), conn)
   expect_identical(check_sqlite_connection(conn, connected = TRUE), conn)
   expect_error(check_sqlite_connection(conn, connected = FALSE),
@@ -87,6 +88,8 @@ test_that("check_key", {
 test_that("check_flob_query", {
  x <- list(NULL)
  expect_error(check_flob_query(x), "there is no flob to retrieve")
+ expect_error(check_flob_query(x, "delete"), "there is no flob to delete")
+
  x <- flobr::flob_obj
  expect_identical(check_flob_query(x), x)
 })

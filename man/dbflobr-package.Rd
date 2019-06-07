@@ -4,9 +4,9 @@
 \name{dbflobr-package}
 \alias{dbflobr}
 \alias{dbflobr-package}
-\title{dbflobr: Read and Write Files to Databases as BLOBs}
+\title{dbflobr: Read and Write Files to  SQLite Databases as BLOBs}
 \description{
-Reads and writes files to databases as flobs 
+Reads and writes files to SQLite databases as flobs 
     (a special type of BLOB that includes the file extension type).
 }
 \seealso{
