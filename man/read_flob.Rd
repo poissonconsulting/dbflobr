@@ -9,11 +9,13 @@ read_flob(column_name, table_name, key, conn)
 \arguments{
 \item{column_name}{A string of the name of the BLOB column.}
 
-\item{table_name}{A string of the name of the table.}
+\item{table_name}{A string of the name of the existing table.}
 
-\item{key}{A data.frame with column names and values which filter table to a single row.}
+\item{key}{A data.frame whose columns and values are used to filter the
+table to a single row (this in combination with the \code{column_name}
+argument are used to target a single cell within the table to modify).}
 
-\item{conn}{A connection object.}
+\item{conn}{A SQLite connection object.}
 }
 \value{
 A flob.

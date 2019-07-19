@@ -11,11 +11,13 @@ write_flob(flob, column_name, table_name, key, conn, exists = TRUE)
 
 \item{column_name}{A string of the name of the BLOB column.}
 
-\item{table_name}{A string of the name of the table.}
+\item{table_name}{A string of the name of the existing table.}
 
-\item{key}{A data.frame with column names and values which filter table to a single row.}
+\item{key}{A data.frame whose columns and values are used to filter the
+table to a single row (this in combination with the \code{column_name}
+argument are used to target a single cell within the table to modify).}
 
-\item{conn}{A connection object.}
+\item{conn}{A SQLite connection object.}
 
 \item{exists}{A flag specifying whether the column must already exist.
 IF FALSE, a new BLOB column is created.}
@@ -24,5 +26,23 @@ IF FALSE, a new BLOB column is created.}
 Modified database.
 }
 \description{
-Write a flob to a column (of type BLOB) in a database table.
+Write a flob to SQLite database table (column must be type BLOB).
+}
+\details{
+A flob is a file that was read into binary in integer-mode as little endian,
+saved as the single element of a named list
+(where the name is the extension of the original file)
+and then serialized before being coerced into a blob.
+
+Flobs are created with the \code{flobr} package.
+}
+\examples{
+library(flobr)
+library(DBI)
+flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+key <- data.frame(IntColumn = 2L)
+write_flob(flob, "BlobColumn", "Table1", key, conn)
+
 }

@@ -24,9 +24,9 @@
 #' library(flobr)
 #' library(DBI)
 #' flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
-#' path <- "db.sqlite"
-#' conn <- DBI::dbConnect(drv = RSQLite::SQLite(), path)
-#' key <- data.frame(CharColumn = "a", IntColumn = 2L)
+#' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+#' key <- data.frame(IntColumn = 2L)
 #' write_flob(flob, "BlobColumn", "Table1", key, conn)
 #'
 #' @export
@@ -62,12 +62,6 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = TRUE) 
 #' @inheritParams write_flob
 #'
 #' @return A flob.
-#' @examples
-#' library(DBI)
-#' path <- "db.sqlite"
-#' conn <- DBI::dbConnect(drv = RSQLite::SQLite(), path)
-#' key <- data.frame(CharColumn = "a", IntColumn = 2L)
-#' read_flob("BlobColumn", "Table1", key, conn)
 #' @export
 read_flob <- function(column_name, table_name, key, conn) {
 
@@ -88,12 +82,6 @@ read_flob <- function(column_name, table_name, key, conn) {
 #' @inheritParams write_flob
 #'
 #' @return A flob.
-#' @examples
-#' library(DBI)
-#' path <- "db.sqlite"
-#' conn <- DBI::dbConnect(drv = RSQLite::SQLite(), path)
-#' key <- data.frame(CharColumn = "a", IntColumn = 2L)
-#' delete_flob("BlobColumn", "Table1", key, conn)
 #' @export
 delete_flob <- function(column_name, table_name, key, conn) {
 

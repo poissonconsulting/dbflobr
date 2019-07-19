@@ -7,9 +7,9 @@
 add_blob_column(column_name, table_name, conn)
 }
 \arguments{
-\item{column_name}{A string of the name of the column.}
+\item{column_name}{A string of the name of the new column.}
 
-\item{table_name}{A string of the name of the table.}
+\item{table_name}{A string of the name of the existing table.}
 
 \item{conn}{A connection object.}
 }
