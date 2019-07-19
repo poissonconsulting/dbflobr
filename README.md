@@ -60,19 +60,21 @@ Add a flob to a newly created BLOB column called ‘file’
 
 ``` r
 # use demo flob from flobr package
-x <- flobr::flob_obj
+flob <- flobr::flob_obj
 
 # a new BLOB column is created when exists = FALSE
 # specify which observation to add the flob to by providing a key. 
 
 key <- data.frame(num = 1.1)
-write_flob(x, column_name = "file", table_name = "df", key = key, conn = conn, exists = FALSE)
+# When the table is filtered so that column 'num' == 1.1, the result is a single row. In combination with the `column_name` argument, this targets a single cell to modify.
+
+write_flob(flob, column_name = "file", table_name = "df", key = key, conn = conn, exists = FALSE)
 
 # read flob
-x <- read_flob(column_name = "file", table_name = "df", key = key, conn = conn)
-str(x)
+flob <- read_flob(column_name = "file", table_name = "df", key = key, conn = conn)
+str(flob)
 #> List of 1
-#>  $ file: raw [1:133836] 58 0a 00 00 ...
+#>  $ file: raw [1:133851] 58 0a 00 00 ...
 #>  - attr(*, "class")= chr [1:2] "flob" "blob"
 
 DBI::dbDisconnect(conn)
