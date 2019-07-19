@@ -2,8 +2,8 @@
 #'
 #' Add named empty blob column to SQLite database
 #'
-#' @param column_name A string of the name of the column.
-#' @param table_name A string of the name of the table.
+#' @param column_name A string of the name of the new column.
+#' @param table_name A string of the name of the existing table.
 #' @param conn A connection object.
 #'
 #' @return Modified SQLite database.
