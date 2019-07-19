@@ -27,7 +27,7 @@
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 #' key <- data.frame(IntColumn = 2L)
-#' write_flob(flob, "BlobColumn", "Table1", key, conn)
+#' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 #'
 #' @export
 write_flob <- function(flob, column_name, table_name, key, conn, exists = TRUE) {
