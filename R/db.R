@@ -47,6 +47,8 @@ is_column_blob <- function(column_name, table_name, conn) {
 safe_key <- function(key, conn){
   key <- lapply(colnames(key), function(y){
     value <- key[,y]
+    if(is_posix(value))
+      value <- as.numeric(value)
     sql <- glue_sql("{`y`} = ?value", .con = conn)
     sql_interpolate(sql, conn,
                     value = value)

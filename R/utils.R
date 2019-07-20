@@ -42,3 +42,8 @@ collapse_flob <- function(x) {
 
 err <- function (...) stop(..., call. = FALSE, domain = NA)
 
+is_posix <- function(x){
+  inherits(x, "POSIXct") | inherits(x, "Date") |
+    inherits(x, "POSIXlt") | inherits(x, "POSIXt")
+}
+
