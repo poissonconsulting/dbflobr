@@ -53,6 +53,7 @@ test_that("filter key", {
   df <- data.frame("char" = c("a", "b", "b"),
                    num = c(1.1, 2.2, 2.2),
                    key = c(1, 2, 3),
+                   null = NA_character_,
                    stringsAsFactors = FALSE)
 
   expect_true(DBI::dbWriteTable(conn, "df", df))

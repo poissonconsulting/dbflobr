@@ -4,14 +4,13 @@ test_that("write flob works", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
 
-  tmp <- Sys.time()
   df <- data.frame(char = c("a", "b", "b"),
                    num = c(1.1, 2.2, 2.2),
-                   posix = tmp,
+                   null = NA_character_,
                    key = c(1, 2, 3),
                    stringsAsFactors = FALSE)
 
-  readwritesqlite::rws_write(df, exists = FALSE, conn = conn)
+  expect_true(DBI::dbWriteTable(conn, "df", df))
 
   key <- df[1,]
   key2 <- data.frame(char = "a", num = 2.2,
@@ -44,7 +43,7 @@ test_that("write flob works", {
   expect_true(write_flob(flob, "flob", table_name =  "df",
                           exists = TRUE, key = key, conn = conn))
 
-  df2 <- as.data.frame(readwritesqlite::rws_read("df", conn = conn)[[1]])
+  df2 <- DBI::dbReadTable(conn, "df")
   expect_equal(df2$flob[1], flob, check.names = FALSE, check.attributes = FALSE)
 
   ### read flob
