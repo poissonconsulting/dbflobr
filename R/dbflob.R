@@ -1,13 +1,6 @@
 #' Write flob
 #'
-#' Write a flob to SQLite database table (column must be type BLOB).
-#'
-#'  A flob is a file that was read into binary in integer-mode as little endian,
-#'  saved as the single element of a named list
-#'  (where the name is the extension of the original file)
-#'  and then serialized before being coerced into a blob.
-#'
-#'  Flobs are created with the `flobr` package.
+#' Write a \code{\link[flobr]{flob}} to a SQLite database.
 #'
 #' @param flob A flob.
 #' @param column_name A string of the name of the BLOB column.
@@ -18,20 +11,18 @@
 #' @param conn A SQLite connection object.
 #' @param exists A flag specifying whether the column must already exist.
 #' IF FALSE, a new BLOB column is created.
-#'
-#' @return Modified database.
+#' @return An invisible copy of flob.
+#' @export
 #' @examples
-#' library(flobr)
-#' library(DBI)
 #' flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+#' DBI::dbReadTable(conn, "Table1")
 #' key <- data.frame(IntColumn = 2L)
 #' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
-#'
-#' @export
+#' DBI::dbReadTable(conn, "Table1")
+#' DBI::dbDisconnect(conn)
 write_flob <- function(flob, column_name, table_name, key, conn, exists = TRUE) {
-
   flobr::check_flob(flob)
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
@@ -52,45 +43,59 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = TRUE) 
   sql <- glue("{sql} = {collapse_flob(flob)} WHERE {safe_key(key, conn)}")
 
   execute(sql, conn)
-  invisible(TRUE)
+  invisible(flob)
 }
 
 #' Read flob
 #'
-#' Read a blob from SQLite database into flob.
+#' Read a \code{\link[flobr]{flob}} from a SQLite database.
 #'
 #' @inheritParams write_flob
 #'
 #' @return A flob.
 #' @export
+#' @examples
+#' flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+#' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+#' key <- data.frame(IntColumn = 2L)
+#' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
+#' read_flob("BlobColumn", "Table1", key, conn)
+#' DBI::dbDisconnect(conn)
 read_flob <- function(column_name, table_name, key, conn) {
-
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_blob(column_name, table_name, conn)
   check_key(table_name, key, conn)
 
   x <- query_flob(column_name, table_name, key, conn)
-  x <- check_flob_query(x)
-  x
+  check_flob_query(x)
 }
 
-#' Delete blob
+#' Delete flob
 #'
-#' Delete a blob from SQLite database.
+#' Delete a flob from a SQLite database.
 #'
 #' @inheritParams write_flob
 #'
-#' @return A flob.
+#' @return An invisible copy of the deleted flob.
 #' @export
+#' @examples
+#' flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+#' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+#' key <- data.frame(IntColumn = 2L)
+#' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
+#' DBI::dbReadTable(conn, "Table1")
+#' delete_flob("BlobColumn", "Table1", key, conn)
+#' DBI::dbReadTable(conn, "Table1")
+#' DBI::dbDisconnect(conn)
 delete_flob <- function(column_name, table_name, key, conn) {
-
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_blob(column_name, table_name, conn)
   check_key(table_name, key, conn)
 
-  # first check that there is a flob there
   x <- query_flob(column_name, table_name, key, conn)
   x <- check_flob_query(x, "delete")
 
@@ -101,5 +106,5 @@ delete_flob <- function(column_name, table_name, key, conn) {
   sql <- glue("{sql} = NULL WHERE {safe_key(key, conn)}")
 
   execute(sql, conn)
-  invisible(TRUE)
+  invisible(x)
 }

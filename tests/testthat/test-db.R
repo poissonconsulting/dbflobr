@@ -14,9 +14,10 @@ test_that("unquoted table names case insensitive in RSQLite", {
   expect_identical(table_exists(c("loCal", "LOCAL"), conn), c(TRUE, TRUE))
   expect_true(DBI::dbCreateTable(conn, "`loCal`", local))
   expect_true(table_exists("`loCal`", conn))
-  # this is why need own internal tables_exists
-  expect_false(dbExistsTable(conn, "`loCal`"))
   expect_false(table_exists("`LOCAL`", conn))
+
+  skip_if_not_installed("RSQLite", "2.1.1.9003")
+  expect_true(DBI::dbExistsTable(conn, "`loCal`"))
 })
 
 test_that("columns exist", {

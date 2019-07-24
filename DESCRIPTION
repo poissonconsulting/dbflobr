@@ -1,11 +1,13 @@
 Package: dbflobr
-Title: Read and Write Files to  SQLite Databases as BLOBs
-Version: 0.0.0.9004
+Title: Read and Write Files to SQLite Databases
+Version: 0.0.0.9005
 Authors@R: c(
-    person("Sebastian", "Dalgarno", role = c("aut", "cre"), email = "seb@poissonconsulting.ca"),
-    person("Joe", "Thorley", role = "ctb", email = "joe@poissonconsulting.ca", comment = c(ORCID = "0000-0002-7683-4592")))
+    person("Sebastian", "Dalgarno", , "seb@poissonconsulting.ca", c("aut", "cre"), comment = c(ORCID = "0000-0002-3658-4517")),
+    person("Joe", "Thorley", , "joe@poissonconsulting.ca", "ctb", comment = c(ORCID = "0000-0002-7683-4592")),
+    person("Poisson Consulting", role = c("cph", "fnd"))
+    )
 Description: Reads and writes files to SQLite databases as flobs 
-    (a special type of BLOB that includes the file extension type).
+    (a flob is a blob that preserves the file extension).
 License: MIT + file LICENSE
 Imports:
     checkr,

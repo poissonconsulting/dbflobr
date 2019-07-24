@@ -7,15 +7,23 @@
 add_blob_column(column_name, table_name, conn)
 }
 \arguments{
-\item{column_name}{A string of the name of the new column.}
+\item{column_name}{A string of the name of the BLOB column.}
 
 \item{table_name}{A string of the name of the existing table.}
 
-\item{conn}{A connection object.}
+\item{conn}{A SQLite connection object.}
 }
 \value{
 Modified SQLite database.
 }
 \description{
 Add named empty blob column to SQLite database
+}
+\examples{
+conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+DBI::dbReadTable(conn, "Table1")
+add_blob_column("BlobColumn", "Table1", conn)
+DBI::dbReadTable(conn, "Table1")
+DBI::dbDisconnect(conn)
 }

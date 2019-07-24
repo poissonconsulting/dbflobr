@@ -3,7 +3,8 @@
 
 <!-- badges: start -->
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Travis build
 status](https://travis-ci.com/poissonconsulting/dbflobr.svg?branch=master)](https://travis-ci.com/poissonconsulting/dbflobr)
 [![AppVeyor build
@@ -12,74 +13,98 @@ status](https://ci.appveyor.com/api/projects/status/4yop2q92batu2e25/branch/mast
 status](https://codecov.io/gh/poissonconsulting/dbflobr/branch/master/graph/badge.svg)](https://codecov.io/github/poissonconsulting/dbflobr?branch=master)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-
+[![Tinyverse
+status](https://tinyverse.netlify.com/badge/dbflobr)](https://CRAN.R-project.org/package=dbflobr)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/dbflobr)](https://cran.r-project.org/package=dbflobr)
+![CRAN downloads](http://cranlogs.r-pkg.org/badges/dbflobr)
 <!-- badges: end -->
 
 # dbflobr
 
 `dbflobr` reads and writes files to SQLite databases as
-[flobs](https://poissonconsulting.github.io/flobr/reference/flob.html).
-A flob is a special type of BLOB that includes the file extension type.
+[flobs](https://github.com/poissonconsulting/flobr). A flob is a
+[blob](https://github.com/tidyverse/blob) that preserves the file
+extension.
 
 ## Installation
+
+To install the latest release version from
+[CRAN](https://cran.r-project.org)
+
+``` r
+install.packages("dbflobr")
+```
 
 To install the latest development version from
 [GitHub](https://github.com/poissonconsulting/dbflobr)
 
-    # install.packages("devtools")
-    devtools::install_github("poissonconsulting/checkr")
-    devtools::install_github("poissonconsulting/err")
-    devtools::install_github("poissonconsulting/flobr")
-    devtools::install_github("poissonconsulting/dbflobr")
+``` r
+# install.packages("remotes")
+remotes::install_github("poissonconsulting/dbflobr")
+```
 
-To install the latest development version from the Poisson
-[drat](https://github.com/poissonconsulting/drat) repository.
-
-    # install.packages("drat")
-    drat::addRepo("poissonconsulting")
-    install.packages("dbflobr")
-
-## Usage
-
-Create a connection and populate it with a table of fake data
+## Demonstration
 
 ``` r
 library(dbflobr)
-library(flobr)
-library(DBI)
 
-conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-
-df <- data.frame(char = c("a", "b", "b"),
-                   num = c(1.1, 2.2, 2.2),
-                   stringsAsFactors = FALSE)
-
-DBI::dbWriteTable(conn, "df", df)
-```
-
-Add a flob to a newly created BLOB column called ‘file’
-
-``` r
-# use demo flob from flobr package
-flob <- flobr::flob_obj
-
-# a new BLOB column is created when exists = FALSE
-# specify which observation to add the flob to by providing a key. 
-
-key <- data.frame(num = 1.1)
-# When the table is filtered so that column 'num' == 1.1, the result is a single row. In combination with the `column_name` argument, this targets a single cell to modify.
-
-write_flob(flob, column_name = "file", table_name = "df", key = key, conn = conn, exists = FALSE)
-
-# read flob
-flob <- read_flob(column_name = "file", table_name = "df", key = key, conn = conn)
+# convert a file to flob using flobr
+flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
 str(flob)
 #> List of 1
-#>  $ file: raw [1:133851] 58 0a 00 00 ...
+#>  $ /Library/Frameworks/R.framework/Versions/3.6/Resources/library/flobr/extdata/flobr.pdf: raw [1:133851] 58 0a 00 00 ...
+#>  - attr(*, "ptype")= raw(0) 
 #>  - attr(*, "class")= chr [1:2] "flob" "blob"
 
+# create a SQLite database connection 
+conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+
+# create a table 'Table1' of data
+DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+
+# read the table
+DBI::dbReadTable(conn, "Table1")
+#>   IntColumn
+#> 1         1
+#> 2         2
+
+# specify which row to add the flob to by providing a key 
+key <- data.frame(IntColumn = 1L)
+
+# write the flob to the database in column 'BlobColumn'
+write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
+
+# read the table
+DBI::dbReadTable(conn, "Table1")
+#>   IntColumn      BlobColumn
+#> 1         1 blob[133.85 kB]
+#> 2         2            <NA>
+
+# read the flob
+flob2 <- read_flob("BlobColumn", "Table1", key, conn)
+str(flob2)
+#> List of 1
+#>  $ BlobColumn: raw [1:133851] 58 0a 00 00 ...
+#>  - attr(*, "class")= chr [1:2] "flob" "blob"
+
+# delete the flob
+delete_flob("BlobColumn", "Table1", key, conn)
+
+# read the table
+DBI::dbReadTable(conn, "Table1")
+#>   IntColumn BlobColumn
+#> 1         1       <NA>
+#> 2         2       <NA>
+
+# close the connection
 DBI::dbDisconnect(conn)
 ```
+
+## Inspiration
+
+  - [blob](https://github.com/tidyverse/blob)
+  - [flobr](https://github.com/poissonconsulting/flobr)
 
 ## Contribution
 
@@ -89,11 +114,6 @@ Please report any
 [Pull requests](https://github.com/poissonconsulting/dbflobr/pulls) are
 always welcome.
 
-Please note that the ‘dbflobr’ project is released with a [Contributor
-Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this project,
-you agree to abide by its terms.
-
-## Creditation
-
-  - [blob](https://github.com/tidyverse/blob)
-  - [flobr](https://github.com/poissonconsulting/flobr)
+Please note that this project is released with a [Contributor Code of
+Conduct](https://github.com/poissonconsulting/dbflobr/blob/master/CODE_OF_CONDUCT.md).
+By contributing, you agree to abide by its terms.

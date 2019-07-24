@@ -2,13 +2,17 @@
 #'
 #' Add named empty blob column to SQLite database
 #'
-#' @param column_name A string of the name of the new column.
-#' @param table_name A string of the name of the existing table.
-#' @param conn A connection object.
+#' @inheritParams write_flob
 #'
 #' @return Modified SQLite database.
-#'
 #' @export
+#' @examples
+#' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+#' DBI::dbReadTable(conn, "Table1")
+#' add_blob_column("BlobColumn", "Table1", conn)
+#' DBI::dbReadTable(conn, "Table1")
+#' DBI::dbDisconnect(conn)
 add_blob_column <- function(column_name, table_name, conn) {
 
   check_sqlite_connection(conn)
@@ -22,28 +26,3 @@ add_blob_column <- function(column_name, table_name, conn) {
   execute(sql, conn)
   invisible(TRUE)
 }
-
-.quotes <- "^(`|[[]|\")(.*)(`|[]]|\")$"
-
-is_quoted <- function(x) grepl(.quotes, x)
-
-to_upper <- function(x) {
-  x <- as.character(x)
-  is_quoted <- is_quoted(x)
-  x[!is_quoted] <- toupper(x[!is_quoted])
-  x
-}
-
-collapse_flob <- function(x) {
-  flobr::check_flob(x)
-  y <- glue_collapse(unlist(x), "")
-  glue("x'{y}'")
-}
-
-err <- function (...) stop(..., call. = FALSE, domain = NA)
-
-is_posix <- function(x){
-  inherits(x, "POSIXct") | inherits(x, "Date") |
-    inherits(x, "POSIXlt") | inherits(x, "POSIXt")
-}
-

@@ -4,10 +4,10 @@
 \name{dbflobr-package}
 \alias{dbflobr}
 \alias{dbflobr-package}
-\title{dbflobr: Read and Write Files to  SQLite Databases as BLOBs}
+\title{dbflobr: Read and Write Files to SQLite Databases}
 \description{
 Reads and writes files to SQLite databases as flobs 
-    (a special type of BLOB that includes the file extension type).
+    (a flob is a blob that preserves the file extension).
 }
 \seealso{
 Useful links:
@@ -18,11 +18,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Sebastian Dalgarno \email{seb@poissonconsulting.ca}
+\strong{Maintainer}: Sebastian Dalgarno \email{seb@poissonconsulting.ca} (0000-0002-3658-4517)
 
 Other contributors:
 \itemize{
   \item Joe Thorley \email{joe@poissonconsulting.ca} (0000-0002-7683-4592) [contributor]
+  \item Poisson Consulting [copyright holder, funder]
 }
 
 }

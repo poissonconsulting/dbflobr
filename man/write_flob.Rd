@@ -23,26 +23,18 @@ argument are used to target a single cell within the table to modify).}
 IF FALSE, a new BLOB column is created.}
 }
 \value{
-Modified database.
+An invisible copy of flob.
 }
 \description{
-Write a flob to SQLite database table (column must be type BLOB).
-}
-\details{
-A flob is a file that was read into binary in integer-mode as little endian,
-saved as the single element of a named list
-(where the name is the extension of the original file)
-and then serialized before being coerced into a blob.
-
-Flobs are created with the \code{flobr} package.
+Write a \code{\link[flobr]{flob}} to a SQLite database.
 }
 \examples{
-library(flobr)
-library(DBI)
 flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
 conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+DBI::dbReadTable(conn, "Table1")
 key <- data.frame(IntColumn = 2L)
 write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
-
+DBI::dbReadTable(conn, "Table1")
+DBI::dbDisconnect(conn)
 }

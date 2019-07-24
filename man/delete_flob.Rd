@@ -2,7 +2,7 @@
 % Please edit documentation in R/dbflob.R
 \name{delete_flob}
 \alias{delete_flob}
-\title{Delete blob}
+\title{Delete flob}
 \usage{
 delete_flob(column_name, table_name, key, conn)
 }
@@ -18,8 +18,19 @@ argument are used to target a single cell within the table to modify).}
 \item{conn}{A SQLite connection object.}
 }
 \value{
-A flob.
+An invisible copy of the deleted flob.
 }
 \description{
-Delete a blob from SQLite database.
+Delete a flob from a SQLite database.
+}
+\examples{
+flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+key <- data.frame(IntColumn = 2L)
+write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
+DBI::dbReadTable(conn, "Table1")
+delete_flob("BlobColumn", "Table1", key, conn)
+DBI::dbReadTable(conn, "Table1")
+DBI::dbDisconnect(conn)
 }

@@ -40,8 +40,8 @@ test_that("write flob works", {
   expect_error(write_flob(flob, "flob", table_name =  "df",
                           exists = TRUE, key = key2, conn = conn),
                "filtering table by key must result in a single observation")
-  expect_true(write_flob(flob, "flob", table_name =  "df",
-                          exists = TRUE, key = key, conn = conn))
+  expect_is(write_flob(flob, "flob", table_name =  "df",
+                          exists = TRUE, key = key, conn = conn), "flob")
 
   df2 <- DBI::dbReadTable(conn, "df")
   expect_equal(df2$flob[1], flob, check.names = FALSE, check.attributes = FALSE)
@@ -61,17 +61,17 @@ test_that("write flob works", {
   expect_identical(flob2[[1]], flob[[1]])
 
   ### delete flob
-  # expect_error(delete_flob("flob", table_name = "test", key = key, conn = conn),
-  #              "table 'test' does not exist")
-  # expect_error(delete_flob("blob", table_name = "df", key = key, conn = conn),
-  #              "column 'blob' does not exist")
-  # expect_error(delete_flob("flob", table_name = "df", key = key2, conn = conn),
-  #              "filtering table by key must result in a single observation")
-  #
-  # expect_true(delete_flob("flob", table_name =  "df",
-  #                         key = key, conn = conn))
-  # expect_error(read_flob("flob", table_name = "df", key = key, conn = conn),
-  #              "there is no flob to retrieve")
-  # expect_error(delete_flob("flob", table_name = "df", key = key, conn = conn),
-  #              "there is no flob to delete")
+  expect_error(delete_flob("flob", table_name = "test", key = key, conn = conn),
+                "table 'test' does not exist")
+  expect_error(delete_flob("blob", table_name = "df", key = key, conn = conn),
+                "column 'blob' does not exist")
+  expect_error(delete_flob("flob", table_name = "df", key = key2, conn = conn),
+                "filtering table by key must result in a single observation")
+
+  expect_is(delete_flob("flob", table_name =  "df",
+                           key = key, conn = conn), "flob")
+  expect_error(read_flob("flob", table_name = "df", key = key, conn = conn),
+                "there is no flob to retrieve")
+  expect_error(delete_flob("flob", table_name = "df", key = key, conn = conn),
+                "there is no flob to delete")
 })
