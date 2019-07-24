@@ -11,3 +11,4 @@
 ^test\.sqlite$
 ^codecov\.yml$
 ^build.R$
+^cran-comments\.md$

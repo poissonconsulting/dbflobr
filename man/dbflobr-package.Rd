@@ -20,9 +20,13 @@ Useful links:
 \author{
 \strong{Maintainer}: Sebastian Dalgarno \email{seb@poissonconsulting.ca} (0000-0002-3658-4517)
 
+Authors:
+\itemize{
+  \item Joe Thorley \email{joe@poissonconsulting.ca} (0000-0002-7683-4592)
+}
+
 Other contributors:
 \itemize{
-  \item Joe Thorley \email{joe@poissonconsulting.ca} (0000-0002-7683-4592) [contributor]
   \item Poisson Consulting [copyright holder, funder]
 }
 
