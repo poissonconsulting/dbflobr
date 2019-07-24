@@ -1,6 +1,6 @@
 context("utils")
 
-test_that("utils functions work", {
+test_that("add_blob_column works", {
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))

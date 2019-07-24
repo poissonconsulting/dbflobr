@@ -4,7 +4,7 @@
 \alias{write_flob}
 \title{Write flob}
 \usage{
-write_flob(flob, column_name, table_name, key, conn, exists = TRUE)
+write_flob(flob, column_name, table_name, key, conn, exists = NA)
 }
 \arguments{
 \item{flob}{A flob.}
@@ -19,7 +19,8 @@ argument are used to target a single cell within the table to modify).}
 
 \item{conn}{A SQLite connection object.}
 
-\item{exists}{A flag specifying whether the column must already exist.
+\item{exists}{A logical scalar specifying whether the column must (TRUE) or
+mustn't (FALSE) already exist or whether it doesn't matter (NA).
 IF FALSE, a new BLOB column is created.}
 }
 \value{

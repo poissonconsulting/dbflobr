@@ -75,3 +75,20 @@ test_that("write flob works", {
   expect_error(delete_flob("flob", table_name = "df", key = key, conn = conn),
                 "there is no flob to delete")
 })
+
+test_that("write_flob column exists", {
+  conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  teardown(DBI::dbDisconnect(conn))
+  expect_true(DBI::dbWriteTable(conn, "df", data.frame(Index = 1)))
+
+  key <- data.frame(Index = 1)
+
+  flob <- flobr::flob_obj
+  expect_error(write_flob(flob, "New", "df", key, conn, exists = TRUE),
+               "column 'New' does not exist")
+  expect_is(write_flob(flob, "New", "df", key, conn), "flob")
+  expect_is(write_flob(flob, "New", "df", key, conn), "flob")
+  expect_is(write_flob(flob, "New", "df", key, conn, exists = TRUE), "flob")
+  expect_error(write_flob(flob, "New", "df", key, conn, exists = FALSE),
+               "column 'New' already exists")
+})

@@ -9,7 +9,8 @@
 #' table to a single row (this in combination with the `column_name`
 #' argument are used to target a single cell within the table to modify).
 #' @param conn A SQLite connection object.
-#' @param exists A flag specifying whether the column must already exist.
+#' @param exists A logical scalar specifying whether the column must (TRUE) or
+#' mustn't (FALSE) already exist or whether it doesn't matter (NA).
 #' IF FALSE, a new BLOB column is created.
 #' @return An invisible copy of flob.
 #' @export
@@ -22,17 +23,16 @@
 #' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 #' DBI::dbReadTable(conn, "Table1")
 #' DBI::dbDisconnect(conn)
-write_flob <- function(flob, column_name, table_name, key, conn, exists = TRUE) {
+write_flob <- function(flob, column_name, table_name, key, conn, exists = NA) {
   flobr::check_flob(flob)
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
-  check_flag(exists)
+  check_scalar(exists, c(TRUE, NA))
 
-  if(exists) {
+  if(isTRUE(exists)) {
     check_column_blob(column_name, table_name, conn)
-  } else {
+  } else if(isFALSE(exists) || !column_exists(column_name, table_name, conn))
     add_blob_column(column_name, table_name, conn)
-  }
 
   check_key(table_name, key, conn)
 
