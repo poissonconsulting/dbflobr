@@ -54,7 +54,6 @@ flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
 str(flob)
 #> List of 1
 #>  $ /Library/Frameworks/R.framework/Versions/3.6/Resources/library/flobr/extdata/flobr.pdf: raw [1:133851] 58 0a 00 00 ...
-#>  - attr(*, "ptype")= raw(0) 
 #>  - attr(*, "class")= chr [1:2] "flob" "blob"
 
 # create a SQLite database connection 
@@ -63,23 +62,21 @@ conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 # create a table 'Table1' of data
 DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 
-# read the table
 DBI::dbReadTable(conn, "Table1")
 #>   IntColumn
 #> 1         1
 #> 2         2
 
 # specify which row to add the flob to by providing a key 
-key <- data.frame(IntColumn = 1L)
+key <- data.frame(IntColumn = 2L)
 
 # write the flob to the database in column 'BlobColumn'
 write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 
-# read the table
 DBI::dbReadTable(conn, "Table1")
 #>   IntColumn      BlobColumn
-#> 1         1 blob[133.85 kB]
-#> 2         2            <NA>
+#> 1         1            <NA>
+#> 2         2 blob[133.85 kB]
 
 # read the flob
 flob2 <- read_flob("BlobColumn", "Table1", key, conn)
@@ -91,7 +88,6 @@ str(flob2)
 # delete the flob
 delete_flob("BlobColumn", "Table1", key, conn)
 
-# read the table
 DBI::dbReadTable(conn, "Table1")
 #>   IntColumn BlobColumn
 #> 1         1       <NA>

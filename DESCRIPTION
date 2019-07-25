@@ -1,6 +1,6 @@
 Package: dbflobr
 Title: Read and Write Files to SQLite Databases
-Version: 0.0.0.9006
+Version: 0.0.1
 Authors@R: c(
     person("Sebastian", "Dalgarno", , "seb@poissonconsulting.ca", c("aut", "cre"), comment = c(ORCID = "0000-0002-3658-4517")),
     person("Joe", "Thorley", , "joe@poissonconsulting.ca", "aut", comment = c(ORCID = "0000-0002-7683-4592")),
@@ -11,14 +11,13 @@ Description: Reads and writes files to SQLite databases as flobs
 License: MIT + file LICENSE
 Imports:
     checkr,
-    flobr (>= 0.2.0),
+    flobr,
     glue,
     DBI,
     RSQLite
 Suggests: 
     testthat,
     covr
-Remotes: poissonconsulting/flobr
 URL: https://github.com/poissonconsulting/dbflobr
 BugReports: https://github.com/poissonconsulting/dbflobr/issues
 Encoding: UTF-8
@@ -26,4 +25,3 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
 Language: en-US
-

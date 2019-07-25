@@ -57,16 +57,14 @@ conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 # create a table 'Table1' of data
 DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 
-# read the table
 DBI::dbReadTable(conn, "Table1")
 
 # specify which row to add the flob to by providing a key 
-key <- data.frame(IntColumn = 1L)
+key <- data.frame(IntColumn = 2L)
 
 # write the flob to the database in column 'BlobColumn'
 write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 
-# read the table
 DBI::dbReadTable(conn, "Table1")
 
 # read the flob
@@ -76,7 +74,6 @@ str(flob2)
 # delete the flob
 delete_flob("BlobColumn", "Table1", key, conn)
 
-# read the table
 DBI::dbReadTable(conn, "Table1")
 
 # close the connection
