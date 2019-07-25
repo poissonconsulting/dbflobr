@@ -12,3 +12,4 @@
 ^codecov\.yml$
 ^build.R$
 ^cran-comments\.md$
+^CRAN-RELEASE$
