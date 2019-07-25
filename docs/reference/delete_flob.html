@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add blob column — add_blob_column • dbflobr</title>
+<title>Delete flob — delete_flob • dbflobr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,9 +32,9 @@
 
 
 
-<meta property="og:title" content="Add blob column — add_blob_column" />
+<meta property="og:title" content="Delete flob — delete_flob" />
 
-<meta property="og:description" content="Add named empty blob column to SQLite database" />
+<meta property="og:description" content="Delete a flob from a SQLite database." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -106,18 +106,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add blob column</h1>
-    <small class="dont-index">Source: <a href='https://github.com/poissonconsulting/dbflobr/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
-    <div class="hidden name"><code>add_blob_column.Rd</code></div>
+    <h1>Delete flob</h1>
+    <small class="dont-index">Source: <a href='https://github.com/poissonconsulting/dbflobr/blob/master/R/dbflob.R'><code>R/dbflob.R</code></a></small>
+    <div class="hidden name"><code>delete_flob.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Add named empty blob column to SQLite database</p>
+    <p>Delete a flob from a SQLite database.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>add_blob_column</span>(<span class='no'>column_name</span>, <span class='no'>table_name</span>, <span class='no'>conn</span>)</pre>
+    <pre class="usage"><span class='fu'>delete_flob</span>(<span class='no'>column_name</span>, <span class='no'>table_name</span>, <span class='no'>key</span>, <span class='no'>conn</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -131,6 +131,12 @@
       <td><p>A string of the name of the existing table.</p></td>
     </tr>
     <tr>
+      <th>key</th>
+      <td><p>A data.frame whose columns and values are used to filter the
+table to a single row (this in combination with the <code>column_name</code>
+argument are used to target a single cell within the table to modify).</p></td>
+    </tr>
+    <tr>
       <th>conn</th>
       <td><p>A SQLite connection object.</p></td>
     </tr>
@@ -138,15 +144,18 @@
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Modified SQLite database.</p>
+    <p>An invisible copy of the deleted flob.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RSQLite</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RSQLite/man/SQLite.html'>SQLite</a></span>(), <span class='st'>":memory:"</span>)
+    <pre class="examples"><div class='input'><span class='no'>flob</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flobr</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/flobr/man/flob.html'>flob</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"flobr.pdf"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"flobr"</span>))
+<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RSQLite</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/RSQLite/man/SQLite.html'>SQLite</a></span>(), <span class='st'>":memory:"</span>)
 <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>conn</span>, <span class='st'>"Table1"</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>IntColumn</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>2L</span>)))
-<span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbReadTable.html'>dbReadTable</a></span>(<span class='no'>conn</span>, <span class='st'>"Table1"</span>)</div><div class='output co'>#&gt;   IntColumn
-#&gt; 1         1
-#&gt; 2         2</div><div class='input'><span class='fu'>add_blob_column</span>(<span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='no'>conn</span>)
+<span class='no'>key</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>IntColumn</span> <span class='kw'>=</span> <span class='fl'>2L</span>)
+<span class='fu'><a href='write_flob.html'>write_flob</a></span>(<span class='no'>flob</span>, <span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='no'>key</span>, <span class='no'>conn</span>, <span class='kw'>exists</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbReadTable.html'>dbReadTable</a></span>(<span class='no'>conn</span>, <span class='st'>"Table1"</span>)</div><div class='output co'>#&gt;   IntColumn      BlobColumn
+#&gt; 1         1            &lt;NA&gt;
+#&gt; 2         2 blob[133.85 kB]</div><div class='input'><span class='fu'>delete_flob</span>(<span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='no'>key</span>, <span class='no'>conn</span>)
 <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbReadTable.html'>dbReadTable</a></span>(<span class='no'>conn</span>, <span class='st'>"Table1"</span>)</div><div class='output co'>#&gt;   IntColumn BlobColumn
 #&gt; 1         1       &lt;NA&gt;
 #&gt; 2         2       &lt;NA&gt;</div><div class='input'><span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/DBI/man/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>conn</span>)</div></pre>
