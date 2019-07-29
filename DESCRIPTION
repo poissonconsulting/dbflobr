@@ -6,7 +6,7 @@ Authors@R: c(
     person("Joe", "Thorley", , "joe@poissonconsulting.ca", "aut", comment = c(ORCID = "0000-0002-7683-4592")),
     person("Poisson Consulting", role = c("cph", "fnd"))
     )
-Description: Reads and writes files to SQLite databases as flobs 
+Description: Reads and writes files to SQLite databases <https://www.sqlite.org/index.html> as flobs 
     (a flob is a blob that preserves the file extension).
 License: MIT + file LICENSE
 Imports:
