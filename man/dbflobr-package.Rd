@@ -6,7 +6,7 @@
 \alias{dbflobr-package}
 \title{dbflobr: Read and Write Files to SQLite Databases}
 \description{
-Reads and writes files to SQLite databases as flobs 
+Reads and writes files to SQLite databases <https://www.sqlite.org/index.html> as flobs 
     (a flob is a blob that preserves the file extension).
 }
 \seealso{
