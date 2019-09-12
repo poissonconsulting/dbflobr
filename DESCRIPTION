@@ -18,6 +18,7 @@ Imports:
 Suggests: 
     testthat,
     covr
+Remotes: poissonconsulting/flobr
 URL: https://github.com/poissonconsulting/dbflobr
 BugReports: https://github.com/poissonconsulting/dbflobr/issues
 Encoding: UTF-8

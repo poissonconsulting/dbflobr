@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# dbflobr <img src="man/figures/logo.png" align="right" />
+
 <!-- badges: start -->
 
 [![Lifecycle:
@@ -17,10 +19,8 @@ MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org
 status](https://tinyverse.netlify.com/badge/dbflobr)](https://CRAN.R-project.org/package=dbflobr)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/dbflobr)](https://cran.r-project.org/package=dbflobr)
-![CRAN downloads](http://cranlogs.r-pkg.org/badges/dbflobr)
+![CRAN downloads](https://cranlogs.r-pkg.org/badges/dbflobr)
 <!-- badges: end -->
-
-# dbflobr
 
 `dbflobr` reads and writes files to SQLite databases as
 [flobs](https://github.com/poissonconsulting/flobr). A flob is a
@@ -29,19 +29,27 @@ extension.
 
 ## Installation
 
-To install the latest release version from
-[CRAN](https://cran.r-project.org)
+To install the latest release from [CRAN](https://cran.r-project.org)
 
 ``` r
 install.packages("dbflobr")
 ```
 
-To install the latest development version from
+To install the developmental version from
 [GitHub](https://github.com/poissonconsulting/dbflobr)
 
 ``` r
 # install.packages("remotes")
 remotes::install_github("poissonconsulting/dbflobr")
+```
+
+To install the latest developmental release from the Poisson drat
+[repository](https://github.com/poissonconsulting/drat)
+
+``` r
+# install.packages("drat")
+drat::addRepo("poissonconsulting")
+install.packages("dbflobr")
 ```
 
 ## Demonstration
