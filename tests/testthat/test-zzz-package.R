@@ -21,7 +21,8 @@ test_that("write flob works", {
 
   expect_error(write_flob(1, "flob", table_name =  "df",
                           exists = FALSE, key = key, conn = conn),
-               "flob must inherit from class flob")
+               "`flob` must inherit from S3 class 'flob'[.]",
+               class = "chk_error")
   expect_error(write_flob(flob, "flob", table_name =  "test",
                           exists = FALSE, key = key, conn = conn),
                "table 'test' does not exist")

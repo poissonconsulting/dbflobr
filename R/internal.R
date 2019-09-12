@@ -10,7 +10,7 @@ to_upper <- function(x) {
 }
 
 collapse_flob <- function(x) {
-  flobr::check_flob(x)
+  flobr::chk_flob(x)
   y <- glue_collapse(unlist(x), "")
   glue("x'{y}'")
 }
