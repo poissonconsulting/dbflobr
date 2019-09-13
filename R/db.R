@@ -2,12 +2,12 @@ column_names <- function(table_name, conn) {
   DBI::dbListFields(conn, table_name)
 }
 
-column_exists <- function(column_name, table_name, conn){
+column_exists <- function(column_name, table_name, conn) {
   columns <- column_names(table_name, conn)
   to_upper(column_name) %in% to_upper(columns)
 }
 
-table_names <- function(conn){
+table_names <- function(conn) {
   DBI::dbListTables(conn)
 }
 
@@ -44,32 +44,35 @@ is_column_blob <- function(column_name, table_name, conn) {
 }
 
 # prevents injection attack from values
-safe_key <- function(key, conn){
-  key <- lapply(colnames(key), function(y){
-    value <- key[,y]
+safe_key <- function(key, conn) {
+  key <- lapply(colnames(key), function(y) {
+    value <- key[, y]
     sql <- glue_sql("{`y`} = ?value", .con = conn)
     sql_null <- glue_sql("{`y`} IS NULL", .con = conn)
-    if(is.na(value)){
+    if (is.na(value)) {
       return(sql_interpolate(sql_null, conn))
     }
     sql_interpolate(sql, conn,
-                    value = value)
+      value = value
+    )
   })
   glue_collapse(key, " AND ")
 }
 
-filter_key <- function(table_name, key, conn){
+filter_key <- function(table_name, key, conn) {
   sql <- glue("SELECT * FROM ?table_name WHERE {safe_key(key, conn)}")
   sql <- sql_interpolate(sql, conn,
-                           table_name = table_name)
+    table_name = table_name
+  )
   get_query(sql, conn)
 }
 
-query_flob <- function(column_name, table_name, key, conn){
+query_flob <- function(column_name, table_name, key, conn) {
   sql <- glue_sql("SELECT {`column_name`} FROM {`table_name`} WHERE",
-                  column_name = column_name,
-                  table_name = table_name,
-                  .con = conn)
+    column_name = column_name,
+    table_name = table_name,
+    .con = conn
+  )
   sql <- glue("{sql} {safe_key(key, conn)}")
 
   x <- get_query(sql, conn)

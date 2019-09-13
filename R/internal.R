@@ -15,4 +15,4 @@ collapse_flob <- function(x) {
   glue("x'{y}'")
 }
 
-err <- function (...) stop(..., call. = FALSE, domain = NA)
+err <- function(...) stop(..., call. = FALSE, domain = NA)

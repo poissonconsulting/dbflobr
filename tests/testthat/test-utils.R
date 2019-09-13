@@ -1,7 +1,6 @@
 context("utils")
 
 test_that("add_blob_column works", {
-
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
 
@@ -10,8 +9,10 @@ test_that("add_blob_column works", {
   expect_true(DBI::dbCreateTable(conn, "df", df))
 
   ## add blob_column
-  expect_error(add_blob_column(table_name = "df", column_name = "x", conn = conn),
-               "column 'x' already exists")
+  expect_error(
+    add_blob_column(table_name = "df", column_name = "x", conn = conn),
+    "column 'x' already exists"
+  )
   expect_true(add_blob_column(table_name = "df", column_name = "flob", conn = conn))
 
   df2 <- DBI::dbReadTable(conn, "df")

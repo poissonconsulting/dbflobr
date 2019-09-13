@@ -29,17 +29,19 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = NA) {
   check_table_name(table_name, conn)
   check_scalar(exists, c(TRUE, NA))
 
-  if(isTRUE(exists)) {
+  if (isTRUE(exists)) {
     check_column_blob(column_name, table_name, conn)
-  } else if(isFALSE(exists) || !column_exists(column_name, table_name, conn))
+  } else if (isFALSE(exists) || !column_exists(column_name, table_name, conn)) {
     add_blob_column(column_name, table_name, conn)
+  }
 
   check_key(table_name, key, conn)
 
   sql <- glue_sql("UPDATE {`table_name`} SET {`column_name`}",
-                  column_name = column_name,
-                  table_name = table_name,
-                  .con = conn)
+    column_name = column_name,
+    table_name = table_name,
+    .con = conn
+  )
   sql <- glue("{sql} = {collapse_flob(flob)} WHERE {safe_key(key, conn)}")
 
   execute(sql, conn)
@@ -100,9 +102,10 @@ delete_flob <- function(column_name, table_name, key, conn) {
   x <- check_flob_query(x, "delete")
 
   sql <- glue_sql("UPDATE {`table_name`} SET {`column_name`}",
-                  column_name = column_name,
-                  table_name = table_name,
-                  .con = conn)
+    column_name = column_name,
+    table_name = table_name,
+    .con = conn
+  )
   sql <- glue("{sql} = NULL WHERE {safe_key(key, conn)}")
 
   execute(sql, conn)
