@@ -40,8 +40,10 @@ test_that("columns type blob", {
   expect_true(DBI::dbCreateTable(conn, "local", local))
   add_blob_column("flob", "local", conn)
 
-  expect_identical(table_column_type(c("x", "flob"), "local", conn),
-                   c("TEXT", "BLOB"))
+  expect_identical(
+    table_column_type(c("x", "flob"), "local", conn),
+    c("TEXT", "BLOB")
+  )
 
   expect_true(is_column_blob("flob", "local", conn))
   expect_false(is_column_blob("x", "local", conn))
@@ -51,16 +53,18 @@ test_that("filter key", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
 
-  df <- data.frame("char" = c("a", "b", "b"),
-                   num = c(1.1, 2.2, 2.2),
-                   key = c(1, 2, 3),
-                   null = NA_character_,
-                   stringsAsFactors = FALSE)
+  df <- data.frame(
+    "char" = c("a", "b", "b"),
+    num = c(1.1, 2.2, 2.2),
+    key = c(1, 2, 3),
+    null = NA_character_,
+    stringsAsFactors = FALSE
+  )
 
   expect_true(DBI::dbWriteTable(conn, "df", df))
 
   ## safe_key
-  key <- df[1,]
+  key <- df[1, ]
   x <- safe_key(key, conn)
   expect_is(x, "glue")
   expect_length(x, 1L)
@@ -76,16 +80,20 @@ test_that("table_info", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
 
-  local <- data.frame(logical = TRUE,
-                      date = as.Date("2000-01-01"),
-                      posixct = as.POSIXct("2001-01-02 03:04:05", tz = "Etc/GMT+8"))
+  local <- data.frame(
+    logical = TRUE,
+    date = as.Date("2000-01-01"),
+    posixct = as.POSIXct("2001-01-02 03:04:05", tz = "Etc/GMT+8")
+  )
 
   expect_true(DBI::dbCreateTable(conn, "local", local))
 
   table_info <- table_info("local", conn)
   expect_is(table_info, "data.frame")
-  expect_identical(colnames(table_info),
-                   c("cid", "name", "type", "notnull", "dflt_value", "pk"))
+  expect_identical(
+    colnames(table_info),
+    c("cid", "name", "type", "notnull", "dflt_value", "pk")
+  )
   expect_identical(table_info$cid, 0:2)
   expect_identical(table_info$name, c("logical", "date", "posixct"))
   expect_identical(table_info$type, c("INTEGER", "REAL", "REAL"))

@@ -14,14 +14,15 @@
 #' DBI::dbReadTable(conn, "Table1")
 #' DBI::dbDisconnect(conn)
 add_blob_column <- function(column_name, table_name, conn) {
-
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = FALSE, conn)
 
   sql <- "ALTER TABLE ?table_name ADD ?column_name BLOB"
-  sql <- sql_interpolate(sql, conn, table_name = table_name,
-                         column_name = column_name)
+  sql <- sql_interpolate(sql, conn,
+    table_name = table_name,
+    column_name = column_name
+  )
 
   execute(sql, conn)
   invisible(TRUE)
