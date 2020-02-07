@@ -34,6 +34,19 @@ table_info <- function(table_name, conn) {
   table_info
 }
 
+table_pk <- function(table_name, conn){
+  info <- table_info(table_name, conn)
+  info$name[info$pk > 0]
+}
+
+sql_pk <- function(x){
+  paste0("`", paste(x, collapse = "`, `"), "`")
+}
+
+filename_key <- function(x){
+  paste(paste(names(x), collapse = "-"), paste(x, collapse = "-"), sep = "_")
+}
+
 table_column_type <- function(column_name, table_name, conn) {
   table_info <- table_info(table_name, conn)
   table_info$type[to_upper(table_info$name) == to_upper(column_name)]

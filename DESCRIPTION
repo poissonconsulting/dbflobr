@@ -14,9 +14,10 @@ Imports:
     flobr (>= 0.2.0.9003),
     glue,
     DBI,
-    RSQLite
+    RSQLite,
+    usethis
 Suggests: 
-    testthat,
+    testthat (>= 2.1.0),
     covr
 Remotes: poissonconsulting/flobr
 URL: https://github.com/poissonconsulting/dbflobr
