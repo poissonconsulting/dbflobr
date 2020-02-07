@@ -6,7 +6,7 @@
 \alias{dbflobr-package}
 \title{dbflobr: Read and Write Files to SQLite Databases}
 \description{
-\if{html}{\figure{logo.png}{options: align='right'}}
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
 Reads and writes files to SQLite databases <https://www.sqlite.org/index.html> as flobs 
     (a flob is a blob that preserves the file extension).
@@ -20,11 +20,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Sebastian Dalgarno \email{seb@poissonconsulting.ca} (0000-0002-3658-4517)
+\strong{Maintainer}: Sebastian Dalgarno \email{seb@poissonconsulting.ca} (\href{https://orcid.org/0000-0002-3658-4517}{ORCID})
 
 Authors:
 \itemize{
-  \item Joe Thorley \email{joe@poissonconsulting.ca} (0000-0002-7683-4592)
+  \item Joe Thorley \email{joe@poissonconsulting.ca} (\href{https://orcid.org/0000-0002-7683-4592}{ORCID})
 }
 
 Other contributors:
