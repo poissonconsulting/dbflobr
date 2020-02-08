@@ -45,7 +45,6 @@ sql_pk <- function(x){
 
 filename_key <- function(x){
   glue_collapse(x, "-")
-  # paste(paste(names(x), collapse = "-"), paste(x, collapse = "-"), sep = "_")
 }
 
 table_column_type <- function(column_name, table_name, conn) {
@@ -55,6 +54,11 @@ table_column_type <- function(column_name, table_name, conn) {
 
 is_column_blob <- function(column_name, table_name, conn) {
   toupper(table_column_type(column_name, table_name, conn)) == "BLOB"
+}
+
+blob_columns <- function(table_name, conn){
+  table_info <- table_info(table_name, conn)
+  table_info$name[table_info$type == "BLOB"]
 }
 
 # prevents injection attack from values

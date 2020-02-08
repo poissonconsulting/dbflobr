@@ -1,14 +1,14 @@
 #' Save flobs.
 #'
-#' Save and rename \code{\link[flobr]{flob}}s from a SQLite database table and column to directory.
+#' Rename \code{\link[flobr]{flobs}} from a SQLite database BLOB column and save to directory.
 #'
 #' @inheritParams write_flob
-#' @param dir A character string of the path to the directory to save files to.
+#' @param dir A string of the path to the directory to save the files in.
 #'
-#' @return An invisible list of the original file names.
+#' @return An invisible character string of the directory.
 #' @export
 #' @examples
-#' flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+#' flob <- flobr::flob_obj
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 #' key <- data.frame(IntColumn = 2L)
@@ -22,7 +22,9 @@ save_flobs <- function(column_name, table_name, dir, conn){
   sql <- glue("SELECT {sql_pk(pk)} FROM ('{table_name}');")
   values <- get_query(sql, conn)
 
-  usethis::ui_line(glue("Saving files to {dir} ..."))
+  usethis::ui_line(glue("Table name: {ui_path(table_name)}"))
+  usethis::ui_line(glue("Column name: {ui_path(column_name)}"))
+  usethis::ui_line(glue("Saving files to {ui_path(dir)}"))
 
   for(i in 1:nrow(values)){
     key <- values[i, , drop = FALSE]
@@ -39,11 +41,49 @@ save_flobs <- function(column_name, table_name, dir, conn){
       usethis::ui_todo(glue("Row {i}: no file found"))
     }
   }
+  return(invisible(dir))
 }
 
-# messages
-### moving files to directory
-# file blah renamed to blah
+#' Save all flobs.
+#'
+#' Rename \code{\link[flobr]{flob}}s from a SQLite database and save to directory.
+#'
+#' @inheritParams write_flob
+#' @param dir A character string of the path to the directory to save files to.
+#' @param table_name A vector of character strings indicating names of tables to save flobs from.
+#' By default all tables are included.
+#'
+#' @return An invisible character string of the directory.
+#' @export
+#' @examples
+#' flob <- flobr::flob_obj
+#' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+#' key <- data.frame(IntColumn = 2L)
+#' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
+#' dir <- tempdir()
+#' save_all_flobs(dir = dir, conn = conn)
+#' DBI::dbDisconnect(conn)
+save_all_flobs <- function(table_name = NULL, dir, conn){
+
+  message("should we put table_name to the end? would be inconsistent,
+          but it is most likely to be used with default")
+  if(is.null(table_name)){
+    table_name <- table_names(conn)
+  }
+
+  for(i in table_name){
+    cols <- blob_columns(i, conn)
+    for(j in cols){
+      save_flobs(j, i, dir, conn)
+      ui_line("")
+    }
+  }
+  invisible(dir)
+}
+
+
+
 
 ### save_all_flobs create nested dir of table names and columns names with files in it
 ## tabke_name arg deafulat all tables, but user can provide vector of table names

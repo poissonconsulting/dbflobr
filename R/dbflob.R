@@ -15,7 +15,7 @@
 #' @return An invisible copy of flob.
 #' @export
 #' @examples
-#' flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+#' flob <- flobr::flob_obj
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 #' DBI::dbReadTable(conn, "Table1")
@@ -57,7 +57,7 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = NA) {
 #' @return A flob.
 #' @export
 #' @examples
-#' flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+#' flob <- flobr::flob_obj
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 #' key <- data.frame(IntColumn = 2L)
@@ -83,7 +83,7 @@ read_flob <- function(column_name, table_name, key, conn) {
 #' @return An invisible copy of the deleted flob.
 #' @export
 #' @examples
-#' flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+#' flob <- flobr::flob_obj
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 #' key <- data.frame(IntColumn = 2L)

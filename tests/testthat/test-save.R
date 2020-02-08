@@ -14,6 +14,8 @@ test_that("save_flobs works", {
                   "CREATE TABLE df2 (
                 char TEXT PRIMARY KEY NOT NULL)")
 
+  # one column pk with two blob cols
+
   DBI::dbWriteTable(conn, "df",
                     data.frame(char = c("a", "a", "b"), num = c(1, 2.1, 1)),
                     append = TRUE)
@@ -45,6 +47,17 @@ test_that("save_flobs works", {
                                                         "a-2.1.pdf",
                                                         "b-1.pdf",
                                                         "b.pdf"))
+
+  write_flob(flob, "New2", "df2", key = data.frame(char = "a"), conn)
+
+  save_all_flobs(dir = path, conn = conn)
+  expect_identical(list.files(path, pattern = "pdf"), c("a-1.pdf",
+                                                        "a-2.1.pdf",
+                                                        "a.pdf",
+                                                        "b-1.pdf",
+                                                        "b.pdf"))
+
+  save_all_flobs("df2", path, conn)
 
 })
 
