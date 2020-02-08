@@ -17,17 +17,26 @@
 #' save_flobs("BlobColumn", "Table1", dir, conn)
 #' DBI::dbDisconnect(conn)
 save_flobs <- function(column_name, table_name, dir, conn){
+
   pk <- table_pk(table_name, conn)
   sql <- glue("SELECT {sql_pk(pk)} FROM ('{table_name}');")
   values <- get_query(sql, conn)
+
+  usethis::ui_line(glue("Saving files to {dir} ..."))
+
   for(i in 1:nrow(values)){
     key <- values[i, , drop = FALSE]
     x <- try(read_flob(column_name, table_name, key, conn), silent = TRUE)
-    if(!is_try_error(x)){
-      flobr::unflob(x, dir = dir, name = filename_key(key))
-      usethis::ui_done(paste0("Row ", i, ": file exported to ", dir))
+
+     if(!is_try_error(x)){
+      filename <- flobr::flob_name(x)
+      ext <- flobr::flob_ext(x)
+      file <- glue("{filename}.{ext}")
+      new_file <- filename_key(key)
+      flobr::unflob(x, dir = dir, name = new_file)
+      usethis::ui_done(glue("Row {i}: file {file} renamed to {new_file}.{ext}"))
     } else {
-      usethis::ui_todo(paste0("Row ", i, ": no file to export"))
+      usethis::ui_todo(glue("Row {i}: no file found"))
     }
   }
 }

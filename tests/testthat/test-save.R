@@ -36,15 +36,15 @@ test_that("save_flobs works", {
   dir.create(path)
 
   save_flobs("New", "df", path, conn)
-  expect_identical(list.files(path, pattern = "pdf"), c("char-num_a-1.pdf",
-                                                        "char-num_a-2.1.pdf",
-                                                        "char-num_b-1.pdf"))
+  expect_identical(list.files(path, pattern = "pdf"), c("a-1.pdf",
+                                                        "a-2.1.pdf",
+                                                        "b-1.pdf"))
   # works when pk length 1 and some empty flobs
   save_flobs("New", "df2", path, conn)
-  expect_identical(list.files(path, pattern = "pdf"), c("char_b.pdf",
-                                                        "char-num_a-1.pdf",
-                                                        "char-num_a-2.1.pdf",
-                                                        "char-num_b-1.pdf"))
+  expect_identical(list.files(path, pattern = "pdf"), c("a-1.pdf",
+                                                        "a-2.1.pdf",
+                                                        "b-1.pdf",
+                                                        "b.pdf"))
 
 })
 

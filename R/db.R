@@ -44,7 +44,8 @@ sql_pk <- function(x){
 }
 
 filename_key <- function(x){
-  paste(paste(names(x), collapse = "-"), paste(x, collapse = "-"), sep = "_")
+  glue_collapse(x, "-")
+  # paste(paste(names(x), collapse = "-"), paste(x, collapse = "-"), sep = "_")
 }
 
 table_column_type <- function(column_name, table_name, conn) {
