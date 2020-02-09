@@ -17,7 +17,7 @@
 #' dir <- tempdir()
 #' save_flobs("BlobColumn", "Table1", dir, conn)
 #' DBI::dbDisconnect(conn)
-save_flobs <- function(column_name, table_name, dir, conn){
+save_flobs <- function(column_name, table_name, dir = ".", conn){
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = TRUE, conn)
@@ -72,7 +72,7 @@ save_flobs <- function(column_name, table_name, dir, conn){
 #' dir <- tempdir()
 #' save_all_flobs(dir = dir, conn = conn)
 #' DBI::dbDisconnect(conn)
-save_all_flobs <- function(table_name = NULL, dir, conn){
+save_all_flobs <- function(table_name = NULL, dir = ".", conn){
   check_sqlite_connection(conn)
   checkor(check_table_name(table_name, conn), check_null(table_name))
   check_string(dir)
