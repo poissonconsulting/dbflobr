@@ -15,7 +15,7 @@
 #' @return An invisible copy of flob.
 #' @export
 #' @examples
-#' flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+#' flob <- flobr::flob_obj
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 #' DBI::dbReadTable(conn, "Table1")
@@ -57,7 +57,7 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = NA) {
 #' @return A flob.
 #' @export
 #' @examples
-#' flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+#' flob <- flobr::flob_obj
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 #' key <- data.frame(IntColumn = 2L)
@@ -83,7 +83,7 @@ read_flob <- function(column_name, table_name, key, conn) {
 #' @return An invisible copy of the deleted flob.
 #' @export
 #' @examples
-#' flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+#' flob <- flobr::flob_obj
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 #' key <- data.frame(IntColumn = 2L)
@@ -99,7 +99,7 @@ delete_flob <- function(column_name, table_name, key, conn) {
   check_key(table_name, key, conn)
 
   x <- query_flob(column_name, table_name, key, conn)
-  x <- check_flob_query(x, "delete")
+  x <- check_flob_query(x)
 
   sql <- glue_sql("UPDATE {`table_name`} SET {`column_name`}",
     column_name = column_name,
@@ -111,3 +111,34 @@ delete_flob <- function(column_name, table_name, key, conn) {
   execute(sql, conn)
   invisible(x)
 }
+
+#' Add blob column
+#'
+#' Add named empty blob column to SQLite database
+#'
+#' @inheritParams write_flob
+#'
+#' @return Modified SQLite database.
+#' @export
+#' @examples
+#' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+#' DBI::dbReadTable(conn, "Table1")
+#' add_blob_column("BlobColumn", "Table1", conn)
+#' DBI::dbReadTable(conn, "Table1")
+#' DBI::dbDisconnect(conn)
+add_blob_column <- function(column_name, table_name, conn) {
+  check_sqlite_connection(conn)
+  check_table_name(table_name, conn)
+  check_column_name(column_name, table_name, exists = FALSE, conn)
+
+  sql <- "ALTER TABLE ?table_name ADD ?column_name BLOB"
+  sql <- sql_interpolate(sql, conn,
+                         table_name = table_name,
+                         column_name = column_name
+  )
+
+  execute(sql, conn)
+  invisible(TRUE)
+}
+

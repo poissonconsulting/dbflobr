@@ -9,6 +9,10 @@ to_upper <- function(x) {
   x
 }
 
+is_try_error <- function(x) {
+  inherits(x, "try-error")
+}
+
 collapse_flob <- function(x) {
   flobr::chk_flob(x)
   y <- glue_collapse(unlist(x), "")

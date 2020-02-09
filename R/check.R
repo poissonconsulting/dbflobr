@@ -5,9 +5,9 @@ check_sqlite_connection <- function(x, connected = NA, x_name = substitute(x), e
   check_flag(error)
   check_inherits(x, "SQLiteConnection", x_name = x_name)
   if (isTRUE(connected) && !dbIsValid(x)) {
-    chk_fail(x_name, " must be connected", error = error)
+    chk_fail(x_name, " must be connected.", error = error)
   } else if (isFALSE(connected) && dbIsValid(x)) {
-    chk_fail(x_name, " must be disconnected", error = error)
+    chk_fail(x_name, " must be disconnected.", error = error)
   }
   invisible(x)
 }
@@ -18,7 +18,7 @@ check_table_name <- function(table_name, conn) {
 
   table_exists <- table_exists(table_name, conn)
   if (!table_exists) {
-    err("table '", table_name, "' does not exist")
+    err("Can't find table `", table_name, "` in database.")
   }
 
   table_name
@@ -30,10 +30,10 @@ check_column_name <- function(column_name, table_name, exists, conn) {
 
   column_exists <- column_exists(column_name, table_name, conn)
   if (isTRUE(exists) && !column_exists) {
-    err("column '", column_name, "' does not exist")
+    err("Can't find column `", column_name, "` in table `", table_name, "`")
   }
   if (isFALSE(exists) && column_exists) {
-    err("column '", column_name, "' already exists")
+    err("`", column_name, "` must not already exist in table `", table_name, "`")
   }
   column_name
 }
@@ -42,7 +42,7 @@ check_column_blob <- function(column_name, table_name, conn) {
   check_column_name(column_name, table_name, exists = TRUE, conn)
   is_blob <- is_column_blob(column_name, table_name, conn)
   if (!is_blob) {
-    err("column '", column_name, "' is not type BLOB")
+    err("`", column_name, "` must be type BLOB.")
   }
   column_name
 }
@@ -51,14 +51,14 @@ check_key <- function(table_name, key, conn) {
   check_data(key, nrow = 1L)
   x <- filter_key(table_name, key, conn)
   if (nrow(x) != 1L) {
-    err("filtering table by key must result in a single observation")
+    err("Filtering table by key must result in a single row.")
   }
   key
 }
 
-check_flob_query <- function(x, y = "retrieve") {
+check_flob_query <- function(x) {
   if (is.null(unlist(x))) {
-    err("there is no flob to ", y)
+    err("Can't find flob in that location.")
   }
   class(x) <- c("flob", "blob")
   flobr::chk_flob(x)

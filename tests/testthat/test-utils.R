@@ -10,9 +10,7 @@ test_that("add_blob_column works", {
 
   ## add blob_column
   expect_error(
-    add_blob_column(table_name = "df", column_name = "x", conn = conn),
-    "column 'x' already exists"
-  )
+    add_blob_column(table_name = "df", column_name = "x", conn = conn))
   expect_true(add_blob_column(table_name = "df", column_name = "flob", conn = conn))
 
   df2 <- DBI::dbReadTable(conn, "df")

@@ -24,7 +24,7 @@ A flob.
 Read a \code{\link[flobr]{flob}} from a SQLite database.
 }
 \examples{
-flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
+flob <- flobr::flob_obj
 conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 key <- data.frame(IntColumn = 2L)
