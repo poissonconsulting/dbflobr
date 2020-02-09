@@ -18,7 +18,7 @@ check_table_name <- function(table_name, conn) {
 
   table_exists <- table_exists(table_name, conn)
   if (!table_exists) {
-    err("table '", table_name, "' does not exist")
+    err("Table '", table_name, "' does not exist.")
   }
 
   table_name
@@ -30,10 +30,10 @@ check_column_name <- function(column_name, table_name, exists, conn) {
 
   column_exists <- column_exists(column_name, table_name, conn)
   if (isTRUE(exists) && !column_exists) {
-    err("column '", column_name, "' does not exist")
+    err("Column '", column_name, "' does not exist.")
   }
   if (isFALSE(exists) && column_exists) {
-    err("column '", column_name, "' already exists")
+    err("Column '", column_name, "' already exists.")
   }
   column_name
 }
@@ -42,7 +42,7 @@ check_column_blob <- function(column_name, table_name, conn) {
   check_column_name(column_name, table_name, exists = TRUE, conn)
   is_blob <- is_column_blob(column_name, table_name, conn)
   if (!is_blob) {
-    err("column '", column_name, "' is not type BLOB")
+    err("Column '", column_name, "' is not type BLOB.")
   }
   column_name
 }
@@ -51,14 +51,14 @@ check_key <- function(table_name, key, conn) {
   check_data(key, nrow = 1L)
   x <- filter_key(table_name, key, conn)
   if (nrow(x) != 1L) {
-    err("filtering table by key must result in a single observation")
+    err("Filtering table by key must result in a single observation.")
   }
   key
 }
 
 check_flob_query <- function(x, y = "retrieve") {
   if (is.null(unlist(x))) {
-    err("there is no flob to ", y)
+    err("There is no flob to ", y, ".")
   }
   class(x) <- c("flob", "blob")
   flobr::chk_flob(x)
