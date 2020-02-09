@@ -29,6 +29,6 @@ DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)), append = TR
 key <- data.frame(IntColumn = 2L)
 write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 dir <- tempdir()
-save_flobs("BlobColumn", "Table1", dir, conn)
+save_flobs("BlobColumn", "Table1", conn, dir)
 DBI::dbDisconnect(conn)
 }

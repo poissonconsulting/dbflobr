@@ -36,17 +36,17 @@ test_that("save_flobs works", {
   unlink(path, recursive = TRUE)
   dir.create(path)
 
-  expect_error(save_flobs("yup", "df", path, conn))
-  expect_error(save_flobs("New", "df3", path, conn))
-  expect_error(save_flobs("New", "df", path, "conn"))
-  expect_error(save_flobs("New", "df", 2, conn))
+  expect_error(save_flobs("yup", "df", conn, path))
+  expect_error(save_flobs("New", "df3", conn, path))
+  expect_error(save_flobs("New", "df", "conn", path))
+  expect_error(save_flobs("New", "df", conn, 2))
 
-  save_flobs("New", "df", path, conn)
+  save_flobs("New", "df", conn, path)
   expect_identical(list.files(path, pattern = "pdf"), c("a-1.pdf",
                                                         "a-2.1.pdf",
                                                         "b-1.pdf"))
   # works when pk length 1 and some empty flobs
-  save_flobs("New", "df2", path, conn)
+  save_flobs("New", "df2", conn, path)
   expect_identical(list.files(path, pattern = "pdf"), c("a-1.pdf",
                                                         "a-2.1.pdf",
                                                         "b-1.pdf",
@@ -54,7 +54,7 @@ test_that("save_flobs works", {
 
   write_flob(flob, "New2", "df2", key = data.frame(char = "a"), conn)
 
-  save_all_flobs(dir = path, conn = conn)
+  save_all_flobs(conn = conn, dir = path)
   expect_error(save_all_flobs("df3", path, conn))
   expect_error(save_all_flobs("df", path, "conn"))
   expect_error(save_all_flobs("df", 2, conn))
@@ -65,7 +65,7 @@ test_that("save_flobs works", {
                      "df/New/a-2.1.pdf", "df/New/b-1.pdf",
                      "df2/New/b.pdf", "df2/New2/a.pdf"))
 
-  expect_identical(save_all_flobs("df2", path, conn), path)
+  expect_identical(save_all_flobs("df2", conn, path), path)
 
 })
 

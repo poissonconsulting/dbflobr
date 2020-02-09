@@ -15,7 +15,7 @@
 #' key <- data.frame(IntColumn = 2L)
 #' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 #' dir <- tempdir()
-#' save_flobs("BlobColumn", "Table1", dir, conn)
+#' save_flobs("BlobColumn", "Table1", conn, dir)
 #' DBI::dbDisconnect(conn)
 save_flobs <- function(column_name, table_name, conn, dir = "."){
   check_sqlite_connection(conn)
@@ -89,7 +89,7 @@ save_all_flobs <- function(table_name = NULL, conn, dir = "."){
         dir.create(path, recursive = TRUE)
       ui_line(glue("Table name: {ui_value(i)}"))
       ui_line(glue("Column name: {ui_value(j)}"))
-      save_flobs(j, i, path, conn)
+      save_flobs(j, i, conn, path)
       ui_line("")
     }
   }
