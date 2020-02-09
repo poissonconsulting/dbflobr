@@ -19,12 +19,13 @@ save_flobs(column_name, table_name, dir, conn)
 An invisible character string of the directory.
 }
 \description{
-Rename \code{\link[flobr]{flobs}} from a SQLite database BLOB column and save to directory.
+Rename \code{\link[flobr]{flob}}s from a SQLite database BLOB column and save to directory.
 }
 \examples{
 flob <- flobr::flob_obj
 conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+DBI::dbGetQuery(conn, "CREATE TABLE Table1 (IntColumn INTEGER PRIMARY KEY NOT NULL)")
+DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)), append = TRUE)
 key <- data.frame(IntColumn = 2L)
 write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 dir <- tempdir()

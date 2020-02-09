@@ -1,6 +1,6 @@
 #' Save flobs.
 #'
-#' Rename \code{\link[flobr]{flobs}} from a SQLite database BLOB column and save to directory.
+#' Rename \code{\link[flobr]{flob}}s from a SQLite database BLOB column and save to directory.
 #'
 #' @inheritParams write_flob
 #' @param dir A string of the path to the directory to save the files in.
@@ -10,7 +10,8 @@
 #' @examples
 #' flob <- flobr::flob_obj
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+#' DBI::dbGetQuery(conn, "CREATE TABLE Table1 (IntColumn INTEGER PRIMARY KEY NOT NULL)")
+#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)), append = TRUE)
 #' key <- data.frame(IntColumn = 2L)
 #' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 #' dir <- tempdir()
@@ -23,6 +24,10 @@ save_flobs <- function(column_name, table_name, dir, conn){
   check_string(dir)
 
   pk <- table_pk(table_name, conn)
+
+  if(!length(pk))
+    err("Table `", table_name, "` must have a PRIMARY KEY.")
+
   sql <- glue("SELECT {sql_pk(pk)} FROM ('{table_name}');")
   values <- get_query(sql, conn)
 
@@ -60,7 +65,8 @@ save_flobs <- function(column_name, table_name, dir, conn){
 #' @examples
 #' flob <- flobr::flob_obj
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
+#' DBI::dbGetQuery(conn, "CREATE TABLE Table1 (IntColumn INTEGER PRIMARY KEY NOT NULL)")
+#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)), append = TRUE)
 #' key <- data.frame(IntColumn = 2L)
 #' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 #' dir <- tempdir()
@@ -92,10 +98,3 @@ save_all_flobs <- function(table_name = NULL, dir, conn){
   }
   invisible(dir)
 }
-
-
-
-
-### save_all_flobs create nested dir of table names and columns names with files in it
-## tabke_name arg deafulat all tables, but user can provide vector of table names
-
