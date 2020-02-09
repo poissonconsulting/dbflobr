@@ -15,7 +15,9 @@ Imports:
     glue,
     DBI,
     RSQLite,
-    usethis
+    crayon,
+    clisymbols,
+    rlang
 Suggests: 
     testthat (>= 2.1.0),
     covr

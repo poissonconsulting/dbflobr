@@ -31,7 +31,7 @@ save_flobs <- function(column_name, table_name, dir = ".", conn){
   sql <- glue("SELECT {sql_pk(pk)} FROM ('{table_name}');")
   values <- get_query(sql, conn)
 
-  usethis::ui_line(glue("Saving files to {ui_path(dir)}"))
+  ui_line(glue("Saving files to {ui_value(dir)}"))
 
   for(i in 1:nrow(values)){
     key <- values[i, , drop = FALSE]
@@ -43,9 +43,9 @@ save_flobs <- function(column_name, table_name, dir = ".", conn){
       file <- glue("{filename}.{ext}")
       new_file <- filename_key(key)
       flobr::unflob(x, dir = dir, name = new_file)
-      usethis::ui_done(glue("Row {i}: file {file} renamed to {new_file}.{ext}"))
+      ui_done(glue("Row {i}: file {file} renamed to {new_file}.{ext}"))
     } else {
-      usethis::ui_todo(glue("Row {i}: no file found"))
+      ui_todo(glue("Row {i}: no file found"))
     }
   }
   return(invisible(dir))
@@ -87,8 +87,8 @@ save_all_flobs <- function(table_name = NULL, dir = ".", conn){
       path <- file.path(dir, i, j)
       if(!dir.exists(path))
         dir.create(path, recursive = TRUE)
-      usethis::ui_line(glue("Table name: {ui_path(i)}"))
-      usethis::ui_line(glue("Column name: {ui_path(j)}"))
+      ui_line(glue("Table name: {ui_value(i)}"))
+      ui_line(glue("Column name: {ui_value(j)}"))
       save_flobs(j, i, path, conn)
       ui_line("")
     }

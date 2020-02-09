@@ -1,2 +1,2 @@
-#' @import checkr glue RSQLite usethis
+#' @import checkr glue RSQLite
 NULL
