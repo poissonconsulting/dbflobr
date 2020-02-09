@@ -99,7 +99,7 @@ delete_flob <- function(column_name, table_name, key, conn) {
   check_key(table_name, key, conn)
 
   x <- query_flob(column_name, table_name, key, conn)
-  x <- check_flob_query(x, "delete")
+  x <- check_flob_query(x)
 
   sql <- glue_sql("UPDATE {`table_name`} SET {`column_name`}",
     column_name = column_name,
