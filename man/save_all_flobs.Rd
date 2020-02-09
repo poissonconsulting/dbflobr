@@ -4,7 +4,7 @@
 \alias{save_all_flobs}
 \title{Save all flobs.}
 \usage{
-save_all_flobs(table_name = NULL, dir, conn)
+save_all_flobs(table_name = NULL, dir = ".", conn)
 }
 \arguments{
 \item{table_name}{A vector of character strings indicating names of tables to save flobs from.

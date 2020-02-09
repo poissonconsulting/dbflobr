@@ -4,7 +4,7 @@
 \alias{save_flobs}
 \title{Save flobs.}
 \usage{
-save_flobs(column_name, table_name, dir, conn)
+save_flobs(column_name, table_name, dir = ".", conn)
 }
 \arguments{
 \item{column_name}{A string of the name of the BLOB column.}
