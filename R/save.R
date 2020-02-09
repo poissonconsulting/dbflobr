@@ -77,9 +77,6 @@ save_all_flobs <- function(table_name = NULL, dir = ".", conn){
   checkor(check_table_name(table_name, conn), check_null(table_name))
   check_string(dir)
 
-  message("should we put table_name to the end? would be inconsistent,
-          but it is most likely to be used with default")
-
   if(is.null(table_name)){
     table_name <- table_names(conn)
   }
