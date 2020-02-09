@@ -90,7 +90,7 @@ test_that("check_key", {
 test_that("check_flob_query", {
   x <- list(NULL)
   expect_error(check_flob_query(x))
-  expect_error(check_flob_query(x, "delete"))
+  expect_error(check_flob_query(x))
 
   x <- flobr::flob_obj
   expect_identical(check_flob_query(x), x)

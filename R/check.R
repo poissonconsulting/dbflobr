@@ -18,7 +18,7 @@ check_table_name <- function(table_name, conn) {
 
   table_exists <- table_exists(table_name, conn)
   if (!table_exists) {
-    err(table_name, " must be a valid table.")
+    err("Can't find table `", table_name, "` in database.")
   }
 
   table_name
@@ -30,10 +30,10 @@ check_column_name <- function(column_name, table_name, exists, conn) {
 
   column_exists <- column_exists(column_name, table_name, conn)
   if (isTRUE(exists) && !column_exists) {
-    err(column_name, " must be a valid column in table ", table_name)
+    err("Can't find column `", column_name, "` in table `", table_name, "`")
   }
   if (isFALSE(exists) && column_exists) {
-    err(column_name, " already exists in table ", table_name)
+    err("`", column_name, "` must not already exist in table `", table_name, "`")
   }
   column_name
 }
@@ -42,7 +42,7 @@ check_column_blob <- function(column_name, table_name, conn) {
   check_column_name(column_name, table_name, exists = TRUE, conn)
   is_blob <- is_column_blob(column_name, table_name, conn)
   if (!is_blob) {
-    err(column_name, " must be type BLOB.")
+    err("`", column_name, "` must be type BLOB.")
   }
   column_name
 }
@@ -56,9 +56,9 @@ check_key <- function(table_name, key, conn) {
   key
 }
 
-check_flob_query <- function(x, y = "retrieve") {
+check_flob_query <- function(x) {
   if (is.null(unlist(x))) {
-    err("There is no flob to ", y, ".")
+    err("Can't find flob in that location.")
   }
   class(x) <- c("flob", "blob")
   flobr::chk_flob(x)
