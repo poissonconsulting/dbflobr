@@ -15,7 +15,6 @@ test_that("save_flobs works", {
                 char TEXT PRIMARY KEY NOT NULL)")
 
   # one column pk with two blob cols
-
   DBI::dbWriteTable(conn, "df",
                     data.frame(char = c("a", "a", "b"), num = c(1, 2.1, 1)),
                     append = TRUE)
@@ -37,6 +36,11 @@ test_that("save_flobs works", {
   unlink(path, recursive = TRUE)
   dir.create(path)
 
+  expect_error(save_flobs("yup", "df", path, conn))
+  expect_error(save_flobs("New", "df3", path, conn))
+  expect_error(save_flobs("New", "df", path, "conn"))
+  expect_error(save_flobs("New", "df", 2, conn))
+
   save_flobs("New", "df", path, conn)
   expect_identical(list.files(path, pattern = "pdf"), c("a-1.pdf",
                                                         "a-2.1.pdf",
@@ -51,13 +55,17 @@ test_that("save_flobs works", {
   write_flob(flob, "New2", "df2", key = data.frame(char = "a"), conn)
 
   save_all_flobs(dir = path, conn = conn)
-  expect_identical(list.files(path, pattern = "pdf"), c("a-1.pdf",
-                                                        "a-2.1.pdf",
-                                                        "a.pdf",
-                                                        "b-1.pdf",
-                                                        "b.pdf"))
+  expect_error(save_all_flobs("df3", path, conn))
+  expect_error(save_all_flobs("df", path, "conn"))
+  expect_error(save_all_flobs("df", 2, conn))
 
-  save_all_flobs("df2", path, conn)
+  expect_identical(list.files(path, pattern = "pdf", recursive = TRUE),
+                   c("a-1.pdf", "a-2.1.pdf",
+                     "b-1.pdf", "b.pdf", "df/New/a-1.pdf",
+                     "df/New/a-2.1.pdf", "df/New/b-1.pdf",
+                     "df2/New/b.pdf", "df2/New2/a.pdf"))
+
+  expect_identical(save_all_flobs("df2", path, conn), path)
 
 })
 

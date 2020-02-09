@@ -17,13 +17,15 @@
 #' save_flobs("BlobColumn", "Table1", dir, conn)
 #' DBI::dbDisconnect(conn)
 save_flobs <- function(column_name, table_name, dir, conn){
+  check_sqlite_connection(conn)
+  check_table_name(table_name, conn)
+  check_column_name(column_name, table_name, exists = TRUE, conn)
+  check_string(dir)
 
   pk <- table_pk(table_name, conn)
   sql <- glue("SELECT {sql_pk(pk)} FROM ('{table_name}');")
   values <- get_query(sql, conn)
 
-  usethis::ui_line(glue("Table name: {ui_path(table_name)}"))
-  usethis::ui_line(glue("Column name: {ui_path(column_name)}"))
   usethis::ui_line(glue("Saving files to {ui_path(dir)}"))
 
   for(i in 1:nrow(values)){
@@ -65,9 +67,13 @@ save_flobs <- function(column_name, table_name, dir, conn){
 #' save_all_flobs(dir = dir, conn = conn)
 #' DBI::dbDisconnect(conn)
 save_all_flobs <- function(table_name = NULL, dir, conn){
+  check_sqlite_connection(conn)
+  checkor(check_table_name(table_name, conn), check_null(table_name))
+  check_string(dir)
 
   message("should we put table_name to the end? would be inconsistent,
           but it is most likely to be used with default")
+
   if(is.null(table_name)){
     table_name <- table_names(conn)
   }
@@ -75,7 +81,12 @@ save_all_flobs <- function(table_name = NULL, dir, conn){
   for(i in table_name){
     cols <- blob_columns(i, conn)
     for(j in cols){
-      save_flobs(j, i, dir, conn)
+      path <- file.path(dir, i, j)
+      if(!dir.exists(path))
+        dir.create(path, recursive = TRUE)
+      usethis::ui_line(glue("Table name: {ui_path(i)}"))
+      usethis::ui_line(glue("Column name: {ui_path(j)}"))
+      save_flobs(j, i, path, conn)
       ui_line("")
     }
   }
