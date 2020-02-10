@@ -46,7 +46,7 @@ import_flobs <- function(column_name, table_name, key, conn,
 
   ui_line(glue("Writing files to connection"))
 
-  l <- set_names(vector(length = length(files)), filenames)
+  success <- set_names(vector(length = length(files)), filenames)
 
   for(i in seq_along(files)){
     values <- prep_file(filenames[i])
@@ -69,7 +69,7 @@ import_flobs <- function(column_name, table_name, key, conn,
                exists = TRUE), silent = TRUE)
 
     if(!is_try_error(x)){
-      l[i] <- TRUE
+      success[i] <- TRUE
       ui_done(glue("File {i}: {filenames[i]} written to database"))
     } else {
       if(length_unequal){
@@ -79,5 +79,5 @@ import_flobs <- function(column_name, table_name, key, conn,
       }
     }
   }
-  return(invisible(l))
+  return(invisible(success))
 }
