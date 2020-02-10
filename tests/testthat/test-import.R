@@ -40,10 +40,16 @@ test_that("import_flobs works", {
                 char TEXT NOT NULL,
                 int INTEGER NOT NULL,
                 num REAL NOT NULL,
-                PRIMARY KEY (char, int))")
+                PRIMARY KEY (char))")
 
   DBI::dbWriteTable(conn, "df",
                     data.frame(char = c("a", "b", "b"),
+                               int = c(1, 2, 3),
+                               num = c(1, 1, 1), stringsAsFactors = FALSE),
+                    append = TRUE)
+
+  DBI::dbWriteTable(conn, "df3",
+                    data.frame(char = c("a", "b", "c"),
                                int = c(1, 2, 3),
                                num = c(1, 1, 1), stringsAsFactors = FALSE),
                     append = TRUE)
@@ -55,12 +61,6 @@ test_that("import_flobs works", {
   key2 <- data.frame(char = "a", int = 2, stringsAsFactors = FALSE)
   key <- key2[0,]
   key3 <- data.frame(char = "a", num = 2, stringsAsFactors = FALSE)[0,]
-
-  column_name = "New"
-  table_name = "df"
-  dir = path
-  exists = FALSE
-  recursive = FALSE
 
   expect_error(import_flobs("New", "df2", key, conn, path),
                "Table `df2` must have a primary key.")
@@ -74,7 +74,23 @@ test_that("import_flobs works", {
   expect_true(all(x))
   expect_identical(names(x), basename(files))
 
+  ### test replaces existing
+  x <- import_flobs("New2", "df", key, conn, path, exists = TRUE, replace = TRUE, recursive = FALSE)
+  expect_true(all(x))
+
+  ### test wont replace existing
+  x <- import_flobs("New2", "df", key, conn, path, exists = TRUE, replace = FALSE, recursive = FALSE)
+  expect_true(!any(x))
+
+  ### test recursive
   x <- import_flobs("New3", "df", key, conn, path, recursive = TRUE)
   expect_true(sum(x) == 3)
+  expect_length(x, 4)
   expect_identical(names(x), basename(list_files(path, recursive = TRUE)))
+
+  ### test pk of 1
+  x <- import_flobs("New", "df3", key, conn, path, recursive = TRUE)
+  expect_true(sum(x) == 2)
+  expect_identical(names(x[x]), c("a-1.csv", "b-2.csv"))
+
 })

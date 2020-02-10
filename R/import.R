@@ -7,8 +7,9 @@
 #' file names in dir. The populated key is used to filter the table to a
 #' single row (this in combination with the column_name argument are used to
 #' target a single cell within the table to modify).
-#' @param recursive A flag indicating whether to recurse into file directory.
 #' @param dir A string of the path to the directory to save the files in.
+#' @param recursive A flag indicating whether to recurse into file directory.
+#' @param replace A flag indicating whether to replace existing flobs.
 #'
 #' @return An invisible named vector of file names and flag indicating whether
 #' successfully written to database.
@@ -24,7 +25,8 @@
 #' save_flobs("BlobColumn", "Table1", conn, dir)
 #' DBI::dbDisconnect(conn)
 import_flobs <- function(column_name, table_name, key, conn,
-                         dir = ".", exists = FALSE, recursive = FALSE){
+                         dir = ".", exists = FALSE, recursive = FALSE,
+                         replace = TRUE){
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = exists, conn)
@@ -47,13 +49,20 @@ import_flobs <- function(column_name, table_name, key, conn,
   l <- set_names(vector(length = length(files)), filenames)
 
   for(i in seq_along(files)){
-    x <- prep_file(filenames[i])
-    y <- flobr::flob(files[i])
-    for(j in seq_along(x)){
-      key[i, j] <- x[j]
+    values <- prep_file(filenames[i])
+    flob <- flobr::flob(files[i])
+    length_unequal <- length(values) > length(key)
+    for(j in seq_along(values)){
+      key[i, j] <- values[j]
     }
 
-    x <- try(write_flob(y, key = key[i,],
+    y <- try(read_flob(column_name, table_name, key[i,], conn), silent = TRUE)
+    if(!replace && !is_try_error(y)){
+      ui_todo(glue("File {i}: can't write {filenames[i]} to database. Flob already exists in that location and replace = FALSE"))
+      next
+    }
+
+    x <- try(write_flob(flob, key = key[i,],
                column_name = column_name,
                table_name = table_name,
                conn = conn,
@@ -63,7 +72,11 @@ import_flobs <- function(column_name, table_name, key, conn,
       l[i] <- TRUE
       ui_done(glue("File {i}: {filenames[i]} written to database"))
     } else {
-      ui_todo(glue("File {i}: can't write {filenames[i]} to database"))
+      if(length_unequal){
+        ui_todo(glue("File {i}: can't write {filenames[i]} to database. The number of hyphen-separated values must be identical to the number of columns in `key`."))
+      } else {
+        ui_todo(glue("File {i}: can't write {filenames[i]} to database"))
+      }
     }
   }
   return(invisible(l))

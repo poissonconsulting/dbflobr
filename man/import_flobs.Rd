@@ -11,7 +11,8 @@ import_flobs(
   conn,
   dir = ".",
   exists = FALSE,
-  recursive = FALSE
+  recursive = FALSE,
+  replace = TRUE
 )
 }
 \arguments{
@@ -33,6 +34,8 @@ mustn't (FALSE) already exist or whether it doesn't matter (NA).
 IF FALSE, a new BLOB column is created.}
 
 \item{recursive}{A flag indicating whether to recurse into file directory.}
+
+\item{replace}{A flag indicating whether to replace existing flobs.}
 }
 \value{
 An invisible named vector of file names and flag indicating whether
