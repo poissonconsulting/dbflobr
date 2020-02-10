@@ -1,11 +1,6 @@
 context("utils")
 
-test_that("populate_key works", {
-  key2 <- data.frame(
-    char = "a", num = 2.2,
-    stringsAsFactors = FALSE
-  )
-  key3 <- data.frame(key = 3)
-
+test_that("list_files works", {
+  expect_true(1 == 1)
 
 })

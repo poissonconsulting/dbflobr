@@ -64,3 +64,20 @@ check_flob_query <- function(x) {
   flobr::chk_flob(x)
   invisible(x)
 }
+
+check_pk <- function(table_name, conn){
+  pk <- table_pk(table_name, conn)
+  if(!length(pk)){
+    err("Table `", table_name, "` must have a primary key.")
+  }
+}
+
+check_pk_key <- function(table_name, conn, key){
+  pk <- table_pk(table_name, conn)
+  if(!length(pk)){
+    err("Table `", table_name, "` must have a primary key.")
+  }
+  if(!all(names(key) %in% pk)){
+    err("key column names must include primary key column names.")
+  }
+}

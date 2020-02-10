@@ -14,3 +14,8 @@ is_try_error <- function(x) {
 }
 
 err <- function(...) stop(..., call. = FALSE, domain = NA)
+
+set_names <- function(x, names) {
+  names(x) <- names
+  x
+}

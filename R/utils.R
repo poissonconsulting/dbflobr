@@ -8,7 +8,12 @@ collapse_flob <- function(x) {
   glue("x'{y}'")
 }
 
-populate_key <- function(key, files){
-  if(length(key) != lengths(files))
-    err("The number of columns in key and the number of files in dir must be identical.")
+prep_file <- function(x){
+  x <- tools::file_path_sans_ext(x)
+  strsplit(x, "-")[[1]]
+}
+
+list_files <- function(path, recursive){
+  setdiff(list.files(path, recursive = recursive, full.names = TRUE),
+          list.dirs(path, recursive = recursive, full.names = TRUE))
 }
