@@ -43,10 +43,6 @@ sql_pk <- function(x){
   paste0("`", paste(x, collapse = "`, `"), "`")
 }
 
-filename_key <- function(x){
-  glue_collapse(x, "-")
-}
-
 table_column_type <- function(column_name, table_name, conn) {
   table_info <- table_info(table_name, conn)
   table_info$type[to_upper(table_info$name) == to_upper(column_name)]
