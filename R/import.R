@@ -55,7 +55,7 @@ import_flobs <- function(column_name, table_name, key, conn,
     flob <- flobr::flob(files[i])
 
     if(is_length_unequal(values, key)){
-      ui_todo(glue("File {i}: can't write {filenames[i]} to database. The number of hyphen-separated values must be identical to the number of columns in `key`."))
+      ui_oops(glue("File {i}: can't write {filenames[i]} to database. The number of hyphen-separated values must be identical to the number of columns in `key`."))
       next
     }
 
@@ -65,7 +65,7 @@ import_flobs <- function(column_name, table_name, key, conn,
 
     y <- try(read_flob(column_name, table_name, key[i,], conn), silent = TRUE)
     if(!replace && !is_try_error(y)){
-      ui_todo(glue("File {i}: can't write {filenames[i]} to database. Flob already exists in that location and replace = FALSE"))
+      ui_oops(glue("File {i}: can't write {filenames[i]} to database. Flob already exists in that location and replace = FALSE"))
       next
     }
 
@@ -79,7 +79,7 @@ import_flobs <- function(column_name, table_name, key, conn,
       success[i] <- TRUE
       ui_done(glue("File {i}: {filenames[i]} written to database"))
     } else {
-      ui_todo(glue("File {i}: can't write {filenames[i]} to database"))
+      ui_oops(glue("File {i}: can't write {filenames[i]} to database"))
     }
   }
   return(invisible(success))

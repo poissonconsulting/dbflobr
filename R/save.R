@@ -45,7 +45,7 @@ save_flobs <- function(column_name, table_name, conn, dir = "."){
       flobr::unflob(x, dir = dir, name = new_file)
       ui_done(glue("Row {i}: file {file} renamed to {new_file}.{ext}"))
     } else {
-      ui_todo(glue("Row {i}: no file found"))
+      ui_oops(glue("Row {i}: no file found"))
     }
   }
   return(invisible(dir))
