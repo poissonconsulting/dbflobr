@@ -39,6 +39,12 @@ table_pk <- function(table_name, conn){
   info$name[info$pk > 0]
 }
 
+table_nrows <- function(table_name, conn){
+  sql <- glue("SELECT Count(*) FROM '{table_name}'")
+  nrows <- get_query(sql, conn)
+  nrows[[1]]
+}
+
 sql_pk <- function(x){
   paste0("`", paste(x, collapse = "`, `"), "`")
 }
