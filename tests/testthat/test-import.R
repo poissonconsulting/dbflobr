@@ -82,10 +82,15 @@ test_that("import_flobs works", {
   x <- import_flobs("New2", "df", key, conn, path, exists = TRUE, replace = FALSE, recursive = FALSE)
   expect_true(!any(x))
 
+  ### test nrows > length(files)
+  expect_error(import_flobs("New3", "df", key, conn, path, recursive = TRUE),
+               "Number of files must be less than or equal to number of rows in table.")
+
   ### test recursive
+  unlink(file.path(path, "b-3.csv"))
   x <- import_flobs("New3", "df", key, conn, path, recursive = TRUE)
-  expect_true(sum(x) == 3)
-  expect_length(x, 4)
+  expect_true(sum(x) == 2)
+  expect_length(x, 3)
   expect_identical(names(x), basename(list_files(path, recursive = TRUE)))
 
   ### test pk of 1
