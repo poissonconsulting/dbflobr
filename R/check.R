@@ -81,3 +81,10 @@ check_pk_key <- function(table_name, conn, key){
     err("key column names must include primary key column names.")
   }
 }
+
+check_nrows <- function(table_name, conn, files){
+  nrows <- table_nrows(table_name, conn)
+  if(length(files) > nrows){
+    err("Number of files must be less than or equal to number of rows in table.")
+  }
+}

@@ -40,19 +40,11 @@ import_flobs <- function(column_name, table_name, key, conn,
   files <- list_files(dir, recursive = recursive)
   filenames <- basename(files)
 
-  nrows <- table_nrows(table_name, conn)
-  print(nrows)
-  print(length(files))
-  length(files) > nrows
-  if(length(files) > nrows){
-    err("Number of files must be less than or equal to number of rows in table.")
-  }
+  check_nrows(table_name, conn, files)
 
   column_exists <- column_exists(column_name, table_name, conn = conn)
   if(!exists && !column_exists)
     add_blob_column(column_name, table_name, conn)
-
-
 
   ui_line(glue("Writing files to connection"))
 

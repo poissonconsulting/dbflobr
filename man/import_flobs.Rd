@@ -42,7 +42,7 @@ An invisible named vector of file names and flag indicating whether
 successfully written to database.
 }
 \description{
-Import flobs to SQLite database from directory.
+Import flobs to SQLite database column from directory.
 }
 \examples{
 flob <- flobr::flob_obj
