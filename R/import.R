@@ -51,7 +51,12 @@ import_flobs <- function(column_name, table_name, key, conn,
   for(i in seq_along(files)){
     values <- prep_file(filenames[i])
     flob <- flobr::flob(files[i])
-    length_unequal <- length(values) > length(key)
+
+    if(is_length_unequal(values, key)){
+      ui_todo(glue("File {i}: can't write {filenames[i]} to database. The number of hyphen-separated values must be identical to the number of columns in `key`."))
+      next
+    }
+
     for(j in seq_along(values)){
       key[i, j] <- values[j]
     }
@@ -63,20 +68,16 @@ import_flobs <- function(column_name, table_name, key, conn,
     }
 
     x <- try(write_flob(flob, key = key[i,],
-               column_name = column_name,
-               table_name = table_name,
-               conn = conn,
-               exists = TRUE), silent = TRUE)
+                        column_name = column_name,
+                        table_name = table_name,
+                        conn = conn,
+                        exists = TRUE), silent = TRUE)
 
     if(!is_try_error(x)){
       success[i] <- TRUE
       ui_done(glue("File {i}: {filenames[i]} written to database"))
     } else {
-      if(length_unequal){
-        ui_todo(glue("File {i}: can't write {filenames[i]} to database. The number of hyphen-separated values must be identical to the number of columns in `key`."))
-      } else {
-        ui_todo(glue("File {i}: can't write {filenames[i]} to database"))
-      }
+      ui_todo(glue("File {i}: can't write {filenames[i]} to database"))
     }
   }
   return(invisible(success))
