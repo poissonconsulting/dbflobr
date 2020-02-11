@@ -23,10 +23,7 @@ save_flobs <- function(column_name, table_name, conn, dir = "."){
   check_column_name(column_name, table_name, exists = TRUE, conn)
   check_string(dir)
 
-  pk <- table_pk(table_name, conn)
-
-  if(!length(pk))
-    err("Table `", table_name, "` must have a PRIMARY KEY.")
+  pk <- check_pk(table_name, conn)
 
   sql <- glue("SELECT {sql_pk(pk)} FROM ('{table_name}');")
   values <- get_query(sql, conn)

@@ -70,6 +70,7 @@ check_pk <- function(table_name, conn){
   if(!length(pk)){
     err("Table `", table_name, "` must have a primary key.")
   }
+  return(pk)
 }
 
 check_pk_key <- function(table_name, conn, key){
