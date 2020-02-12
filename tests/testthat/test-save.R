@@ -42,15 +42,16 @@ test_that("save_flobs works", {
   expect_error(save_flobs("New", "df", conn, 2))
 
   save_flobs("New", "df", conn, path)
-  expect_identical(list.files(path, pattern = "pdf"), c("a-1.pdf",
-                                                        "a-2.1.pdf",
-                                                        "b-1.pdf"))
+  expect_identical(list.files(path, pattern = "pdf"), c("a_-_1.pdf",
+                                                        "a_-_2.1.pdf",
+                                                        "b_-_1.pdf"))
   # works when pk length 1 and some empty flobs
   save_flobs("New", "df2", conn, path)
-  expect_identical(list.files(path, pattern = "pdf"), c("a-1.pdf",
-                                                        "a-2.1.pdf",
-                                                        "b-1.pdf",
-                                                        "b.pdf"))
+  # regardless of order
+  expect_true(all(list.files(path, pattern = "pdf") %in% c("a_-_1.pdf",
+                                                        "a_-_2.1.pdf",
+                                                        "b.pdf",
+                                                        "b_-_1.pdf")))
 
   write_flob(flob, "New2", "df2", key = data.frame(char = "a"), conn)
 
@@ -59,11 +60,11 @@ test_that("save_flobs works", {
   expect_error(save_all_flobs("df", path, "conn"))
   expect_error(save_all_flobs("df", 2, conn))
 
-  expect_identical(list.files(path, pattern = "pdf", recursive = TRUE),
-                   c("a-1.pdf", "a-2.1.pdf",
-                     "b-1.pdf", "b.pdf", "df/New/a-1.pdf",
-                     "df/New/a-2.1.pdf", "df/New/b-1.pdf",
-                     "df2/New/b.pdf", "df2/New2/a.pdf"))
+  expect_true(all(list.files(path, pattern = "pdf", recursive = TRUE) %in%
+                   c("a_-_1.pdf", "a_-_2.1.pdf",
+                     "b_-_1.pdf", "b.pdf", "df/New/a_-_1.pdf",
+                     "df/New/a_-_2.1.pdf", "df/New/b_-_1.pdf",
+                     "df2/New/b.pdf", "df2/New2/a.pdf")))
 
   expect_identical(save_all_flobs("df2", conn, path), path)
 

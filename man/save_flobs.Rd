@@ -4,7 +4,7 @@
 \alias{save_flobs}
 \title{Save flobs.}
 \usage{
-save_flobs(column_name, table_name, conn, dir = ".")
+save_flobs(column_name, table_name, conn, dir = ".", sep = "_-_")
 }
 \arguments{
 \item{column_name}{A string of the name of the BLOB column.}
@@ -14,6 +14,8 @@ save_flobs(column_name, table_name, conn, dir = ".")
 \item{conn}{A SQLite connection object.}
 
 \item{dir}{A string of the path to the directory to save the files in.}
+
+\item{sep}{A string of the separator used to construct file names from values.}
 }
 \value{
 An invisible character string of the directory.

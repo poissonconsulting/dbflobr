@@ -4,7 +4,7 @@
 \alias{save_all_flobs}
 \title{Save all flobs.}
 \usage{
-save_all_flobs(table_name = NULL, conn, dir = ".")
+save_all_flobs(table_name = NULL, conn, dir = ".", sep = "_-_")
 }
 \arguments{
 \item{table_name}{A vector of character strings indicating names of tables to save flobs from.
@@ -13,6 +13,8 @@ By default all tables are included.}
 \item{conn}{A SQLite connection object.}
 
 \item{dir}{A character string of the path to the directory to save files to.}
+
+\item{sep}{A string of the separator used to construct file names from values.}
 }
 \value{
 An invisible character string of the directory.

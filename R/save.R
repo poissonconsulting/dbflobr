@@ -4,6 +4,7 @@
 #'
 #' @inheritParams write_flob
 #' @param dir A string of the path to the directory to save the files in.
+#' @param sep A string of the separator used to construct file names from values.
 #'
 #' @return An invisible character string of the directory.
 #' @export
@@ -17,11 +18,12 @@
 #' dir <- tempdir()
 #' save_flobs("BlobColumn", "Table1", conn, dir)
 #' DBI::dbDisconnect(conn)
-save_flobs <- function(column_name, table_name, conn, dir = "."){
+save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = TRUE, conn)
   check_string(dir)
+  check_string(sep)
 
   pk <- check_pk(table_name, conn)
 
@@ -38,7 +40,7 @@ save_flobs <- function(column_name, table_name, conn, dir = "."){
       filename <- flobr::flob_name(x)
       ext <- flobr::flob_ext(x)
       file <- glue("{filename}.{ext}")
-      new_file <- filename_key(key)
+      new_file <- create_filename(key, sep = sep)
       flobr::unflob(x, dir = dir, name = new_file)
       ui_done(glue("Row {i}: file {file} renamed to {new_file}.{ext}"))
     } else {
@@ -53,9 +55,10 @@ save_flobs <- function(column_name, table_name, conn, dir = "."){
 #' Rename \code{\link[flobr]{flob}}s from a SQLite database and save to directory.
 #'
 #' @inheritParams write_flob
-#' @param dir A character string of the path to the directory to save files to.
 #' @param table_name A vector of character strings indicating names of tables to save flobs from.
 #' By default all tables are included.
+#' @param dir A character string of the path to the directory to save files to.
+#' @param sep A string of the separator used to construct file names from values.
 #'
 #' @return An invisible character string of the directory.
 #' @export
@@ -69,10 +72,11 @@ save_flobs <- function(column_name, table_name, conn, dir = "."){
 #' dir <- tempdir()
 #' save_all_flobs(conn = conn, dir = dir)
 #' DBI::dbDisconnect(conn)
-save_all_flobs <- function(table_name = NULL, conn, dir = "."){
+save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_"){
   check_sqlite_connection(conn)
   checkor(check_table_name(table_name, conn), check_null(table_name))
   check_string(dir)
+  check_string(sep)
 
   if(is.null(table_name)){
     table_name <- table_names(conn)
@@ -86,7 +90,7 @@ save_all_flobs <- function(table_name = NULL, conn, dir = "."){
         dir.create(path, recursive = TRUE)
       ui_line(glue("Table name: {ui_value(i)}"))
       ui_line(glue("Column name: {ui_value(j)}"))
-      save_flobs(j, i, conn, path)
+      save_flobs(j, i, conn, path, sep)
       ui_line("")
     }
   }
