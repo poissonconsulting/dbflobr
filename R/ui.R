@@ -8,8 +8,8 @@ ui_line <- function(x) {
   rlang::inform(x)
 }
 
-ui_todo <- function(x) {
-  bullet(x, crayon::red(clisymbols::symbol$bullet))
+ui_oops <- function(x) {
+  bullet(x, crayon::red(clisymbols::symbol$cross))
 }
 
 ui_done <- function(x) {

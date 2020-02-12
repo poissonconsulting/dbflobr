@@ -4,15 +4,17 @@
 \alias{save_all_flobs}
 \title{Save all flobs.}
 \usage{
-save_all_flobs(table_name = NULL, dir = ".", conn)
+save_all_flobs(table_name = NULL, conn, dir = ".", sep = "_-_")
 }
 \arguments{
 \item{table_name}{A vector of character strings indicating names of tables to save flobs from.
 By default all tables are included.}
 
+\item{conn}{A SQLite connection object.}
+
 \item{dir}{A character string of the path to the directory to save files to.}
 
-\item{conn}{A SQLite connection object.}
+\item{sep}{A string of the separator used to construct file names from values.}
 }
 \value{
 An invisible character string of the directory.
@@ -28,6 +30,6 @@ DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)), append = TR
 key <- data.frame(IntColumn = 2L)
 write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 dir <- tempdir()
-save_all_flobs(dir = dir, conn = conn)
+save_all_flobs(conn = conn, dir = dir)
 DBI::dbDisconnect(conn)
 }
