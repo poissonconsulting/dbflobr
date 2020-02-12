@@ -100,11 +100,3 @@ test_that("table_info", {
   expect_identical(table_info$notnull, rep(0L, 3))
   expect_identical(table_info$pk, rep(0L, 3))
 })
-
-test_that("table_nrows works", {
-  conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
-
-  DBI::dbWriteTable(conn, "local", data.frame(x = as.character(1:3)))
-  expect_identical(table_nrows("local", conn), 3L)
-})

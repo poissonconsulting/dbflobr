@@ -16,14 +16,13 @@
 #' successfully written to database.
 #' @export
 #' @examples
-#' flob <- flobr::flob_obj
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-#' DBI::dbGetQuery(conn, "CREATE TABLE Table1 (IntColumn INTEGER PRIMARY KEY NOT NULL)")
-#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)), append = TRUE)
-#' key <- data.frame(IntColumn = 2L)
-#' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
+#' DBI::dbGetQuery(conn, "CREATE TABLE Table1 (CharColumn TEXT PRIMARY KEY NOT NULL)")
+#' DBI::dbWriteTable(conn, "Table1", data.frame(CharColumn = c("a", "b")), append = TRUE)
+#' key <- data.frame(CharColumn = "a", stringsAsFactors = FALSE)[0,,drop = FALSE]
 #' dir <- tempdir()
-#' save_flobs("BlobColumn", "Table1", conn, dir)
+#' write.csv(key, file.path(dir, "a.csv"))
+#' import_flobs("BlobColumn", "Table1", key, conn, dir)
 #' DBI::dbDisconnect(conn)
 import_flobs <- function(column_name, table_name, key, conn,
                          dir = ".", exists = FALSE, recursive = FALSE,
@@ -40,8 +39,6 @@ import_flobs <- function(column_name, table_name, key, conn,
 
   files <- list_files(dir, recursive = recursive)
   filenames <- basename(files)
-
-  check_nrows(table_name, conn, files)
 
   column_exists <- column_exists(column_name, table_name, conn = conn)
   if(!exists && !column_exists)
@@ -70,7 +67,7 @@ import_flobs <- function(column_name, table_name, key, conn,
       next
     }
 
-    x <- try(write_flob(flob, key = key[i,],
+    x <- try(write_flob(flob, key = key[i,,drop = FALSE],
                         column_name = column_name,
                         table_name = table_name,
                         conn = conn,
@@ -104,31 +101,55 @@ import_flobs <- function(column_name, table_name, key, conn,
 #' successfully written to database.
 #' @export
 #' @examples
-#' flob <- flobr::flob_obj
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-#' DBI::dbGetQuery(conn, "CREATE TABLE Table1 (IntColumn INTEGER PRIMARY KEY NOT NULL)")
-#' DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)), append = TRUE)
-#' key <- data.frame(IntColumn = 2L)
-#' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
+#' DBI::dbGetQuery(conn, "CREATE TABLE Table1 (CharColumn TEXT PRIMARY KEY NOT NULL)")
+#' DBI::dbWriteTable(conn, "Table1", data.frame(CharColumn = c("a", "b")), append = TRUE)
+#' key <- data.frame(CharColumn = "a", stringsAsFactors = FALSE)[0,,drop = FALSE]
 #' dir <- tempdir()
-#' save_flobs("BlobColumn", "Table1", conn, dir)
+#' path <- file.path(dir, "Table1", "BlobColumn")
+#' dir.create(path)
+#' write.csv(key, file.path(path, "a.csv"))
+#' import_all_flobs(key, conn, dir)
 #' DBI::dbDisconnect(conn)
-import_flobs <- function(column_name, table_name, key, conn,
-                         dir = ".", exists = FALSE, recursive = FALSE,
-                         replace = TRUE){
+import_all_flobs <- function(conn, dir = ".", exists = FALSE,
+                             recursive = FALSE, replace = TRUE){
   check_sqlite_connection(conn)
-  check_table_name(table_name, conn)
-  check_column_name(column_name, table_name, exists = exists, conn)
+  checkor(check_table_name(table_name, conn), check_null(table_name))
   check_string(dir)
   check_inherits(key, "data.frame")
   check_nrow(key, 0L)
   check_flag(exists)
   check_flag(recursive)
-  check_pk_key(table_name, conn, key)
 
-  files <- list_files(dir, recursive = recursive)
-  filenames <- basename(files)
+  dirs <- nest_dirs(path)
 
+  for(i in seq_along(dirs)){
+    x <- dirs[[i]]
+    table_name <- x[1]
+    column_name <- x[2]
+    inner_path <- file.path(path, table_name, column_name)
+    key <- table_pk_df(table_name, conn)[0, , drop = FALSE]
+    ui_line(glue("Table name: {ui_value(table_name)}"))
+    ui_line(glue("Column name: {ui_value(column_name)}"))
+    import_flobs(column_name = x[2], table_name = x[1],
+                 key = key, conn = conn, dir = inner_path, exists = TRUE, replace = TRUE)
+    ui_line("")
+  }
 
+  # for(i in table_name){
+  #   cols <- blob_columns(i, conn)
+  #   for(j in cols){
+  #     path <- file.path(dir, i, j)
+  #     if(!dir.exists(path))
+  #       dir.create(path, recursive = TRUE)
+  #     ui_line(glue("Table name: {ui_value(i)}"))
+  #     ui_line(glue("Column name: {ui_value(j)}"))
+  #     save_flobs(j, i, conn, path)
+  #     ui_line("")
+  #   }
+  # }
+  #
+  # files <- list_files(dir, recursive = recursive)
+  # filenames <- basename(files)
 }
 

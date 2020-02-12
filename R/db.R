@@ -39,10 +39,22 @@ table_pk <- function(table_name, conn){
   info$name[info$pk > 0]
 }
 
-table_nrows <- function(table_name, conn){
-  sql <- glue("SELECT Count(*) FROM '{table_name}'")
-  nrows <- get_query(sql, conn)
-  nrows[[1]]
+table_pk_df <- function(table_name, conn){
+  info <- table_info(table_name, conn)
+  pk <- info$name[info$pk > 0]
+  key <- data.frame(matrix(ncol = length(pk), nrow = 1, dimnames = list(NULL, pk)))
+  for(i in pk){
+    type <- info$type[info$name == i]
+    x <- switch (type,
+      "TEXT" = character(),
+      "INTEGER" = integer(),
+      "BOOLEAN" = logical(),
+      "REAL" = numeric(),
+      logical()
+    )
+    key[i] <- x
+  }
+  key
 }
 
 sql_pk <- function(x){

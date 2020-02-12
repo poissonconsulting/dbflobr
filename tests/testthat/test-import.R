@@ -82,10 +82,6 @@ test_that("import_flobs works", {
   x <- import_flobs("New2", "df", key, conn, path, exists = TRUE, replace = FALSE, recursive = FALSE)
   expect_true(!any(x))
 
-  ### test nrows > length(files)
-  expect_error(import_flobs("New3", "df", key, conn, path, recursive = TRUE),
-               "Number of files must be less than or equal to number of rows in table.")
-
   ### test recursive
   unlink(file.path(path, "b-3.csv"))
   x <- import_flobs("New3", "df", key, conn, path, recursive = TRUE)
@@ -97,5 +93,50 @@ test_that("import_flobs works", {
   x <- import_flobs("New", "df3", key, conn, path, recursive = TRUE)
   expect_true(sum(x) == 2)
   expect_identical(names(x[x]), c("a-1.csv", "b-2.csv"))
+
+})
+
+test_that("import_all_flobs works", {
+
+  conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  teardown(DBI::dbDisconnect(conn))
+
+  # 2 column pk
+  DBI::dbGetQuery(conn,
+                  "CREATE TABLE df (
+                char TEXT NOT NULL,
+                num REAL NOT NULL,
+                PRIMARY KEY (char, num))")
+
+  # one column pk with empty
+  DBI::dbGetQuery(conn,
+                  "CREATE TABLE df2 (
+                char TEXT PRIMARY KEY NOT NULL)")
+
+  # one column pk with two blob cols
+  DBI::dbWriteTable(conn, "df",
+                    data.frame(char = c("a", "a", "b"), num = c(1, 2.1, 1)),
+                    append = TRUE)
+  DBI::dbWriteTable(conn, "df2", data.frame(char = c("a", "b")), append = TRUE)
+
+  flob <- flobr::flob_obj
+  write_flob(flob, "New", "df", key = data.frame(char = "a", num = 1), conn)
+  write_flob(flob, "New2", "df", key = data.frame(char = "a", num = 2.1), conn)
+  write_flob(flob, "New", "df", key = data.frame(char = "b"), conn)
+  write_flob(flob, "New", "df2", key = data.frame(char = "b"), conn)
+
+  ### works when pk length 2
+  teardown(unlink(file.path(tempdir(), "dbflobr")))
+
+  path <- file.path(tempdir(), "dbflobr")
+  unlink(path, recursive = TRUE)
+  dir.create(path)
+
+  save_all_flobs(conn = conn, dir = path)
+
+
+
+
+
 
 })
