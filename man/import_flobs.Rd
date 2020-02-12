@@ -7,12 +7,12 @@
 import_flobs(
   column_name,
   table_name,
-  key,
   conn,
   dir = ".",
+  sep = "_-_",
   exists = FALSE,
   recursive = FALSE,
-  replace = TRUE
+  replace = FALSE
 )
 }
 \arguments{
@@ -20,38 +20,35 @@ import_flobs(
 
 \item{table_name}{A string of the name of the existing table.}
 
-\item{key}{An empty data.frame whose columns and types are populated by
-file names in dir. The populated key is used to filter the table to a
-single row (this in combination with the column_name argument are used to
-target a single cell within the table to modify).}
-
 \item{conn}{A SQLite connection object.}
 
-\item{dir}{A string of the path to the directory to save the files in.}
+\item{dir}{A string of the path to the directory to import files from.}
+
+\item{sep}{A string of the separator between values in file names.}
 
 \item{exists}{A logical scalar specifying whether the column must (TRUE) or
 mustn't (FALSE) already exist or whether it doesn't matter (NA).
 IF FALSE, a new BLOB column is created.}
 
-\item{recursive}{A flag indicating whether to recurse into file directory.}
+\item{recursive}{A logical scalar indicating whether to recurse into file directory (TRUE) or not (FALSE).}
 
-\item{replace}{A flag indicating whether to replace existing flobs.}
+\item{replace}{A logical scalar indicating whether to replace existing flobs (TRUE) or not (FALSE).}
 }
 \value{
-An invisible named vector of file names and flag indicating whether
+An invisible named vector indicating file name and whether the file was
 successfully written to database.
 }
 \description{
-Import flobs to SQLite database column from directory.
+Import \code{\link[flobr]{flob}}s to SQLite database column from directory.
+Values in file name are matched to table primary key to determine where to write flob.
 }
 \examples{
-flob <- flobr::flob_obj
 conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-DBI::dbGetQuery(conn, "CREATE TABLE Table1 (IntColumn INTEGER PRIMARY KEY NOT NULL)")
-DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)), append = TRUE)
-key <- data.frame(IntColumn = 2L)
-write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
+DBI::dbGetQuery(conn, "CREATE TABLE Table1 (CharColumn TEXT PRIMARY KEY NOT NULL)")
+DBI::dbWriteTable(conn, "Table1", data.frame(CharColumn = c("a", "b")), append = TRUE)
+key <- data.frame(CharColumn = "a", stringsAsFactors = FALSE)[0,,drop = FALSE]
 dir <- tempdir()
-save_flobs("BlobColumn", "Table1", conn, dir)
+write.csv(key, file.path(dir, "a.csv"))
+import_flobs("BlobColumn", "Table1", conn, dir)
 DBI::dbDisconnect(conn)
 }

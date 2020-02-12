@@ -54,7 +54,7 @@ table_pk_df <- function(table_name, conn){
     )
     key[i] <- x
   }
-  key
+  key[0,,drop = FALSE]
 }
 
 sql_pk <- function(x){

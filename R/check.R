@@ -72,13 +72,3 @@ check_pk <- function(table_name, conn){
   }
   return(pk)
 }
-
-check_pk_key <- function(table_name, conn, key){
-  pk <- table_pk(table_name, conn)
-  if(!length(pk)){
-    err("Table `", table_name, "` must have a primary key.")
-  }
-  if(!all(pk %in% names(key))){
-    err("key column names must include primary key column names.")
-  }
-}

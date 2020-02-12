@@ -13,10 +13,12 @@ test_that("import_flobs works", {
   dir.create(inner_path2)
   dir.create(inner_path3)
 
-  write.csv(mtcars, file.path(path, "a-1.csv"))
-  write.csv(mtcars, file.path(path, "b-2.csv"))
-  write.csv(mtcars, file.path(path, "b-3.csv"))
-  write.csv(mtcars, file.path(inner_path, "b-3-2.csv"))
+  df <- data.frame(a = 1)
+
+  write.csv(df, file.path(path, "a_-_1.csv"))
+  write.csv(df, file.path(path, "b_-_2.csv"))
+  write.csv(df, file.path(path, "b_-_3.csv"))
+  write.csv(df, file.path(inner_path, "b_-_3_-_2.csv"))
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
@@ -58,42 +60,47 @@ test_that("import_flobs works", {
   expect_length(list_files(path, recursive = FALSE), 3L)
   expect_length(list_files(path, recursive = TRUE), 4L)
 
-  key2 <- data.frame(char = "a", int = 2, stringsAsFactors = FALSE)
-  key <- key2[0,]
-  key3 <- data.frame(char = "a", num = 2, stringsAsFactors = FALSE)[0,]
-
-  expect_error(import_flobs("New", "df2", key, conn, path),
+  expect_error(import_flobs("New", "df2", conn, path),
                "Table `df2` must have a primary key.")
 
-  # key must have 0 rows
-  expect_error(import_flobs("New", "df", key2, conn, path))
-  expect_error(import_flobs("New", "df", key3, conn, path),
-               "key column names must include primary key column names.")
-
-  x <- import_flobs("New2", "df", key, conn, path, recursive = FALSE)
+  x <- import_flobs("New2", "df", conn, path, recursive = FALSE)
   expect_true(all(x))
   expect_identical(names(x), basename(files))
 
   ### test replaces existing
-  x <- import_flobs("New2", "df", key, conn, path, exists = TRUE, replace = TRUE, recursive = FALSE)
+  x <- import_flobs("New2", "df", conn, path, exists = TRUE, replace = TRUE, recursive = FALSE)
   expect_true(all(x))
 
   ### test wont replace existing
-  x <- import_flobs("New2", "df", key, conn, path, exists = TRUE, replace = FALSE, recursive = FALSE)
+  x <- import_flobs("New2", "df", conn, path, exists = TRUE, recursive = FALSE)
   expect_true(!any(x))
 
   ### test recursive
-  unlink(file.path(path, "b-3.csv"))
-  x <- import_flobs("New3", "df", key, conn, path, recursive = TRUE)
+  unlink(file.path(path, "b_-_3.csv"))
+  x <- import_flobs("New3", "df", conn, path, recursive = TRUE)
   expect_true(sum(x) == 2)
   expect_length(x, 3)
   expect_identical(names(x), basename(list_files(path, recursive = TRUE)))
 
-  ### test pk of 1
-  x <- import_flobs("New", "df3", key, conn, path, recursive = TRUE)
-  expect_true(sum(x) == 2)
-  expect_identical(names(x[x]), c("a-1.csv", "b-2.csv"))
+  write.csv(df, file.path(inner_path3, "a.csv"))
+  write.csv(df, file.path(inner_path3, "b.csv"))
+  write.csv(df, file.path(inner_path3, "b_-_1.csv"))
 
+  ### test pk of 1
+  x <- import_flobs("New", "df3", conn, inner_path3)
+  expect_true(sum(x) == 2)
+  expect_identical(names(x[x]), c("a.csv", "b.csv"))
+
+  ### test sep arg
+  x <- import_flobs("New", "df", conn, path, sep = "-")
+  expect_true(sum(x) == 0)
+  expect_identical(names(x), c("a_-_1.csv", "b_-_2.csv"))
+  unlink(file.path(inner_path, "b_-_3_-_2.csv"))
+  write.csv(df, file.path(inner_path, "b-3.csv"))
+
+  x <- import_flobs("New4", "df", conn, inner_path, sep = "-")
+  expect_true(sum(x) == 1)
+  expect_identical(names(x), c("b-3.csv"))
 })
 
 test_that("import_all_flobs works", {
@@ -134,9 +141,26 @@ test_that("import_all_flobs works", {
 
   save_all_flobs(conn = conn, dir = path)
 
+  expect_error(import_all_flobs(conn, path, exists = FALSE, replace = FALSE),
+               "`New` must not already exist in table `df`")
 
+  x <- import_all_flobs(conn, path, exists = TRUE, replace = FALSE)
+  expect_identical(sum(unlist(x)), 0L)
+  expect_length(x, 3)
+  expect_identical(names(unlist(x)), c("df/New.a_-_1.pdf",
+                                       "df/New.b_-_1.pdf",
+                                       "df/New2.a_-_2.1.pdf",
+                                       "df2/New.b.pdf"))
 
+  x <- import_all_flobs(conn, path, exists = TRUE, replace = TRUE)
+  expect_identical(sum(unlist(x)), 4L)
+  expect_length(x, 3)
+  expect_identical(names(unlist(x)), c("df/New.a_-_1.pdf",
+                                       "df/New.b_-_1.pdf",
+                                       "df/New2.a_-_2.1.pdf",
+                                       "df2/New.b.pdf"))
 
-
+  x <- import_all_flobs(conn, path, sep = "-", exists = TRUE, replace = TRUE)
+  expect_identical(sum(unlist(x)), 1L)
 
 })
