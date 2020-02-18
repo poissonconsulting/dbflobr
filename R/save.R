@@ -6,7 +6,7 @@
 #' @param dir A string of the path to the directory to save the files in.
 #' @param sep A string of the separator used to construct file names from values.
 #'
-#' @return An invisible named vector of file names and new file names.
+#' @return An invisible named vector of the file names and new file names saved.
 #' @export
 #' @examples
 #' flob <- flobr::flob_obj
@@ -67,7 +67,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
 #' @param dir A character string of the path to the directory to save files to.
 #' @param sep A string of the separator used to construct file names from values.
 #'
-#' @return An invisible named vector of file names and new file names.
+#' @return An invisible named list of named vectors of the file names and new file names saved.
 #' @export
 #' @examples
 #' flob <- flobr::flob_obj
@@ -92,19 +92,18 @@ save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_"){
   success <- vector(mode = "list")
   success_names <- vector()
 
-  for(i in seq_along(table_name)){
-    cols <- blob_columns(table_name[i], conn)
-    for(j in seq_along(cols)){
-      path <- file.path(dir, table_name[i], cols[j])
+  for(i in table_name){
+    cols <- blob_columns(i, conn)
+    for(j in cols){
+      name <- file.path(i, j)
+      path <- file.path(dir, name)
       if(!dir.exists(path))
         dir.create(path, recursive = TRUE)
       ui_line(glue("Table name: {ui_value(i)}"))
       ui_line(glue("Column name: {ui_value(j)}"))
-      success[j] <- save_flobs(j, i, conn, path, sep)
-      success_names[j] <- path
+      success[[name]] <- save_flobs(j, i, conn, path, sep)
       ui_line("")
     }
   }
-  names(success) <- success_names
   return(invisible(success))
 }

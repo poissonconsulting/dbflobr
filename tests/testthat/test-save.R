@@ -36,17 +36,23 @@ test_that("save_flobs works", {
   unlink(path, recursive = TRUE)
   dir.create(path)
 
-  expect_error(save_flobs("yup", "df", conn, path))
-  expect_error(save_flobs("New", "df3", conn, path))
+  # custom err messages
+  expect_error(save_flobs("yup", "df", conn, path), "Can't find column `yup` in table `df`.")
+  expect_error(save_flobs("New", "df3", conn, path), "Can't find table `df3` in database.")
+
+  # checkr err messages
   expect_error(save_flobs("New", "df", "conn", path))
   expect_error(save_flobs("New", "df", conn, 2))
 
-  save_flobs("New", "df", conn, path)
-  expect_identical(list.files(path, pattern = "pdf"), c("a_-_1.pdf",
-                                                        "a_-_2.1.pdf",
-                                                        "b_-_1.pdf"))
+  x <- save_flobs("New", "df", conn, path)
+  expect_identical(names(x), c("flobr.pdf", "flobr.pdf", "flobr.pdf"))
+  names(x) <- NULL
+  expect_identical(list.files(path, pattern = "pdf"), x)
+
   # works when pk length 1 and some empty flobs
-  save_flobs("New", "df2", conn, path)
+  y <- save_flobs("New", "df2", conn, path)
+  names(y) <- NULL
+  expect_identical(y, c(NA, "b.pdf"))
   # regardless of order
   expect_true(all(list.files(path, pattern = "pdf") %in% c("a_-_1.pdf",
                                                         "a_-_2.1.pdf",
@@ -55,10 +61,15 @@ test_that("save_flobs works", {
 
   write_flob(flob, "New2", "df2", key = data.frame(char = "a"), conn)
 
-  save_all_flobs(conn = conn, dir = path)
-  expect_error(save_all_flobs("df3", path, conn))
-  expect_error(save_all_flobs("df", path, "conn"))
-  expect_error(save_all_flobs("df", 2, conn))
+  y <- save_all_flobs(conn = conn, dir = path)
+  expect_identical(names(y), c("df/New", "df2/New", "df2/New2"))
+  z <- y$`df/New`
+  names(z) <- NULL
+  expect_identical(z, x)
+
+  expect_error(save_all_flobs("df3", conn, path), "Can't find table `df3` in database. OR table_name must be NULL")
+  expect_error(save_all_flobs("df", "conn", path))
+  expect_error(save_all_flobs("df", conn, 2))
 
   expect_true(all(list.files(path, pattern = "pdf", recursive = TRUE) %in%
                    c("a_-_1.pdf", "a_-_2.1.pdf",
@@ -66,7 +77,8 @@ test_that("save_flobs works", {
                      "df/New/a_-_2.1.pdf", "df/New/b_-_1.pdf",
                      "df2/New/b.pdf", "df2/New2/a.pdf")))
 
-  expect_identical(save_all_flobs("df2", conn, path), path)
+  x <- save_all_flobs("df2", conn, path)
+  expect_identical(length(x), 2L)
 
 })
 
