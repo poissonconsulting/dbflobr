@@ -6,7 +6,7 @@
 #' @param dir A string of the path to the directory to save the files in.
 #' @param sep A string of the separator used to construct file names from values.
 #'
-#' @return An invisible character string of the directory.
+#' @return An invisible named vector of file names and new file names.
 #' @export
 #' @examples
 #' flob <- flobr::flob_obj
@@ -32,6 +32,9 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
 
   ui_line(glue("Saving files to {ui_value(dir)}"))
 
+  success <- vector()
+  success_names <- vector()
+
   for(i in 1:nrow(values)){
     key <- values[i, , drop = FALSE]
     x <- try(read_flob(column_name, table_name, key, conn), silent = TRUE)
@@ -41,13 +44,17 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
       ext <- flobr::flob_ext(x)
       file <- glue("{filename}.{ext}")
       new_file <- create_filename(key, sep = sep)
+      new_file_ext <- glue("{new_file}.{ext}")
+      success[i] <- new_file_ext
+      success_names[i] <- file
       flobr::unflob(x, dir = dir, name = new_file)
-      ui_done(glue("Row {i}: file {file} renamed to {new_file}.{ext}"))
+      ui_done(glue("Row {i}: file {file} renamed to {new_file_ext}"))
     } else {
       ui_oops(glue("Row {i}: no file found"))
     }
   }
-  return(invisible(dir))
+  names(success) <- success_names
+  return(invisible(success))
 }
 
 #' Save all flobs.
@@ -60,7 +67,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
 #' @param dir A character string of the path to the directory to save files to.
 #' @param sep A string of the separator used to construct file names from values.
 #'
-#' @return An invisible character string of the directory.
+#' @return An invisible named vector of file names and new file names.
 #' @export
 #' @examples
 #' flob <- flobr::flob_obj
@@ -82,17 +89,22 @@ save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_"){
     table_name <- table_names(conn)
   }
 
-  for(i in table_name){
-    cols <- blob_columns(i, conn)
-    for(j in cols){
-      path <- file.path(dir, i, j)
+  success <- vector(mode = "list")
+  success_names <- vector()
+
+  for(i in seq_along(table_name)){
+    cols <- blob_columns(table_name[i], conn)
+    for(j in seq_along(cols)){
+      path <- file.path(dir, table_name[i], cols[j])
       if(!dir.exists(path))
         dir.create(path, recursive = TRUE)
       ui_line(glue("Table name: {ui_value(i)}"))
       ui_line(glue("Column name: {ui_value(j)}"))
-      save_flobs(j, i, conn, path, sep)
+      success[j] <- save_flobs(j, i, conn, path, sep)
+      success_names[j] <- path
       ui_line("")
     }
   }
-  invisible(dir)
+  names(success) <- success_names
+  return(invisible(success))
 }
