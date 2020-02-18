@@ -18,7 +18,7 @@ save_flobs(column_name, table_name, conn, dir = ".", sep = "_-_")
 \item{sep}{A string of the separator used to construct file names from values.}
 }
 \value{
-An invisible character string of the directory.
+An invisible named vector of the file names and new file names saved.
 }
 \description{
 Rename \code{\link[flobr]{flob}}s from a SQLite database BLOB column and save to directory.

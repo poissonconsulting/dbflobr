@@ -17,7 +17,7 @@ By default all tables are included.}
 \item{sep}{A string of the separator used to construct file names from values.}
 }
 \value{
-An invisible character string of the directory.
+An invisible named list of named vectors of the file names and new file names saved.
 }
 \description{
 Rename \code{\link[flobr]{flob}}s from a SQLite database and save to directory.
