@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read flob — read_flob • dbflobr</title>
+<title>Import flobs. — import_flobs • dbflobr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="Read flob — read_flob" />
-<meta property="og:description" content="Read a flob from a SQLite database." />
+<meta property="og:title" content="Import flobs. — import_flobs" />
+<meta property="og:description" content="Import flobs to SQLite database column from directory.
+Values in file name are matched to table primary key to determine where to write flob." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -131,16 +132,26 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Read flob</h1>
-    <small class="dont-index">Source: <a href='https://github.com/poissonconsulting/dbflobr/blob/master/R/dbflob.R'><code>R/dbflob.R</code></a></small>
-    <div class="hidden name"><code>read_flob.Rd</code></div>
+    <h1>Import flobs.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/poissonconsulting/dbflobr/blob/master/R/import.R'><code>R/import.R</code></a></small>
+    <div class="hidden name"><code>import_flobs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Read a <code><a href='https://rdrr.io/pkg/flobr/man/flob.html'>flob</a></code> from a SQLite database.</p>
+    <p>Import <code><a href='https://rdrr.io/pkg/flobr/man/flob.html'>flob</a></code>s to SQLite database column from directory.
+Values in file name are matched to table primary key to determine where to write flob.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>read_flob</span>(<span class='no'>column_name</span>, <span class='no'>table_name</span>, <span class='no'>key</span>, <span class='no'>conn</span>)</pre>
+    <pre class="usage"><span class='fu'>import_flobs</span>(
+  <span class='no'>column_name</span>,
+  <span class='no'>table_name</span>,
+  <span class='no'>conn</span>,
+  <span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>"."</span>,
+  <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"_-_"</span>,
+  <span class='kw'>exists</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>recursive</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -154,29 +165,45 @@
       <td><p>A string of the name of the existing table.</p></td>
     </tr>
     <tr>
-      <th>key</th>
-      <td><p>A data.frame whose columns and values are used to filter the
-table to a single row (this in combination with the <code>column_name</code>
-argument are used to target a single cell within the table to modify).</p></td>
-    </tr>
-    <tr>
       <th>conn</th>
       <td><p>A SQLite connection object.</p></td>
+    </tr>
+    <tr>
+      <th>dir</th>
+      <td><p>A string of the path to the directory to import files from.</p></td>
+    </tr>
+    <tr>
+      <th>sep</th>
+      <td><p>A string of the separator between values in file names.</p></td>
+    </tr>
+    <tr>
+      <th>exists</th>
+      <td><p>A logical scalar specifying whether the column must (TRUE) or
+mustn't (FALSE) already exist or whether it doesn't matter (NA).
+IF FALSE, a new BLOB column is created.</p></td>
+    </tr>
+    <tr>
+      <th>recursive</th>
+      <td><p>A logical scalar indicating whether to recurse into file directory (TRUE) or not (FALSE).</p></td>
+    </tr>
+    <tr>
+      <th>replace</th>
+      <td><p>A logical scalar indicating whether to replace existing flobs (TRUE) or not (FALSE).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A flob.</p>
+    <p>An invisible named vector indicating file name and whether the file was
+successfully written to database.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>flob</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flobr</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/flobr/man/flob_obj.html'>flob_obj</a></span>
-<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RSQLite</span><span class='kw ns'>::</span><span class='fu'><a href='https://rsqlite.r-dbi.org/reference/SQLite.html'>SQLite</a></span>(), <span class='st'>":memory:"</span>)
-<span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>conn</span>, <span class='st'>"Table1"</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>IntColumn</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>2L</span>)))
-<span class='no'>key</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>IntColumn</span> <span class='kw'>=</span> <span class='fl'>2L</span>)
-<span class='fu'><a href='write_flob.html'>write_flob</a></span>(<span class='no'>flob</span>, <span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='no'>key</span>, <span class='no'>conn</span>, <span class='kw'>exists</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'>read_flob</span>(<span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='no'>key</span>, <span class='no'>conn</span>)
-<span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>conn</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RSQLite</span><span class='kw ns'>::</span><span class='fu'><a href='https://rsqlite.r-dbi.org/reference/SQLite.html'>SQLite</a></span>(), <span class='st'>":memory:"</span>)
+<span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span>(<span class='no'>conn</span>, <span class='st'>"CREATE TABLE Table1 (CharColumn TEXT PRIMARY KEY NOT NULL)"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: SQL statements must be issued with dbExecute() or dbSendStatement() instead of dbGetQuery() or dbSendQuery().</span></div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'><span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>conn</span>, <span class='st'>"Table1"</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>CharColumn</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>)), <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>key</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>CharColumn</span> <span class='kw'>=</span> <span class='st'>"a"</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)[<span class='fl'>0</span>,,<span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>]
+<span class='no'>dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>()
+<span class='fu'><a href='https://rdrr.io/r/utils/write.table.html'>write.csv</a></span>(<span class='no'>key</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>dir</span>, <span class='st'>"a.csv"</span>))
+<span class='fu'>import_flobs</span>(<span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='no'>conn</span>, <span class='no'>dir</span>)</div><div class='output co'>#&gt; <span class='message'>Writing files to database</span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✔</span><span> File 1: a.csv written to database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> File 2: can't write file1f9a50033e5e.so to database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> File 3: can't write libloc_213_e619d72855daa0d8.rds to database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> File 4: can't write libloc_242_68ebfda1134b5188.rds to database</span></div><div class='input'><span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>conn</span>)</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
