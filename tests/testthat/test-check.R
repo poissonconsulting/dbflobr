@@ -2,24 +2,18 @@ context("check")
 
 test_that("check_sqlite_connection", {
   expect_error(
-    check_sqlite_connection(1),
-    "1 must inherit from class SQLiteConnection"
-  )
+    check_sqlite_connection(1))
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 
   expect_identical(check_sqlite_connection(conn), conn)
   expect_identical(check_sqlite_connection(conn, connected = TRUE), conn)
   expect_error(
-    check_sqlite_connection(conn, connected = FALSE),
-    "conn must be disconnected"
-  )
+    check_sqlite_connection(conn, connected = FALSE))
   DBI::dbDisconnect(conn)
 
   expect_identical(check_sqlite_connection(conn), conn)
   expect_error(
-    check_sqlite_connection(conn, connected = TRUE),
-    "conn must be connected"
-  )
+    check_sqlite_connection(conn, connected = TRUE))
   expect_identical(check_sqlite_connection(conn, connected = FALSE), conn)
 })
 
@@ -31,13 +25,9 @@ test_that("check_table_name", {
   expect_true(DBI::dbCreateTable(conn, "local", local))
 
   expect_error(
-    check_table_name(1, conn),
-    "table_name must be class character"
-  )
+    check_table_name(1, conn))
   expect_error(
-    check_table_name("e", conn),
-    "table 'e' does not exist"
-  )
+    check_table_name("e", conn))
   expect_identical(check_table_name("local", conn), "local")
 })
 
@@ -49,21 +39,13 @@ test_that("check_column_name", {
   expect_true(DBI::dbCreateTable(conn, "local", local))
 
   expect_error(
-    check_column_name("test", table_name = 1, exists = TRUE, conn),
-    "table_name must be class character"
-  )
+    check_column_name("test", table_name = 1, exists = TRUE, conn))
   expect_error(
-    check_column_name("test", table_name = "e", exists = TRUE, conn),
-    "no such table: e"
-  )
+    check_column_name("test", table_name = "e", exists = TRUE, conn))
   expect_error(
-    check_column_name(1, table_name = "local", exists = TRUE, conn),
-    "column_name must be class character"
-  )
+    check_column_name(1, table_name = "local", exists = TRUE, conn))
   expect_error(
-    check_column_name("e", table_name = "local", exists = TRUE, conn),
-    "column 'e' does not exist"
-  )
+    check_column_name("e", table_name = "local", exists = TRUE, conn))
   expect_identical(check_column_name("test", table_name = "local", exists = TRUE, conn), "test")
   expect_identical(check_column_name("e", table_name = "local", exists = FALSE, conn), "e")
 })
@@ -77,13 +59,9 @@ test_that("check_column_blob", {
   expect_true(add_blob_column("blob", table_name = "local", conn = conn))
 
   expect_error(
-    check_column_blob("test", table_name = "local", conn),
-    "column 'test' is not type BLOB"
-  )
+    check_column_blob("test", table_name = "local", conn))
   expect_error(
-    check_column_blob("x", table_name = "local", conn),
-    "column 'x' does not exist"
-  )
+    check_column_blob("x", table_name = "local", conn))
   expect_identical(check_column_blob("blob", table_name = "local", conn), "blob")
 })
 
@@ -103,20 +81,16 @@ test_that("check_key", {
   key3 <- data.frame(num = 1.1, key = 2)
 
   expect_error(
-    check_key(table_name = "df", key = key2, conn),
-    "key must inherit from class data.frame"
-  )
+    check_key(table_name = "df", key = key2, conn))
   expect_error(
-    check_key(table_name = "df", key = key3, conn),
-    "filtering table by key must result in a single observation"
-  )
+    check_key(table_name = "df", key = key3, conn))
   expect_identical(check_key(table_name = "df", key = key, conn), key)
 })
 
 test_that("check_flob_query", {
   x <- list(NULL)
-  expect_error(check_flob_query(x), "there is no flob to retrieve")
-  expect_error(check_flob_query(x, "delete"), "there is no flob to delete")
+  expect_error(check_flob_query(x))
+  expect_error(check_flob_query(x))
 
   x <- flobr::flob_obj
   expect_identical(check_flob_query(x), x)

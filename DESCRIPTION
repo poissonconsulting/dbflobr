@@ -14,10 +14,15 @@ Imports:
     flobr (>= 0.2.0.9003),
     glue,
     DBI,
-    RSQLite
+    RSQLite,
+    crayon,
+    clisymbols,
+    rlang
 Suggests: 
-    testthat,
-    covr
+    testthat (>= 2.1.0),
+    covr,
+    knitr,
+    rmarkdown
 Remotes: poissonconsulting/flobr
 URL: https://github.com/poissonconsulting/dbflobr
 BugReports: https://github.com/poissonconsulting/dbflobr/issues
@@ -26,3 +31,4 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.0
 Language: en-US
+VignetteBuilder: knitr

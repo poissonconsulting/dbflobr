@@ -9,10 +9,13 @@ to_upper <- function(x) {
   x
 }
 
-collapse_flob <- function(x) {
-  flobr::chk_flob(x)
-  y <- glue_collapse(unlist(x), "")
-  glue("x'{y}'")
+is_try_error <- function(x) {
+  inherits(x, "try-error")
 }
 
 err <- function(...) stop(..., call. = FALSE, domain = NA)
+
+set_names <- function(x, names) {
+  names(x) <- names
+  x
+}
