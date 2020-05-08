@@ -1,4 +1,6 @@
 ### from checkr
+is_string <- function(x) (is.character(x) || is.factor(x)) && length(x) == 1 && !is.na(x)
+
 chk_deparse <- function (x) {
   if (!is.character(x))
     x <- deparse(x)
