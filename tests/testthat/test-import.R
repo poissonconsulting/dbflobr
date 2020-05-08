@@ -60,8 +60,7 @@ test_that("import_flobs works", {
   expect_length(list_files(path, recursive = FALSE), 3L)
   expect_length(list_files(path, recursive = TRUE), 4L)
 
-  expect_error(import_flobs("New", "df2", conn, path),
-               "Table `df2` must have a primary key.")
+  expect_error(import_flobs("New", "df2", conn, path), class = "chk_error")
 
   x <- import_flobs("New2", "df", conn, path, recursive = FALSE)
   expect_true(all(x))
@@ -141,8 +140,7 @@ test_that("import_all_flobs works", {
 
   save_all_flobs(conn = conn, dir = path)
 
-  expect_error(import_all_flobs(conn, path, exists = FALSE, replace = FALSE),
-               "`New` must not already exist in table `df`")
+  expect_error(import_all_flobs(conn, path, exists = FALSE, replace = FALSE), class = "chk_error")
 
   x <- import_all_flobs(conn, path, exists = TRUE, replace = FALSE)
   expect_identical(sum(unlist(x)), 0L)

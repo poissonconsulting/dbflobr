@@ -37,12 +37,12 @@ test_that("save_flobs works", {
   dir.create(path)
 
   # custom err messages
-  expect_error(save_flobs("yup", "df", conn, path), "Can't find column `yup` in table `df`.")
-  expect_error(save_flobs("New", "df3", conn, path), "Can't find table `df3` in database.")
+  expect_error(save_flobs("yup", "df", conn, path), class = "chk_error")
+  expect_error(save_flobs("New", "df3", conn, path), class = "chk_error")
 
   # checkr err messages
-  expect_error(save_flobs("New", "df", "conn", path))
-  expect_error(save_flobs("New", "df", conn, 2))
+  expect_error(save_flobs("New", "df", "conn", path), class = "chk_error")
+  expect_error(save_flobs("New", "df", conn, 2), class = "chk_error")
 
   x <- save_flobs("New", "df", conn, path)
   expect_identical(names(x), c("flobr.pdf", "flobr.pdf", "flobr.pdf"))
@@ -67,9 +67,9 @@ test_that("save_flobs works", {
   names(z) <- NULL
   expect_identical(z, x)
 
-  expect_error(save_all_flobs("df3", conn, path), "Can't find table `df3` in database. OR table_name must be NULL")
-  expect_error(save_all_flobs("df", "conn", path))
-  expect_error(save_all_flobs("df", conn, 2))
+  expect_error(save_all_flobs("df3", conn, path), class = "chk_error")
+  expect_error(save_all_flobs("df", "conn", path), class = "chk_error")
+  expect_error(save_all_flobs("df", conn, 2), class = "chk_error")
 
   expect_true(all(list.files(path, pattern = "pdf", recursive = TRUE) %in%
                    c("a_-_1.pdf", "a_-_2.1.pdf",

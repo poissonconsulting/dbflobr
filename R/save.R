@@ -22,8 +22,8 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = TRUE, conn)
-  check_string(dir)
-  check_string(sep)
+  chk_string(dir)
+  chk_string(sep)
 
   pk <- check_pk(table_name, conn)
 
@@ -81,9 +81,9 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
 #' DBI::dbDisconnect(conn)
 save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_"){
   check_sqlite_connection(conn)
-  checkor(check_table_name(table_name, conn), check_null(table_name))
-  check_string(dir)
-  check_string(sep)
+  chkor(check_table_name(table_name, conn), chk_null(table_name))
+  chk_string(dir)
+  chk_string(sep)
 
   if(is.null(table_name)){
     table_name <- table_names(conn)

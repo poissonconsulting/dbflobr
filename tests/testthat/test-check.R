@@ -2,19 +2,19 @@ context("check")
 
 test_that("check_sqlite_connection", {
   expect_error(
-    check_sqlite_connection(1))
+    check_sqlite_connection(1), class = "chk_error")
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 
-  expect_identical(check_sqlite_connection(conn), conn)
-  expect_identical(check_sqlite_connection(conn, connected = TRUE), conn)
+  expect_identical(check_sqlite_connection(conn), NULL)
+  expect_identical(check_sqlite_connection(conn, connected = TRUE), NULL)
   expect_error(
-    check_sqlite_connection(conn, connected = FALSE))
+    check_sqlite_connection(conn, connected = FALSE), class = "chk_error")
   DBI::dbDisconnect(conn)
 
-  expect_identical(check_sqlite_connection(conn), conn)
+  expect_identical(check_sqlite_connection(conn), NULL)
   expect_error(
-    check_sqlite_connection(conn, connected = TRUE))
-  expect_identical(check_sqlite_connection(conn, connected = FALSE), conn)
+    check_sqlite_connection(conn, connected = TRUE), class = "chk_error")
+  expect_identical(check_sqlite_connection(conn, connected = FALSE), NULL)
 })
 
 test_that("check_table_name", {
@@ -25,9 +25,9 @@ test_that("check_table_name", {
   expect_true(DBI::dbCreateTable(conn, "local", local))
 
   expect_error(
-    check_table_name(1, conn))
+    check_table_name(1, conn), class = "chk_error")
   expect_error(
-    check_table_name("e", conn))
+    check_table_name("e", conn), class = "chk_error")
   expect_identical(check_table_name("local", conn), "local")
 })
 
@@ -39,13 +39,13 @@ test_that("check_column_name", {
   expect_true(DBI::dbCreateTable(conn, "local", local))
 
   expect_error(
-    check_column_name("test", table_name = 1, exists = TRUE, conn))
+    check_column_name("test", table_name = 1, exists = TRUE, conn), class = "chk_error")
   expect_error(
-    check_column_name("test", table_name = "e", exists = TRUE, conn))
+    check_column_name("test", table_name = "e", exists = TRUE, conn), class = "chk_error")
   expect_error(
-    check_column_name(1, table_name = "local", exists = TRUE, conn))
+    check_column_name(1, table_name = "local", exists = TRUE, conn), class = "chk_error")
   expect_error(
-    check_column_name("e", table_name = "local", exists = TRUE, conn))
+    check_column_name("e", table_name = "local", exists = TRUE, conn), class = "chk_error")
   expect_identical(check_column_name("test", table_name = "local", exists = TRUE, conn), "test")
   expect_identical(check_column_name("e", table_name = "local", exists = FALSE, conn), "e")
 })

@@ -28,11 +28,11 @@ import_flobs <- function(column_name, table_name, conn,
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = exists, conn)
-  check_string(dir)
-  check_string(sep)
-  check_flag(exists)
-  check_flag(recursive)
-  check_flag(replace)
+  chk_string(dir)
+  chk_string(sep)
+  chk_flag(exists)
+  chk_flag(recursive)
+  chk_flag(replace)
   check_pk(table_name, conn)
 
   files <- list_files(dir, recursive = recursive)
@@ -111,10 +111,10 @@ import_flobs <- function(column_name, table_name, conn,
 import_all_flobs <- function(conn, dir = ".", sep = "_-_",
                              exists = FALSE, replace = FALSE){
   check_sqlite_connection(conn)
-  check_string(dir)
-  check_string(sep)
-  check_flag(exists)
-  check_flag(replace)
+  chk_string(dir)
+  chk_string(sep)
+  chk_flag(exists)
+  chk_flag(replace)
 
   dirs <- dir_tree(dir)
   success <- vector(mode = "list", length = length(dirs))

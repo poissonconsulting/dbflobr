@@ -10,7 +10,7 @@ Description: Reads and writes files to SQLite databases <https://www.sqlite.org/
     (a flob is a blob that preserves the file extension).
 License: MIT + file LICENSE
 Imports:
-    checkr,
+    chk,
     flobr (>= 0.2.0.9003),
     glue,
     DBI,

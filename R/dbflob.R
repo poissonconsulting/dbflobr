@@ -27,7 +27,7 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = NA) {
   flobr::chk_flob(flob)
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
-  check_scalar(exists, c(TRUE, NA))
+  chk_lgl(exists)
 
   if (isTRUE(exists)) {
     check_column_blob(column_name, table_name, conn)

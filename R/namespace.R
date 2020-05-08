@@ -1,2 +1,2 @@
-#' @import checkr glue RSQLite
+#' @import chk glue RSQLite
 NULL

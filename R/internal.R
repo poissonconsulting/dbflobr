@@ -13,8 +13,6 @@ is_try_error <- function(x) {
   inherits(x, "try-error")
 }
 
-err <- function(...) stop(..., call. = FALSE, domain = NA)
-
 set_names <- function(x, names) {
   names(x) <- names
   x
