@@ -1,6 +1,6 @@
 ## Test environments
 
-release 3.6.1
+release 0.1.0
 
 * OS X (local) - release
 
@@ -15,6 +15,6 @@ release 3.6.1
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 notes
 
-* This is a new release.
+* This is a resubmission.
