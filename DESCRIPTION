@@ -11,7 +11,7 @@ Description: Reads and writes files to SQLite databases <https://www.sqlite.org/
 License: MIT + file LICENSE
 Imports:
     chk,
-    flobr (>= 0.2.0.9003),
+    flobr,
     glue,
     DBI,
     RSQLite,
@@ -19,11 +19,10 @@ Imports:
     clisymbols,
     rlang
 Suggests: 
-    testthat (>= 2.1.0),
+    testthat,
     covr,
     knitr,
     rmarkdown
-Remotes: poissonconsulting/flobr
 URL: https://github.com/poissonconsulting/dbflobr
 BugReports: https://github.com/poissonconsulting/dbflobr/issues
 Encoding: UTF-8

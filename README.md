@@ -7,12 +7,10 @@
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![Travis build
-status](https://travis-ci.com/poissonconsulting/dbflobr.svg?branch=master)](https://travis-ci.com/poissonconsulting/dbflobr)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/4yop2q92batu2e25/branch/master?svg=true)](https://ci.appveyor.com/project/poissonconsulting/dbflobr/branch/master)
-[![Coverage
-status](https://codecov.io/gh/poissonconsulting/dbflobr/branch/master/graph/badge.svg)](https://codecov.io/github/poissonconsulting/dbflobr?branch=master)
+[![R build
+status](https://github.com/poissonconsulting/dbflobr/workflows/R-CMD-check/badge.svg)](https://github.com/poissonconsulting/dbflobr/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/poissonconsulting/dbflobr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/dbflobr?branch=master)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Tinyverse
@@ -43,15 +41,6 @@ To install the developmental version from
 remotes::install_github("poissonconsulting/dbflobr")
 ```
 
-To install the latest developmental release from the Poisson drat
-[repository](https://github.com/poissonconsulting/drat)
-
-``` r
-# install.packages("drat")
-drat::addRepo("poissonconsulting")
-install.packages("dbflobr")
-```
-
 ## Demonstration
 
 ``` r
@@ -61,7 +50,7 @@ library(dbflobr)
 flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
 str(flob)
 #> List of 1
-#>  $ /Library/Frameworks/R.framework/Versions/3.6/Resources/library/flobr/extdata/flobr.pdf: raw [1:133851] 58 0a 00 00 ...
+#>  $ /Library/Frameworks/R.framework/Versions/4.0/Resources/library/flobr/extdata/flobr.pdf: raw [1:133851] 58 0a 00 00 ...
 #>  - attr(*, "class")= chr [1:2] "flob" "blob"
 
 # create a SQLite database connection 
@@ -118,6 +107,9 @@ Please report any
 [Pull requests](https://github.com/poissonconsulting/dbflobr/pulls) are
 always welcome.
 
-Please note that this project is released with a [Contributor Code of
-Conduct](https://github.com/poissonconsulting/dbflobr/blob/master/CODE_OF_CONDUCT.md).
-By contributing, you agree to abide by its terms.
+## Code of Conduct
+
+Please note that the dbflobr project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms
