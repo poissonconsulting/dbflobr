@@ -1,16 +1,3 @@
-### from checkr
-is_string <- function(x) (is.character(x) || is.factor(x)) && length(x) == 1 && !is.na(x)
-
-chk_deparse <- function (x) {
-  if (!is.character(x))
-    x <- deparse(x)
-  if (isTRUE(is.na(x)))
-    x <- "NA"
-  if (!is_string(x))
-    abort_chk(substitute(x), " must be a string")
-  x
-}
-
 vld_sqlite_conn <- function(x, connected = NA) {
   vld_s4_class(x, "SQLiteConnection") && (is.na(connected) || connected == dbIsValid(x))
 }
