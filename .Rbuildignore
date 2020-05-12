@@ -4,8 +4,10 @@
 ^data-raw$
 ^docs$
 ^pkgdown$
+^revdep$
 ^scripts$
 ^codecov\.yml$
+^\.covrignore$
 ^cran-comments\.md$
 ^CRAN-RELEASE$
 ^LICENSE\.md$
