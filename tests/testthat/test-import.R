@@ -24,20 +24,20 @@ test_that("import_flobs works", {
   teardown(DBI::dbDisconnect(conn))
 
   # 2 column pk
-  DBI::dbGetQuery(conn,
+  DBI::dbExecute(conn,
                   "CREATE TABLE df (
                 char TEXT NOT NULL,
                 int INTEGER NOT NULL,
                 num REAL NOT NULL,
                 PRIMARY KEY (char, int))")
 
-  DBI::dbGetQuery(conn,
+  DBI::dbExecute(conn,
                   "CREATE TABLE df2 (
                 char TEXT NOT NULL,
                 num REAL NOT NULL)")
 
   # empty
-  DBI::dbGetQuery(conn,
+  DBI::dbExecute(conn,
                   "CREATE TABLE df3 (
                 char TEXT NOT NULL,
                 int INTEGER NOT NULL,
@@ -108,14 +108,14 @@ test_that("import_all_flobs works", {
   teardown(DBI::dbDisconnect(conn))
 
   # 2 column pk
-  DBI::dbGetQuery(conn,
+  DBI::dbExecute(conn,
                   "CREATE TABLE df (
                 char TEXT NOT NULL,
                 num REAL NOT NULL,
                 PRIMARY KEY (char, num))")
 
   # one column pk with empty
-  DBI::dbGetQuery(conn,
+  DBI::dbExecute(conn,
                   "CREATE TABLE df2 (
                 char TEXT PRIMARY KEY NOT NULL)")
 

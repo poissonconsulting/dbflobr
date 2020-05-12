@@ -63,7 +63,7 @@ check_flob_query <- function(x) {
     abort_chk("Can't find flob in that location.")
   }
   class(x) <- c("flob", "blob")
-  flobr::chk_flob(x)
+  chk_flob(x)
   invisible(x)
 }
 

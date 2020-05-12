@@ -47,6 +47,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
       new_file_ext <- glue("{new_file}.{ext}")
       success[i] <- new_file_ext
       success_names[i] <- file
+      new_file <- as.character(new_file)
       flobr::unflob(x, dir = dir, name = new_file)
       ui_done(glue("Row {i}: file {file} renamed to {new_file_ext}"))
     } else {

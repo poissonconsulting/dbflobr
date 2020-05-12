@@ -24,7 +24,7 @@
 #' DBI::dbReadTable(conn, "Table1")
 #' DBI::dbDisconnect(conn)
 write_flob <- function(flob, column_name, table_name, key, conn, exists = NA) {
-  flobr::chk_flob(flob)
+  chk_flob(flob)
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   chk_lgl(exists)
