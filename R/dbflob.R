@@ -29,9 +29,9 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = NA) {
   check_table_name(table_name, conn)
   chk_lgl(exists)
 
-  if (isTRUE(exists)) {
+  if (vld_true(exists)) {
     check_column_blob(column_name, table_name, conn)
-  } else if (isFALSE(exists) || !column_exists(column_name, table_name, conn)) {
+  } else if (vld_false(exists) || !column_exists(column_name, table_name, conn)) {
     add_blob_column(column_name, table_name, conn)
   }
 

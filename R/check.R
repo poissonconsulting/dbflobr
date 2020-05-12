@@ -31,10 +31,10 @@ check_column_name <- function(column_name, table_name, exists, conn) {
   check_table_name(table_name, conn)
 
   column_exists <- column_exists(column_name, table_name, conn)
-  if (isTRUE(exists) && !column_exists) {
+  if (vld_true(exists) && !column_exists) {
     abort_chk("Can't find column `", column_name, "` in table `", table_name, "`.")
   }
-  if (isFALSE(exists) && column_exists) {
+  if (vld_false(exists) && column_exists) {
     abort_chk("`", column_name, "` must not already exist in table `", table_name, "`.")
   }
   column_name
