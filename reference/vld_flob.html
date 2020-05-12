@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Save all flobs. — save_all_flobs • dbflobr</title>
+<title>Validate flob Object — vld_flob • dbflobr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Save all flobs. — save_all_flobs" />
-<meta property="og:description" content="Rename flobs from a SQLite database and save to directory." />
+<meta property="og:title" content="Validate flob Object — vld_flob" />
+<meta property="og:description" content="Validates a flob() object." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -131,51 +131,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Save all flobs.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/poissonconsulting/dbflobr/blob/master/R/save.R'><code>R/save.R</code></a></small>
-    <div class="hidden name"><code>save_all_flobs.Rd</code></div>
+    <h1>Validate flob Object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/poissonconsulting/dbflobr/blob/master/R/vld.R'><code>R/vld.R</code></a></small>
+    <div class="hidden name"><code>vld_flob.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Rename <code><a href='https://rdrr.io/pkg/flobr/man/flob.html'>flob</a></code>s from a SQLite database and save to directory.</p>
+    <p>Validates a <code>flob()</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>save_all_flobs</span>(<span class='kw'>table_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>conn</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"_-_"</span>)</pre>
+    <pre class="usage"><span class='fu'>vld_flob</span>(<span class='no'>x</span>, <span class='kw'>old</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>table_name</th>
-      <td><p>A vector of character strings indicating names of tables to save flobs from.
-By default all tables are included.</p></td>
+      <th>x</th>
+      <td><p>The object to check.</p></td>
     </tr>
     <tr>
-      <th>conn</th>
-      <td><p>A SQLite connection object.</p></td>
-    </tr>
-    <tr>
-      <th>dir</th>
-      <td><p>A character string of the path to the directory to save files to.</p></td>
-    </tr>
-    <tr>
-      <th>sep</th>
-      <td><p>A string of the separator used to construct file names from values.</p></td>
+      <th>old</th>
+      <td><p>A flag indicating whether old flobs are permitted.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An invisible named list of named vectors of the file names and new file names saved.</p>
+    <p>A flag indicating whether the object passed the test.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='chk_flob.html'>chk_flob()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>flob</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flobr</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/flobr/man/flob_obj.html'>flob_obj</a></span>
-<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RSQLite</span><span class='kw ns'>::</span><span class='fu'><a href='https://rsqlite.r-dbi.org/reference/SQLite.html'>SQLite</a></span>(), <span class='st'>":memory:"</span>)
-<span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbGetQuery.html'>dbGetQuery</a></span>(<span class='no'>conn</span>, <span class='st'>"CREATE TABLE Table1 (IntColumn INTEGER PRIMARY KEY NOT NULL)"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: SQL statements must be issued with dbExecute() or dbSendStatement() instead of dbGetQuery() or dbSendQuery().</span></div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'><span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>conn</span>, <span class='st'>"Table1"</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>IntColumn</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>2L</span>)), <span class='kw'>append</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>key</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>IntColumn</span> <span class='kw'>=</span> <span class='fl'>2L</span>)
-<span class='fu'><a href='write_flob.html'>write_flob</a></span>(<span class='no'>flob</span>, <span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='no'>key</span>, <span class='no'>conn</span>, <span class='kw'>exists</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>()
-<span class='fu'>save_all_flobs</span>(<span class='kw'>conn</span> <span class='kw'>=</span> <span class='no'>conn</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='no'>dir</span>)</div><div class='output co'>#&gt; <span class='message'>Table name: <span style='color: #0000BB;'>'Table1'</span><span></span></div><div class='output co'>#&gt; <span class='message'>Column name: </span><span style='color: #0000BB;'>'BlobColumn'</span><span></span></div><div class='output co'>#&gt; <span class='message'>Saving files to </span><span style='color: #0000BB;'>'/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpupTuG0/Table1/BlobColumn'</span><span></span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> Row 1: no file found</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Row 2: file flobr.pdf renamed to 2.pdf</span></div><div class='output co'>#&gt; </div><div class='input'><span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>conn</span>)</div></span></pre>
+    <pre class="examples"><div class='input'><span class='fu'>vld_flob</span>(<span class='kw pkg'>flobr</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/flobr/man/flob_obj.html'>flob_obj</a></span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>vld_flob</span>(<span class='fl'>1</span>)</div><div class='output co'>#&gt; [1] FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
