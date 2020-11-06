@@ -40,18 +40,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">dbflobr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -101,62 +95,65 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>To install the latest release from <a href="https://cran.r-project.org">CRAN</a></p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"dbflobr"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"dbflobr"</span><span class="op">)</span></code></pre></div>
 <p>To install the developmental version from <a href="https://github.com/poissonconsulting/dbflobr">GitHub</a></p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="co"># install.packages("remotes")</span>
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"poissonconsulting/dbflobr"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"poissonconsulting/dbflobr"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="demonstration" class="section level2">
 <h2 class="hasAnchor">
 <a href="#demonstration" class="anchor"></a>Demonstration</h2>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dbflobr</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/poissonconsulting/dbflobr">dbflobr</a></span><span class="op">)</span>
 
 <span class="co"># convert a file to flob using flobr</span>
-<span class="no">flob</span> <span class="kw">&lt;-</span> <span class="kw pkg">flobr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/flobr/man/flob.html">flob</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"flobr.pdf"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"flobr"</span>))
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">flob</span>)
+<span class="va">flob</span> <span class="op">&lt;-</span> <span class="fu">flobr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/flobr/man/flob.html">flob</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"flobr.pdf"</span>, package <span class="op">=</span> <span class="st">"flobr"</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">flob</span><span class="op">)</span>
 <span class="co">#&gt; List of 1</span>
 <span class="co">#&gt;  $ /Library/Frameworks/R.framework/Versions/4.0/Resources/library/flobr/extdata/flobr.pdf: raw [1:133851] 58 0a 00 00 ...</span>
 <span class="co">#&gt;  - attr(*, "class")= chr [1:2] "flob" "blob"</span>
 
 <span class="co"># create a SQLite database connection </span>
-<span class="no">conn</span> <span class="kw">&lt;-</span> <span class="kw pkg">DBI</span><span class="kw ns">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span>(<span class="kw pkg">RSQLite</span><span class="kw ns">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html">SQLite</a></span>(), <span class="st">":memory:"</span>)
+<span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html">SQLite</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">":memory:"</span><span class="op">)</span>
 
 <span class="co"># create a table 'Table1' of data</span>
-<span class="kw pkg">DBI</span><span class="kw ns">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span>(<span class="no">conn</span>, <span class="st">"Table1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">IntColumn</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1L</span>, <span class="fl">2L</span>)))
+<span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"Table1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>IntColumn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
-<span class="kw pkg">DBI</span><span class="kw ns">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable</a></span>(<span class="no">conn</span>, <span class="st">"Table1"</span>)
+<span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"Table1"</span><span class="op">)</span>
 <span class="co">#&gt;   IntColumn</span>
 <span class="co">#&gt; 1         1</span>
 <span class="co">#&gt; 2         2</span>
 
 <span class="co"># specify which row to add the flob to by providing a key </span>
-<span class="no">key</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">IntColumn</span> <span class="kw">=</span> <span class="fl">2L</span>)
+<span class="va">key</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>IntColumn <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span>
 
 <span class="co"># write the flob to the database in column 'BlobColumn'</span>
-<span class="fu"><a href="reference/write_flob.html">write_flob</a></span>(<span class="no">flob</span>, <span class="st">"BlobColumn"</span>, <span class="st">"Table1"</span>, <span class="no">key</span>, <span class="no">conn</span>, <span class="kw">exists</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="fu"><a href="reference/write_flob.html">write_flob</a></span><span class="op">(</span><span class="va">flob</span>, <span class="st">"BlobColumn"</span>, <span class="st">"Table1"</span>, <span class="va">key</span>, <span class="va">conn</span>, exists <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="kw pkg">DBI</span><span class="kw ns">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable</a></span>(<span class="no">conn</span>, <span class="st">"Table1"</span>)
+<span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"Table1"</span><span class="op">)</span>
 <span class="co">#&gt;   IntColumn      BlobColumn</span>
 <span class="co">#&gt; 1         1            &lt;NA&gt;</span>
 <span class="co">#&gt; 2         2 blob[133.85 kB]</span>
 
 <span class="co"># read the flob</span>
-<span class="no">flob2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/read_flob.html">read_flob</a></span>(<span class="st">"BlobColumn"</span>, <span class="st">"Table1"</span>, <span class="no">key</span>, <span class="no">conn</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(<span class="no">flob2</span>)
+<span class="va">flob2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_flob.html">read_flob</a></span><span class="op">(</span><span class="st">"BlobColumn"</span>, <span class="st">"Table1"</span>, <span class="va">key</span>, <span class="va">conn</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">flob2</span><span class="op">)</span>
 <span class="co">#&gt; List of 1</span>
 <span class="co">#&gt;  $ BlobColumn: raw [1:133851] 58 0a 00 00 ...</span>
 <span class="co">#&gt;  - attr(*, "class")= chr [1:2] "flob" "blob"</span>
 
 <span class="co"># delete the flob</span>
-<span class="fu"><a href="reference/delete_flob.html">delete_flob</a></span>(<span class="st">"BlobColumn"</span>, <span class="st">"Table1"</span>, <span class="no">key</span>, <span class="no">conn</span>)
+<span class="fu"><a href="reference/delete_flob.html">delete_flob</a></span><span class="op">(</span><span class="st">"BlobColumn"</span>, <span class="st">"Table1"</span>, <span class="va">key</span>, <span class="va">conn</span><span class="op">)</span>
 
-<span class="kw pkg">DBI</span><span class="kw ns">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable</a></span>(<span class="no">conn</span>, <span class="st">"Table1"</span>)
+<span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbReadTable.html">dbReadTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"Table1"</span><span class="op">)</span>
 <span class="co">#&gt;   IntColumn BlobColumn</span>
 <span class="co">#&gt; 1         1       &lt;NA&gt;</span>
 <span class="co">#&gt; 2         2       &lt;NA&gt;</span>
 
 <span class="co"># close the connection</span>
-<span class="kw pkg">DBI</span><span class="kw ns">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span>(<span class="no">conn</span>)</pre></div>
+<span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="inspiration" class="section level2">
 <h2 class="hasAnchor">
@@ -235,7 +232,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

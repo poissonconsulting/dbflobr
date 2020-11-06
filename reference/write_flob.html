@@ -80,19 +80,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dbflobr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -140,7 +134,7 @@
     <p>Write a <code><a href='https://rdrr.io/pkg/flobr/man/flob.html'>flob</a></code> to a SQLite database.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>write_flob</span>(<span class='no'>flob</span>, <span class='no'>column_name</span>, <span class='no'>table_name</span>, <span class='no'>key</span>, <span class='no'>conn</span>, <span class='kw'>exists</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
+    <pre class="usage"><span class='fu'>write_flob</span><span class='op'>(</span><span class='va'>flob</span>, <span class='va'>column_name</span>, <span class='va'>table_name</span>, <span class='va'>key</span>, <span class='va'>conn</span>, exists <span class='op'>=</span> <span class='cn'>NA</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,16 +174,19 @@ IF FALSE, a new BLOB column is created.</p></td>
     <p>An invisible copy of flob.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>flob</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>flobr</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/flobr/man/flob_obj.html'>flob_obj</a></span>
-<span class='no'>conn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span>(<span class='kw pkg'>RSQLite</span><span class='kw ns'>::</span><span class='fu'><a href='https://rsqlite.r-dbi.org/reference/SQLite.html'>SQLite</a></span>(), <span class='st'>":memory:"</span>)
-<span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span>(<span class='no'>conn</span>, <span class='st'>"Table1"</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>IntColumn</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>2L</span>)))
-<span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span>(<span class='no'>conn</span>, <span class='st'>"Table1"</span>)</div><div class='output co'>#&gt;   IntColumn
+    <pre class="examples"><div class='input'><span class='va'>flob</span> <span class='op'>&lt;-</span> <span class='fu'>flobr</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/flobr/man/flob_obj.html'>flob_obj</a></span>
+<span class='va'>conn</span> <span class='op'>&lt;-</span> <span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbConnect.html'>dbConnect</a></span><span class='op'>(</span><span class='fu'>RSQLite</span><span class='fu'>::</span><span class='fu'><a href='https://rsqlite.r-dbi.org/reference/SQLite.html'>SQLite</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>":memory:"</span><span class='op'>)</span>
+<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbWriteTable.html'>dbWriteTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='st'>"Table1"</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>IntColumn <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1L</span>, <span class='fl'>2L</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='st'>"Table1"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   IntColumn
 #&gt; 1         1
-#&gt; 2         2</div><div class='input'><span class='no'>key</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>IntColumn</span> <span class='kw'>=</span> <span class='fl'>2L</span>)
-<span class='fu'>write_flob</span>(<span class='no'>flob</span>, <span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='no'>key</span>, <span class='no'>conn</span>, <span class='kw'>exists</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span>(<span class='no'>conn</span>, <span class='st'>"Table1"</span>)</div><div class='output co'>#&gt;   IntColumn      BlobColumn
+#&gt; 2         2</div><div class='input'><span class='va'>key</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>IntColumn <span class='op'>=</span> <span class='fl'>2L</span><span class='op'>)</span>
+<span class='fu'>write_flob</span><span class='op'>(</span><span class='va'>flob</span>, <span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='va'>key</span>, <span class='va'>conn</span>, exists <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbReadTable.html'>dbReadTable</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='st'>"Table1"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;   IntColumn      BlobColumn
 #&gt; 1         1            &lt;NA&gt;
-#&gt; 2         2 blob[133.85 kB]</div><div class='input'><span class='kw pkg'>DBI</span><span class='kw ns'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span>(<span class='no'>conn</span>)</div></pre>
+#&gt; 2         2 blob[133.85 kB]</div><div class='input'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>conn</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -205,7 +202,7 @@ IF FALSE, a new BLOB column is created.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
