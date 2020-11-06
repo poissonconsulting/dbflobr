@@ -8,8 +8,9 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-Reads and writes files to SQLite databases <https://www.sqlite.org/index.html> as flobs 
-    (a flob is a blob that preserves the file extension).
+Reads and writes files to SQLite databases
+    <https://www.sqlite.org/index.html> as flobs (a flob is a blob that
+    preserves the file extension).
 }
 \seealso{
 Useful links:

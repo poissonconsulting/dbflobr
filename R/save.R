@@ -65,6 +65,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
 #' @inheritParams write_flob
 #' @param table_name A vector of character strings indicating names of tables to save flobs from.
 #' By default all tables are included.
+#' @param geometry A flag specifying whether to search columns named geometry for flobs.
 #' @param dir A character string of the path to the directory to save files to.
 #' @param sep A string of the separator used to construct file names from values.
 #'
@@ -80,9 +81,11 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
 #' dir <- tempdir()
 #' save_all_flobs(conn = conn, dir = dir)
 #' DBI::dbDisconnect(conn)
-save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_"){
+save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_",
+                           geometry = FALSE){
   check_sqlite_connection(conn)
   chkor(check_table_name(table_name, conn), chk_null(table_name))
+  chk_flag(geometry)
   chk_string(dir)
   chk_string(sep)
 
@@ -95,6 +98,7 @@ save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_"){
 
   for(i in table_name){
     cols <- blob_columns(i, conn)
+    if(!geometry) cols <- cols[cols != "geometry"]
     for(j in cols){
       name <- file.path(i, j)
       path <- file.path(dir, name)

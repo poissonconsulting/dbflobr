@@ -4,7 +4,13 @@
 \alias{save_all_flobs}
 \title{Save all flobs.}
 \usage{
-save_all_flobs(table_name = NULL, conn, dir = ".", sep = "_-_")
+save_all_flobs(
+  table_name = NULL,
+  conn,
+  dir = ".",
+  sep = "_-_",
+  geometry = FALSE
+)
 }
 \arguments{
 \item{table_name}{A vector of character strings indicating names of tables to save flobs from.
@@ -15,6 +21,8 @@ By default all tables are included.}
 \item{dir}{A character string of the path to the directory to save files to.}
 
 \item{sep}{A string of the separator used to construct file names from values.}
+
+\item{geometry}{A flag specifying whether to search columns named geometry for flobs.}
 }
 \value{
 An invisible named list of named vectors of the file names and new file names saved.
