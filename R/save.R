@@ -5,6 +5,9 @@
 #' @inheritParams write_flob
 #' @param dir A string of the path to the directory to save the files in.
 #' @param sep A string of the separator used to construct file names from values.
+#' @param sub A logical specifying whether to save all existing files in a subdirectory
+#' of the same name (sub = TRUE) or all possible files in a subdirectory
+#' of the same name (sub = NA) or not nest files within a subdirectory (sub = FALSE).
 #'
 #' @return An invisible named vector of the file names and new file names saved.
 #' @export
@@ -18,12 +21,14 @@
 #' dir <- tempdir()
 #' save_flobs("BlobColumn", "Table1", conn, dir)
 #' DBI::dbDisconnect(conn)
-save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
+save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_",
+                       sub = FALSE){
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = TRUE, conn)
   chk_string(dir)
   chk_string(sep)
+  chk_lgl(sub)
 
   pk <- check_pk(table_name, conn)
 
@@ -37,24 +42,33 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
 
   for(i in 1:nrow(values)){
     key <- values[i, , drop = FALSE]
+    new_file <- create_filename(key, sep = sep)
+    new_file <- as.character(new_file)
     x <- try(read_flob(column_name, table_name, key, conn), silent = TRUE)
 
      if(!is_try_error(x)){
       filename <- flobr::flob_name(x)
       ext <- flobr::flob_ext(x)
       file <- glue("{filename}.{ext}")
-      new_file <- create_filename(key, sep = sep)
       new_file_ext <- glue("{new_file}.{ext}")
       success[i] <- new_file_ext
       success_names[i] <- file
-      new_file <- as.character(new_file)
-      flobr::unflob(x, dir = dir, name = new_file)
+      if(vld_false(sub)) {
+        flobr::unflob(x, dir = dir, name = new_file)
+      } else {
+        dir.create(file.path(dir, new_file), recursive = TRUE)
+        flobr::unflob(x, dir = file.path(dir, new_file), name = new_file)
+      }
       ui_done(glue("Row {i}: file {file} renamed to {new_file_ext}"))
     } else {
+      if(is.na(sub)) {
+        dir.create(file.path(dir, new_file), recursive = TRUE)
+      }
       ui_oops(glue("Row {i}: no file found"))
     }
   }
   names(success) <- success_names
+  success <- success[!is.na(success)]
   return(invisible(success))
 }
 
@@ -63,11 +77,10 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
 #' Rename \code{\link[flobr]{flob}}s from a SQLite database and save to directory.
 #'
 #' @inheritParams write_flob
+#' @inheritParams save_flobs
 #' @param table_name A vector of character strings indicating names of tables to save flobs from.
 #' By default all tables are included.
 #' @param geometry A flag specifying whether to search columns named geometry for flobs.
-#' @param dir A character string of the path to the directory to save files to.
-#' @param sep A string of the separator used to construct file names from values.
 #'
 #' @return An invisible named list of named vectors of the file names and new file names saved.
 #' @export
@@ -82,12 +95,14 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_"){
 #' save_all_flobs(conn = conn, dir = dir)
 #' DBI::dbDisconnect(conn)
 save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_",
+                           sub = FALSE,
                            geometry = FALSE){
   check_sqlite_connection(conn)
   chkor(check_table_name(table_name, conn), chk_null(table_name))
   chk_flag(geometry)
   chk_string(dir)
   chk_string(sep)
+  chk_lgl(sub)
 
   if(is.null(table_name)){
     table_name <- table_names(conn)
@@ -106,7 +121,7 @@ save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_",
         dir.create(path, recursive = TRUE)
       ui_line(glue("Table name: {ui_value(i)}"))
       ui_line(glue("Column name: {ui_value(j)}"))
-      success[[name]] <- save_flobs(j, i, conn, path, sep)
+      success[[name]] <- save_flobs(j, i, conn, path, sep = sep, sub = sub)
       ui_line("")
     }
   }

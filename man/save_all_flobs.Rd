@@ -9,6 +9,7 @@ save_all_flobs(
   conn,
   dir = ".",
   sep = "_-_",
+  sub = FALSE,
   geometry = FALSE
 )
 }
@@ -18,9 +19,13 @@ By default all tables are included.}
 
 \item{conn}{A SQLite connection object.}
 
-\item{dir}{A character string of the path to the directory to save files to.}
+\item{dir}{A string of the path to the directory to save the files in.}
 
 \item{sep}{A string of the separator used to construct file names from values.}
+
+\item{sub}{A logical specifying whether to save all existing files in a subdirectory
+of the same name (sub = TRUE) or all possible files in a subdirectory
+of the same name (sub = NA) or not nest files within a subdirectory (sub = FALSE).}
 
 \item{geometry}{A flag specifying whether to search columns named geometry for flobs.}
 }
