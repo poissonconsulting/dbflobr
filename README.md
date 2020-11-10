@@ -12,8 +12,6 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www
 coverage](https://codecov.io/gh/poissonconsulting/dbflobr/branch/master/graph/badge.svg)](https://codecov.io/gh/poissonconsulting/dbflobr?branch=master)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Tinyverse
-status](https://tinyverse.netlify.com/badge/dbflobr)](https://CRAN.R-project.org/package=dbflobr)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/dbflobr)](https://cran.r-project.org/package=dbflobr)
 ![CRAN downloads](https://cranlogs.r-pkg.org/badges/dbflobr)
