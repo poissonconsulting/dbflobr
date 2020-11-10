@@ -114,12 +114,10 @@ import_flobs <- function(column_name, table_name, conn,
 #' Values in file names are matched to table primary key to determine where to write flob.
 #'
 #' @inheritParams write_flob
+#' @inheritParams import_flobs
 #' @param dir A string of the path to the directory to import the files from.
 #' Files need to be within nested folders like 'table1/column1/a.csv'.
 #' This structure is created automatically if save_all_flobs() function is used.
-#' @param sep A string of the separator between values in file names.
-#' @param replace A logical scalar indicating whether to replace existing flobs (TRUE) or not (FALSE).
-#'
 #' @return An invisible named list indicating directory path,
 #' file names and whether files were successfully written to database.
 #' @export
@@ -133,13 +131,14 @@ import_flobs <- function(column_name, table_name, conn,
 #' save_all_flobs(conn = conn, dir = dir)
 #' import_all_flobs(conn, dir, exists = TRUE, replace = TRUE)
 #' DBI::dbDisconnect(conn)
-import_all_flobs <- function(conn, dir = ".", sep = "_-_",
+import_all_flobs <- function(conn, dir = ".", sep = "_-_", pattern = ".*",
                              exists = FALSE, replace = FALSE){
   check_sqlite_connection(conn)
   chk_string(dir)
   chk_string(sep)
   chk_flag(exists)
   chk_flag(replace)
+  chk_string(pattern)
 
   dirs <- dir_tree(dir)
   success <- vector(mode = "list", length = length(dirs))
@@ -153,6 +152,7 @@ import_all_flobs <- function(conn, dir = ".", sep = "_-_",
     ui_line(glue("Column name: {ui_value(column_name)}"))
     success[[i]] <- import_flobs(column_name = x[2], table_name = x[1],
                                conn = conn, dir = inner_dir, sep = sep,
+                               pattern = pattern,
                                exists = exists, replace = replace)
     ui_line("")
   }

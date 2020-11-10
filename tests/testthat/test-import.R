@@ -161,6 +161,12 @@ test_that("import_all_flobs works", {
   x <- import_all_flobs(conn, path, sep = "-", exists = TRUE, replace = TRUE)
   expect_identical(sum(unlist(x)), 1L)
 
+  x <- import_all_flobs(conn, path, exists = TRUE, replace = TRUE, pattern = "b")
+
+  expect_identical(sum(unlist(x)), 2L)
+  expect_length(x, 3)
+  expect_identical(names(unlist(x)), c("df/New.b_-_1.pdf",
+                                       "df2/New.b.pdf"))
 })
 
 test_that("import_all_flobs requires unique", {
