@@ -250,3 +250,53 @@ test_that("import_all_flobs is actually recursive", {
   expect_identical(import_flobs("New", "df", conn = conn, dir = path, exists = TRUE, replace = TRUE, recursive = TRUE),
                    c("a_-_1.pdf" = TRUE))
 })
+
+test_that("import_flobs works with subdirectory", {
+
+  teardown(unlink(file.path(tempdir(), "dbflobr")))
+
+  path <- file.path(tempdir(), "dbflobr")
+  unlink(path, recursive = TRUE)
+  dir.create(path)
+  dir.create(file.path(path, "a_-_1"))
+  dir.create(file.path(path, "b_-_2"))
+  dir.create(file.path(path, "b_-_3"))
+
+  df <- data.frame(a = 1)
+
+  write.csv(df, file.path(path, "a_-_1", "data.csv"))
+  write.csv(df, file.path(path, "b_-_2", "data.csv"))
+  write.csv(df, file.path(path, "b_-_3", "data.csv"))
+
+  conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  teardown(DBI::dbDisconnect(conn))
+
+  # 2 column pk
+  DBI::dbExecute(conn,
+                 "CREATE TABLE df (
+                char TEXT NOT NULL,
+                int INTEGER NOT NULL,
+                num REAL NOT NULL,
+                PRIMARY KEY (char, int))")
+
+  DBI::dbWriteTable(conn, "df",
+                    data.frame(char = c("a", "b", "b"),
+                               int = c(1, 2, 3),
+                               num = c(1, 1, 1), stringsAsFactors = FALSE),
+                    append = TRUE)
+
+  expect_identical(import_flobs("New", "df", conn, path, sub = TRUE),
+                   c(`a_-_1` = TRUE, `b_-_2` = TRUE, `b_-_3` = TRUE))
+
+  expect_identical(import_flobs("New", "df", conn, path, sub = TRUE, exists = TRUE, replace = TRUE),
+                   c(`a_-_1` = TRUE, `b_-_2` = TRUE, `b_-_3` = TRUE))
+
+  unlink(file.path(path, "a_-_1", "data.csv"))
+
+  expect_identical(import_flobs("New", "df", conn, path, sub = TRUE, exists = TRUE, replace = TRUE),
+                   c(`b_-_2` = TRUE, `b_-_3` = TRUE))
+
+  write.csv(df, file.path(path, "b_-_2", "data2.csv"))
+  expect_error(import_flobs("New", "df", conn, path, sub = TRUE, exists = TRUE, replace = TRUE),
+               "Directory names must be unique.")
+})

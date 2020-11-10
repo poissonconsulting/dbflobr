@@ -13,7 +13,7 @@
 #' If sub = NA and replace = TRUE then the names of the
 #' subdirectories are used irrespective of whether they include files and existing
 #' flobs are deleted if the corresponding subdirectory is empty.
-#' If sub = TRUE or sub = NA then recursive must be false.
+#' If sub = TRUE or sub = NA then recursive is set to be false.
 #' @return An invisible named vector indicating file name and whether the file was
 #' successfully written to database.
 #' @export
@@ -41,17 +41,23 @@ import_flobs <- function(column_name, table_name, conn,
   check_pk(table_name, conn)
   chk_lgl(sub)
 
-  if(!vld_false(sub) && recursive)
-    stop("If recursive is TRUE then sub must be FALSE.", call. = FALSE)
+  if(!vld_false(sub)) {
+    recursive <- TRUE
+  }
 
   if(vld_false(sub)) {
     files <- list_files(dir, recursive = recursive)
     names(files) <- basename(files)
-  } else
+    if(anyDuplicated(names(files)))
+      stop("File names must be unique.", call. = FALSE)
+  } else if(vld_true(sub)) {
+    files <- list_files(dir, recursive = recursive)
+    names(files) <- basename(dirname(files))
+    if(anyDuplicated(names(files)))
+      stop("Directory names must be unique.", call. = FALSE)
+  } else {
     .NotYetImplemented()
-
-  if(anyDuplicated(names(files)))
-     stop("File names must be unique.", call. = FALSE)
+  }
 
   key <- table_pk_df(table_name, conn)
 
