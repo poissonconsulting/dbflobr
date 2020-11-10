@@ -10,6 +10,7 @@ import_flobs(
   conn,
   dir = ".",
   sep = "_-_",
+  sub = FALSE,
   exists = FALSE,
   recursive = FALSE,
   replace = FALSE
@@ -26,13 +27,20 @@ import_flobs(
 
 \item{sep}{A string of the separator between values in file names.}
 
+\item{sub}{A logical scalar specifying whether to import flobs based on their filename (sub = FALSE)
+or the name of their subdirectory (sub = TRUE) which must only contain 1 file.
+If sub = NA and replace = TRUE then the names of the
+subdirectories are used irrespective of whether they include files and existing
+flobs are deleted if the corresponding subdirectory is empty.
+If sub = TRUE or sub = NA then recursive must be false.}
+
 \item{exists}{A logical scalar specifying whether the column must (TRUE) or
 mustn't (FALSE) already exist or whether it doesn't matter (NA).
 IF FALSE, a new BLOB column is created.}
 
-\item{recursive}{A logical scalar indicating whether to recurse into file directory (TRUE) or not (FALSE).}
+\item{recursive}{A flag indicating whether to recurse into file directory (TRUE) or not (FALSE).}
 
-\item{replace}{A logical scalar indicating whether to replace existing flobs (TRUE) or not (FALSE).}
+\item{replace}{A flag indicating whether to replace existing flobs (TRUE) or not (FALSE).}
 }
 \value{
 An invisible named vector indicating file name and whether the file was

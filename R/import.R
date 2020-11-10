@@ -6,9 +6,14 @@
 #' @inheritParams write_flob
 #' @param dir A string of the path to the directory to import files from.
 #' @param sep A string of the separator between values in file names.
-#' @param recursive A logical scalar indicating whether to recurse into file directory (TRUE) or not (FALSE).
-#' @param replace A logical scalar indicating whether to replace existing flobs (TRUE) or not (FALSE).
-#'
+#' @param recursive A flag indicating whether to recurse into file directory (TRUE) or not (FALSE).
+#' @param replace A flag indicating whether to replace existing flobs (TRUE) or not (FALSE).
+#' @param sub A logical scalar specifying whether to import flobs based on their filename (sub = FALSE)
+#' or the name of their subdirectory (sub = TRUE) which must only contain 1 file.
+#' If sub = NA and replace = TRUE then the names of the
+#' subdirectories are used irrespective of whether they include files and existing
+#' flobs are deleted if the corresponding subdirectory is empty.
+#' If sub = TRUE or sub = NA then recursive must be false.
 #' @return An invisible named vector indicating file name and whether the file was
 #' successfully written to database.
 #' @export
@@ -22,7 +27,7 @@
 #' import_flobs("BlobColumn", "Table1", conn, dir)
 #' DBI::dbDisconnect(conn)
 import_flobs <- function(column_name, table_name, conn,
-                         dir = ".", sep = "_-_",
+                         dir = ".", sep = "_-_", sub = FALSE,
                          exists = FALSE, recursive = FALSE,
                          replace = FALSE){
   check_sqlite_connection(conn)
@@ -34,9 +39,13 @@ import_flobs <- function(column_name, table_name, conn,
   chk_flag(recursive)
   chk_flag(replace)
   check_pk(table_name, conn)
+  chk_lgl(sub)
+
+  if(!vld_false(sub) && recursive)
+    stop("If recursive is TRUE then sub must be FALSE.", call. = TRUE)
 
   files <- list_files(dir, recursive = recursive)
-  filenames <- basename(files)
+  names(files) <- basename(files)
   key <- table_pk_df(table_name, conn)
 
   column_exists <- column_exists(column_name, table_name, conn = conn)
@@ -45,14 +54,14 @@ import_flobs <- function(column_name, table_name, conn,
 
   ui_line(glue("Writing files to database"))
 
-  success <- set_names(vector(length = length(files)), filenames)
+  success <- set_names(vector(length = length(files)), names(files))
 
   for(i in seq_along(files)){
-    values <- parse_filename(filenames[i], sep)
+    values <- parse_filename(names(files)[i], sep)
     flob <- flobr::flob(files[i])
 
     if(is_length_unequal(values, key)){
-      ui_oops(glue("File {i}: can't write {filenames[i]} to database. The number of hyphen-separated values must be identical to the number of columns in `key`."))
+      ui_oops(glue("File {i}: can't write {names(files)[i]} to database. The number of hyphen-separated values must be identical to the number of columns in `key`."))
       next
     }
 
@@ -62,7 +71,7 @@ import_flobs <- function(column_name, table_name, conn,
 
     y <- try(read_flob(column_name, table_name, key[i,, drop = FALSE], conn), silent = TRUE)
     if(!replace && !is_try_error(y)){
-      ui_oops(glue("File {i}: can't write {filenames[i]} to database. Flob already exists in that location and replace = FALSE"))
+      ui_oops(glue("File {i}: can't write {names(files)[i]} to database. Flob already exists in that location and replace = FALSE"))
       next
     }
 
@@ -74,9 +83,9 @@ import_flobs <- function(column_name, table_name, conn,
 
     if(!is_try_error(x)){
       success[i] <- TRUE
-      ui_done(glue("File {i}: {filenames[i]} written to database"))
+      ui_done(glue("File {i}: {names(files)[i]} written to database"))
     } else {
-      ui_oops(glue("File {i}: can't write {filenames[i]} to database"))
+      ui_oops(glue("File {i}: can't write {names(files)[i]} to database"))
     }
   }
   return(invisible(success))
