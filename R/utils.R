@@ -17,8 +17,9 @@ list_files <- function(path, recursive = TRUE, pattern = ".*"){
   if(pattern == ".*")
     pattern <- NULL
 
-  setdiff(list.files(path, recursive = recursive, pattern = pattern, full.names = TRUE),
-          list.dirs(path, recursive = recursive, full.names = TRUE))
+  files <- list.files(path, recursive = recursive, pattern = pattern, full.names = TRUE)
+  dirs <- list.dirs(path, recursive = recursive, full.names = TRUE)
+  setdiff(files, dirs)
 }
 
 dir_tree <- function(path){
