@@ -43,22 +43,24 @@ import_flobs <- function(column_name, table_name, conn,
   chk_lgl(sub)
   chk_string(pattern)
 
-  if(!vld_false(sub)) {
-    recursive <- NA
-  }
 
   if(vld_false(sub)) {
     files <- list_files(dir, recursive = recursive, pattern = pattern)
     names(files) <- basename(files)
     if(anyDuplicated(names(files)))
       stop("File names must be unique.", call. = FALSE)
-  } else if(vld_true(sub)) {
-    files <- list_files(dir, recursive = recursive, pattern = pattern)
+  } else {
+    files <- list_files(dir, recursive = NA, pattern = pattern)
     names(files) <- basename(dirname(files))
     if(anyDuplicated(names(files)))
       stop("Directory names must be unique.", call. = FALSE)
-  } else { # need missing value for names
-    .NotYetImplemented()
+    if(is.na(sub)) {
+      dirs <- list_dirs(dir, recursive = NA, pattern = pattern)
+      names(dirs) <- basename(dirs)
+      dirs[names(files)] <- files
+      dirs[!names(dirs) %in% names(files)] <- NA_character_
+      files <- dirs
+    }
   }
 
   key <- table_pk_df(table_name, conn)
@@ -90,7 +92,6 @@ import_flobs <- function(column_name, table_name, conn,
       next
     }
 
-
     if(!is.na(files[i])) {
       flob <- flobr::flob(files[i])
       x <- try(write_flob(flob, key = key[i,,drop = FALSE],
@@ -105,20 +106,26 @@ import_flobs <- function(column_name, table_name, conn,
       } else {
         ui_oops(glue("File {i}: can't write {names(files)[i]} to database"))
       }
+      next
+    }
+
+    if(is_try_error(y)) {
+      ui_done(glue("File {i}: {names(files)[i]} already absent from database."))
+      success[i] <- TRUE
+      next
+    }
+    x <- try(delete_flob(key = key[i,,drop = FALSE],
+                         column_name = column_name,
+                         table_name = table_name,
+                         conn = conn))
+    if(!is_try_error(x)){
+      success[i] <- TRUE
+      ui_done(glue("File {i}: {names(files)[i]} deleted in database."))
     } else {
-      x <- try(delete_flob(key = key[i,,drop = FALSE],
-                           column_name = column_name,
-                           table_name = table_name,
-                           conn = conn))
-      if(!is_try_error(x)){
-        success[i] <- TRUE
-        ui_done(glue("File {i}: {names(files)[i]} deleted in database."))
-      } else {
-        ui_oops(glue("File {i}: can't delete {names(files)[i]} in database."))
-      }
+      ui_oops(glue("File {i}: can't delete {names(files)[i]} in database."))
     }
   }
-  return(invisible(success))
+return(invisible(success))
 }
 
 #' Import all flobs.

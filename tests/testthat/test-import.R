@@ -310,8 +310,6 @@ test_that("import_flobs works with subdirectory", {
                    c(`b_-_2` = TRUE, `b_-_3` = TRUE))
 })
 
-
-
 test_that("import_flobs does not recurse beyond 1", {
 
   teardown(unlink(file.path(tempdir(), "dbflobr")))
@@ -416,17 +414,10 @@ test_that("import_flobs sub = NA", {
                 num REAL NOT NULL,
                 PRIMARY KEY (char, num))")
 
-  # one column pk with empty
-  DBI::dbExecute(conn,
-                 "CREATE TABLE df2 (
-                char TEXT PRIMARY KEY NOT NULL,
-                 geometry2 BLOB)")
-
   # one column pk with two blob cols
   DBI::dbWriteTable(conn, "df",
                     data.frame(char = c("a", "a", "b"), num = c(1, 2.1, 1)),
                     append = TRUE)
-  DBI::dbWriteTable(conn, "df2", data.frame(char = c("a", "b")), append = TRUE)
 
   flob <- flobr::flob_obj
   write_flob(flob, "geometry", "df", key = data.frame(char = "a", num = 1), conn)
@@ -436,17 +427,22 @@ test_that("import_flobs sub = NA", {
   unlink(path, recursive = TRUE)
   dir.create(path)
 
-  unlink(path, recursive = TRUE)
-  dir.create(path)
-
   x <- save_all_flobs(conn = conn, dir = file.path(path, "dump"), sub = NA, geometry = TRUE)
   expect_identical(x, list(`df/geometry` = c(flobr.pdf = "a_-_1.pdf", flobr.pdf = "b_-_1.pdf"
-  ), `df2/geometry2` = structure(logical(0), .Names = character(0))))
-#
-#   expect_identical(import_all_flobs(conn = conn, dir = file.path(path, "dump"), sub = NA,
-#                                     exists = TRUE),
-#                    list(`df/geometry` = c(`a_-_1` = FALSE, `b_-_1` = FALSE), `df/geometry/a_-_1` = c(`a_-_1` = FALSE,
-#                                                                                                      `b_-_1` = FALSE), `df/geometry/b_-_1` = c(`a_-_1` = FALSE, `b_-_1` = FALSE
-#                                                                                                      ), `df2/geometry2` = structure(logical(0), .Names = character(0))))
+  )))
 
+  expect_identical(import_flobs("geometry", "df", conn = conn, dir = file.path(path, "dump", "df", "geometry"), sub = NA, exists = TRUE),
+                   c(`a_-_1` = FALSE, `a_-_2.1` = TRUE, `b_-_1` = FALSE))
+
+  expect_identical(import_flobs("geometry", "df", conn = conn, dir = file.path(path, "dump", "df", "geometry"), sub = NA, exists = TRUE, replace = TRUE),
+                   c(`a_-_1` = TRUE, `a_-_2.1` = TRUE, `b_-_1` = TRUE))
+
+  unlink(file.path(path, "dump", "df", "geometry", "b_-_1", "b_-_1.pdf"))
+
+  expect_is(read_flob("geometry", "df", conn = conn, key = data.frame(char = "b", num = 1)), "flob")
+
+  expect_identical(import_flobs("geometry", "df", conn = conn, dir = file.path(path, "dump", "df", "geometry"), sub = NA, exists = TRUE, replace = TRUE),
+                   c(`a_-_1` = TRUE, `a_-_2.1` = TRUE, `b_-_1` = TRUE))
+
+  expect_error(read_flob("geometry", "df", conn = conn, key = data.frame(char = "b", num = 1)))
 })

@@ -13,7 +13,13 @@ collapse_flob <- function(x) {
   glue("x'{y}'")
 }
 
-
+list_dirs <- function(path, recursive = TRUE, pattern = ".*"){
+  dirs <- list.dirs(path, recursive = vld_true(recursive), full.names = TRUE)
+  if(pattern != ".*") {
+    dirs <- dirs[grepl(pattern, dirs)]
+  }
+  dirs
+}
 
 list_files <- function(path, recursive = TRUE, pattern = ".*"){
   if(pattern == ".*")
