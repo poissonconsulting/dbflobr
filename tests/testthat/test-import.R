@@ -391,17 +391,12 @@ test_that("import_flobs sub = TRUE", {
 
   expect_identical(import_all_flobs(conn = conn, dir = file.path(path, "dump"), sub = TRUE,
                    exists = TRUE),
-                   list(`df/geometry` = c(`a_-_1` = FALSE, `b_-_1` = FALSE), `df/geometry/a_-_1` = c(`a_-_1` = FALSE,
-                                                                                                     `b_-_1` = FALSE), `df/geometry/b_-_1` = c(`a_-_1` = FALSE, `b_-_1` = FALSE
-                                                                                                     ), `df2/geometry2` = structure(logical(0), .Names = character(0))))
+                   list(`df/geometry` = c(`a_-_1` = FALSE, `b_-_1` = FALSE), `df2/geometry2` = structure(logical(0), .Names = character(0))))
 
   expect_identical(import_all_flobs(conn = conn, dir = file.path(path, "dump"), sub = TRUE,
                                     exists = TRUE, replace = TRUE),
-                   list(`df/geometry` = c(`a_-_1` = TRUE, `b_-_1` = TRUE), `df/geometry/a_-_1` = c(`a_-_1` = TRUE,
-                                                                                                     `b_-_1` = TRUE), `df/geometry/b_-_1` = c(`a_-_1` = TRUE, `b_-_1` = TRUE
-                                                                                                     ), `df2/geometry2` = structure(logical(0), .Names = character(0))))
+                   list(`df/geometry` = c(`a_-_1` = TRUE, `b_-_1` = TRUE), `df2/geometry2` = structure(logical(0), .Names = character(0))))
 })
-
 
 test_that("import_flobs sub = NA", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
@@ -445,4 +440,62 @@ test_that("import_flobs sub = NA", {
                    c(`a_-_1` = TRUE, `a_-_2.1` = TRUE, `b_-_1` = TRUE))
 
   expect_error(read_flob("geometry", "df", conn = conn, key = data.frame(char = "b", num = 1)))
+})
+
+test_that("import_all_flobs works", {
+
+  conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  teardown(DBI::dbDisconnect(conn))
+
+  # 2 column pk
+  DBI::dbExecute(conn,
+                 "CREATE TABLE df (
+                char TEXT NOT NULL,
+                num REAL NOT NULL,
+                PRIMARY KEY (char, num))")
+
+  # one column pk with empty
+  DBI::dbExecute(conn,
+                 "CREATE TABLE df2 (
+                char TEXT PRIMARY KEY NOT NULL)")
+
+  # one column pk with two blob cols
+  DBI::dbWriteTable(conn, "df",
+                    data.frame(char = c("a", "a", "b"), num = c(1, 2.1, 1)),
+                    append = TRUE)
+  DBI::dbWriteTable(conn, "df2", data.frame(char = c("a", "b")), append = TRUE)
+
+  flob <- flobr::flob_obj
+  write_flob(flob, "New", "df", key = data.frame(char = "a", num = 1), conn)
+  write_flob(flob, "New2", "df", key = data.frame(char = "a", num = 2.1), conn)
+  write_flob(flob, "New", "df", key = data.frame(char = "b"), conn)
+  write_flob(flob, "New", "df2", key = data.frame(char = "b"), conn)
+
+  path <- file.path(tempdir(), "dbflobr")
+  unlink(path, recursive = TRUE)
+  dir.create(path)
+
+  save_all_flobs(conn = conn, dir = path, sub = NA)
+
+  expect_identical(import_all_flobs(conn, path, exists = TRUE, sub = TRUE),
+                   list(`df/New` = c(`a_-_1` = FALSE, `b_-_1` = FALSE), `df/New2` = c(`a_-_2.1` = FALSE),
+                        `df2/New` = c(b = FALSE)))
+
+  expect_identical(import_all_flobs(conn, path, exists = TRUE, replace = TRUE, sub = TRUE),
+                   list(`df/New` = c(`a_-_1` = TRUE, `b_-_1` = TRUE), `df/New2` = c(`a_-_2.1` = TRUE),
+                        `df2/New` = c(b = TRUE)))
+
+  list.files(path, recursive = TRUE, include.dirs = TRUE)
+
+  import_flobs("New2", "df", conn = conn, dir = file.path(path, "df", "New2"), sub = TRUE, exists = TRUE, replace = TRUE)
+
+  expect_identical(import_all_flobs(conn, path, exists = TRUE, sub = NA),
+                   list(`df/New` = c(`a_-_1` = FALSE, `a_-_2.1` = TRUE, `b_-_1` = FALSE
+                   ), `df/New2` = c(`a_-_1` = TRUE, `a_-_2.1` = FALSE, `b_-_1` = TRUE
+                   ), `df2/New` = c(a = TRUE, b = FALSE)))
+
+  expect_identical(import_all_flobs(conn, path, exists = TRUE, replace = TRUE, sub = NA),
+                   list(`df/New` = c(`a_-_1` = TRUE, `a_-_2.1` = TRUE, `b_-_1` = TRUE
+                   ), `df/New2` = c(`a_-_1` = TRUE, `a_-_2.1` = TRUE, `b_-_1` = TRUE
+                   ), `df2/New` = c(a = TRUE, b = TRUE)))
 })

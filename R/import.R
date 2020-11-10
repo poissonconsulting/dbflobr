@@ -34,7 +34,7 @@ import_flobs <- function(column_name, table_name, conn,
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = exists, conn)
-  chk_string(dir)
+  chk_dir(dir)
   chk_string(sep)
   chk_flag(exists)
   chk_flag(recursive)
@@ -62,6 +62,7 @@ import_flobs <- function(column_name, table_name, conn,
       files <- dirs
     }
   }
+  print(files)
 
   key <- table_pk_df(table_name, conn)
 
@@ -125,7 +126,7 @@ import_flobs <- function(column_name, table_name, conn,
       ui_oops(glue("File {i}: can't delete {names(files)[i]} in database."))
     }
   }
-return(invisible(success))
+  return(invisible(success))
 }
 
 #' Import all flobs.
@@ -156,14 +157,14 @@ import_all_flobs <- function(conn, dir = ".", sep = "_-_", pattern = ".*",
                              sub = FALSE,
                              exists = FALSE, replace = FALSE){
   check_sqlite_connection(conn)
-  chk_string(dir)
+  chk_dir(dir)
   chk_string(sep)
   chk_flag(exists)
   chk_flag(replace)
   chk_string(pattern)
   chk_lgl(sub)
 
-  dirs <- dir_tree(dir)
+  dirs <- dir_tree(dir, sub)
   success <- vector(mode = "list", length = length(dirs))
 
   for(i in seq_along(dirs)){

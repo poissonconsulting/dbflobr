@@ -35,10 +35,14 @@ list_files <- function(path, recursive = TRUE, pattern = ".*"){
   setdiff(files, dirs)
 }
 
-dir_tree <- function(path){
+dir_tree <- function(path, sub){
   dirs <- setdiff(list.dirs(path, recursive = TRUE, full.names = FALSE), "")
   x <- strsplit(dirs, "/")
-  x[which(sapply(x, length) > 1)]
+  if(!vld_false(sub)) {
+    x <- x[which(sapply(x, length) == 2L)]
+  } else
+    x <- x[which(sapply(x, length) > 1)]
+  x
 }
 
 is_length_unequal <- function(values, key){
