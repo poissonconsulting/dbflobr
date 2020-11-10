@@ -14,7 +14,7 @@
 #' If sub = NA and replace = TRUE then the names of the
 #' subdirectories are used irrespective of whether they include files and existing
 #' flobs are deleted if the corresponding subdirectory is empty.
-#' If sub = TRUE or sub = NA then recursive is set to be false.
+#' If sub = TRUE or sub = NA then recursion is just one subfolder deep.
 #' @return An invisible named vector indicating file name and whether the file was
 #' successfully written to database.
 #' @export
@@ -44,7 +44,7 @@ import_flobs <- function(column_name, table_name, conn,
   chk_string(pattern)
 
   if(!vld_false(sub)) {
-    recursive <- TRUE
+    recursive <- NA
   }
 
   if(vld_false(sub)) {

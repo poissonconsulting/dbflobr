@@ -35,7 +35,7 @@ or the name of their subdirectory (sub = TRUE) which must only contain 1 file.
 If sub = NA and replace = TRUE then the names of the
 subdirectories are used irrespective of whether they include files and existing
 flobs are deleted if the corresponding subdirectory is empty.
-If sub = TRUE or sub = NA then recursive is set to be false.}
+If sub = TRUE or sub = NA then recursion is just one subfolder deep.}
 
 \item{exists}{A logical scalar specifying whether the column must (TRUE) or
 mustn't (FALSE) already exist or whether it doesn't matter (NA).
