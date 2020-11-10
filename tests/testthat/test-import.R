@@ -190,12 +190,63 @@ test_that("import_all_flobs requires unique", {
   unlink(path, recursive = TRUE)
   dir.create(path)
 
-  save_all_flobs(conn = conn, dir = path)
+  expect_identical(save_all_flobs(conn = conn, dir = path), list(`df/New` = c(flobr.pdf = "a_-_1.pdf")))
+
   expect_error(import_flobs("New", "df", conn = conn, dir = path),
                "`New` must not already exist in table `df`.")
-  import_flobs("New", "df", conn = conn, dir = path, exists = TRUE)
+
+  list.files(file.path(path), recursive = TRUE)
+
+  expect_identical(import_flobs("New", "df", conn = conn, dir = path, exists = TRUE),
+                   structure(logical(0), .Names = character(0)))
+
+  expect_identical(import_flobs("New", "df", conn = conn, dir = file.path(path, "df", "New"), exists = TRUE, replace = TRUE),
+                   c("a_-_1.pdf" = TRUE))
+
+  expect_identical(import_flobs("New", "df", conn = conn, dir =path, exists = TRUE, replace = TRUE, recursive = TRUE),
+                   c("a_-_1.pdf" = TRUE))
+
   save_all_flobs(conn = conn, dir = file.path(path, "sub"))
-  import_flobs("New", "df", conn = conn, dir = path, exists = TRUE)
+
+  expect_identical(import_flobs("New", "df", conn = conn, dir = file.path(path, "df", "New"), exists = TRUE, replace = TRUE),
+                   c("a_-_1.pdf" = TRUE))
+
+  expect_identical(import_flobs("New", "df", conn = conn, dir = file.path(path, "sub", "df", "New"), exists = TRUE, replace = TRUE),
+                   c("a_-_1.pdf" = TRUE))
+
   expect_error(import_flobs("New", "df", conn = conn, dir = path, exists = TRUE, recursive = TRUE),
                "File names must be unique.")
+})
+
+test_that("import_all_flobs is actually recursive", {
+
+  conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  teardown(DBI::dbDisconnect(conn))
+
+  # 2 column pk
+  DBI::dbExecute(conn,
+                 "CREATE TABLE df (
+                char TEXT NOT NULL,
+                num REAL NOT NULL,
+                PRIMARY KEY (char, num))")
+
+  # one column pk with two blob cols
+  DBI::dbWriteTable(conn, "df",
+                    data.frame(char = c("a", "a", "b"), num = c(1, 2.1, 1)),
+                    append = TRUE)
+
+  flob <- flobr::flob_obj
+  write_flob(flob, "New", "df", key = data.frame(char = "a", num = 1), conn)
+
+  ### works when pk length 2
+  teardown(unlink(file.path(tempdir(), "dbflobr")))
+
+  path <- file.path(tempdir(), "dbflobr")
+  unlink(path, recursive = TRUE)
+  dir.create(path)
+
+  expect_identical(save_all_flobs(conn = conn, dir = file.path(path, "sub")), list(`df/New` = c(flobr.pdf = "a_-_1.pdf")))
+
+  expect_identical(import_flobs("New", "df", conn = conn, dir = path, exists = TRUE, replace = TRUE, recursive = TRUE),
+                   c("a_-_1.pdf" = TRUE))
 })

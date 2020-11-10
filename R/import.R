@@ -44,8 +44,11 @@ import_flobs <- function(column_name, table_name, conn,
   if(!vld_false(sub) && recursive)
     stop("If recursive is TRUE then sub must be FALSE.", call. = FALSE)
 
-  files <- list_files(dir, recursive = recursive)
-  names(files) <- basename(files)
+  if(vld_false(sub)) {
+    files <- list_files(dir, recursive = recursive)
+    names(files) <- basename(files)
+  } else
+    .NotYetImplemented()
 
   if(anyDuplicated(names(files)))
      stop("File names must be unique.", call. = FALSE)
@@ -58,7 +61,8 @@ import_flobs <- function(column_name, table_name, conn,
 
   ui_line(glue("Writing files to database"))
 
-  success <- set_names(vector(length = length(files)), names(files))
+  success <- rep(FALSE, length = length(files))
+  names(success) <- names(files)
 
   for(i in seq_along(files)){
     values <- parse_filename(names(files)[i], sep)
