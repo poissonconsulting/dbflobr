@@ -42,10 +42,14 @@ import_flobs <- function(column_name, table_name, conn,
   chk_lgl(sub)
 
   if(!vld_false(sub) && recursive)
-    stop("If recursive is TRUE then sub must be FALSE.", call. = TRUE)
+    stop("If recursive is TRUE then sub must be FALSE.", call. = FALSE)
 
   files <- list_files(dir, recursive = recursive)
   names(files) <- basename(files)
+
+  if(anyDuplicated(names(files)))
+     stop("File names must be unique.", call. = FALSE)
+
   key <- table_pk_df(table_name, conn)
 
   column_exists <- column_exists(column_name, table_name, conn = conn)
