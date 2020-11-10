@@ -13,8 +13,11 @@ collapse_flob <- function(x) {
   glue("x'{y}'")
 }
 
-list_files <- function(path, recursive = TRUE){
-  setdiff(list.files(path, recursive = recursive, full.names = TRUE),
+list_files <- function(path, recursive = TRUE, pattern = ".*"){
+  if(pattern == ".*")
+    pattern <- NULL
+
+  setdiff(list.files(path, recursive = recursive, pattern = pattern, full.names = TRUE),
           list.dirs(path, recursive = recursive, full.names = TRUE))
 }
 

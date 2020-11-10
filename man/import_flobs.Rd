@@ -10,6 +10,7 @@ import_flobs(
   conn,
   dir = ".",
   sep = "_-_",
+  pattern = ".*",
   sub = FALSE,
   exists = FALSE,
   recursive = FALSE,
@@ -26,6 +27,8 @@ import_flobs(
 \item{dir}{A string of the path to the directory to import files from.}
 
 \item{sep}{A string of the separator between values in file names.}
+
+\item{pattern}{A regular expression specifying the pattern file names must match.}
 
 \item{sub}{A logical scalar specifying whether to import flobs based on their filename (sub = FALSE)
 or the name of their subdirectory (sub = TRUE) which must only contain 1 file.

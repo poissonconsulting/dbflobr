@@ -8,6 +8,7 @@
 #' @param sep A string of the separator between values in file names.
 #' @param recursive A flag indicating whether to recurse into file directory (TRUE) or not (FALSE).
 #' @param replace A flag indicating whether to replace existing flobs (TRUE) or not (FALSE).
+#' @param pattern A regular expression specifying the pattern file names must match.
 #' @param sub A logical scalar specifying whether to import flobs based on their filename (sub = FALSE)
 #' or the name of their subdirectory (sub = TRUE) which must only contain 1 file.
 #' If sub = NA and replace = TRUE then the names of the
@@ -27,7 +28,7 @@
 #' import_flobs("BlobColumn", "Table1", conn, dir)
 #' DBI::dbDisconnect(conn)
 import_flobs <- function(column_name, table_name, conn,
-                         dir = ".", sep = "_-_", sub = FALSE,
+                         dir = ".", sep = "_-_", pattern = ".*", sub = FALSE,
                          exists = FALSE, recursive = FALSE,
                          replace = FALSE){
   check_sqlite_connection(conn)
@@ -40,18 +41,19 @@ import_flobs <- function(column_name, table_name, conn,
   chk_flag(replace)
   check_pk(table_name, conn)
   chk_lgl(sub)
+  chk_string(pattern)
 
   if(!vld_false(sub)) {
     recursive <- TRUE
   }
 
   if(vld_false(sub)) {
-    files <- list_files(dir, recursive = recursive)
+    files <- list_files(dir, recursive = recursive, pattern = pattern)
     names(files) <- basename(files)
     if(anyDuplicated(names(files)))
       stop("File names must be unique.", call. = FALSE)
   } else if(vld_true(sub)) {
-    files <- list_files(dir, recursive = recursive)
+    files <- list_files(dir, recursive = recursive, pattern = pattern)
     names(files) <- basename(dirname(files))
     if(anyDuplicated(names(files)))
       stop("Directory names must be unique.", call. = FALSE)

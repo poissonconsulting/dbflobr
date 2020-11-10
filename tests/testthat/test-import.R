@@ -58,7 +58,7 @@ test_that("import_flobs works", {
 
   files <- list_files(path, recursive = FALSE)
   expect_length(list_files(path, recursive = FALSE), 3L)
-  expect_length(list_files(path, recursive = TRUE), 4L)
+  expect_length(list_files(path), 4L)
 
   expect_error(import_flobs("New", "df2", conn, path), class = "chk_error")
 
@@ -79,7 +79,7 @@ test_that("import_flobs works", {
   x <- import_flobs("New3", "df", conn, path, recursive = TRUE)
   expect_true(sum(x) == 2)
   expect_length(x, 3)
-  expect_identical(names(x), basename(list_files(path, recursive = TRUE)))
+  expect_identical(names(x), basename(list_files(path, recursive = TRUE, pattern = ".*")))
 
   write.csv(df, file.path(inner_path3, "a.csv"))
   write.csv(df, file.path(inner_path3, "b.csv"))
@@ -299,4 +299,7 @@ test_that("import_flobs works with subdirectory", {
   write.csv(df, file.path(path, "b_-_2", "data2.csv"))
   expect_error(import_flobs("New", "df", conn, path, sub = TRUE, exists = TRUE, replace = TRUE),
                "Directory names must be unique.")
+
+  expect_identical(import_flobs("New", "df", conn, path, sub = TRUE, exists = TRUE, replace = TRUE, pattern = "data.csv"),
+                   c(`b_-_2` = TRUE, `b_-_3` = TRUE))
 })
