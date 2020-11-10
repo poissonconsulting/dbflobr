@@ -351,3 +351,55 @@ test_that("import_flobs does not recurse beyond 1", {
   expect_identical(import_flobs("New2", "df", conn, file.path(path, "extra"), sub = TRUE),
                    c(`a_-_1` = TRUE, `b_-_2` = TRUE, `b_-_3` = TRUE))
 })
+
+
+test_that("import_flobs sub = TRUE", {
+  conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  teardown(DBI::dbDisconnect(conn))
+
+  # 2 column pk
+  DBI::dbExecute(conn,
+                 "CREATE TABLE df (
+                char TEXT NOT NULL,
+                num REAL NOT NULL,
+                PRIMARY KEY (char, num))")
+
+  # one column pk with empty
+  DBI::dbExecute(conn,
+                 "CREATE TABLE df2 (
+                char TEXT PRIMARY KEY NOT NULL,
+                 geometry2 BLOB)")
+
+  # one column pk with two blob cols
+  DBI::dbWriteTable(conn, "df",
+                    data.frame(char = c("a", "a", "b"), num = c(1, 2.1, 1)),
+                    append = TRUE)
+  DBI::dbWriteTable(conn, "df2", data.frame(char = c("a", "b")), append = TRUE)
+
+  flob <- flobr::flob_obj
+  write_flob(flob, "geometry", "df", key = data.frame(char = "a", num = 1), conn)
+  write_flob(flob, "geometry", "df", key = data.frame(char = "b"), conn)
+
+  path <- file.path(tempdir(), "dbflobr")
+  unlink(path, recursive = TRUE)
+  dir.create(path)
+
+  unlink(path, recursive = TRUE)
+  dir.create(path)
+
+  x <- save_all_flobs(conn = conn, dir = file.path(path, "dump"), sub = TRUE, geometry = TRUE)
+  expect_identical(x, list(`df/geometry` = c(flobr.pdf = "a_-_1.pdf", flobr.pdf = "b_-_1.pdf"
+  ), `df2/geometry2` = structure(logical(0), .Names = character(0))))
+
+  expect_identical(import_all_flobs(conn = conn, dir = file.path(path, "dump"), sub = TRUE,
+                   exists = TRUE),
+                   list(`df/geometry` = c(`a_-_1` = FALSE, `b_-_1` = FALSE), `df/geometry/a_-_1` = c(`a_-_1` = FALSE,
+                                                                                                     `b_-_1` = FALSE), `df/geometry/b_-_1` = c(`a_-_1` = FALSE, `b_-_1` = FALSE
+                                                                                                     ), `df2/geometry2` = structure(logical(0), .Names = character(0))))
+
+  expect_identical(import_all_flobs(conn = conn, dir = file.path(path, "dump"), sub = TRUE,
+                                    exists = TRUE, replace = TRUE),
+                   list(`df/geometry` = c(`a_-_1` = TRUE, `b_-_1` = TRUE), `df/geometry/a_-_1` = c(`a_-_1` = TRUE,
+                                                                                                     `b_-_1` = TRUE), `df/geometry/b_-_1` = c(`a_-_1` = TRUE, `b_-_1` = TRUE
+                                                                                                     ), `df2/geometry2` = structure(logical(0), .Names = character(0))))
+})

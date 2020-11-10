@@ -132,6 +132,7 @@ import_flobs <- function(column_name, table_name, conn,
 #' import_all_flobs(conn, dir, exists = TRUE, replace = TRUE)
 #' DBI::dbDisconnect(conn)
 import_all_flobs <- function(conn, dir = ".", sep = "_-_", pattern = ".*",
+                             sub = FALSE,
                              exists = FALSE, replace = FALSE){
   check_sqlite_connection(conn)
   chk_string(dir)
@@ -139,6 +140,7 @@ import_all_flobs <- function(conn, dir = ".", sep = "_-_", pattern = ".*",
   chk_flag(exists)
   chk_flag(replace)
   chk_string(pattern)
+  chk_lgl(sub)
 
   dirs <- dir_tree(dir)
   success <- vector(mode = "list", length = length(dirs))
@@ -152,7 +154,7 @@ import_all_flobs <- function(conn, dir = ".", sep = "_-_", pattern = ".*",
     ui_line(glue("Column name: {ui_value(column_name)}"))
     success[[i]] <- import_flobs(column_name = x[2], table_name = x[1],
                                conn = conn, dir = inner_dir, sep = sep,
-                               pattern = pattern,
+                               pattern = pattern, sub = sub,
                                exists = exists, replace = replace)
     ui_line("")
   }
@@ -160,4 +162,3 @@ import_all_flobs <- function(conn, dir = ".", sep = "_-_", pattern = ".*",
   names(success) <- sapply(dirs, glue_collapse, "/")
   return(invisible(success))
 }
-

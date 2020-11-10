@@ -9,6 +9,7 @@ import_all_flobs(
   dir = ".",
   sep = "_-_",
   pattern = ".*",
+  sub = FALSE,
   exists = FALSE,
   replace = FALSE
 )
@@ -23,6 +24,13 @@ This structure is created automatically if save_all_flobs() function is used.}
 \item{sep}{A string of the separator between values in file names.}
 
 \item{pattern}{A regular expression specifying the pattern file names must match.}
+
+\item{sub}{A logical scalar specifying whether to import flobs based on their filename (sub = FALSE)
+or the name of their subdirectory (sub = TRUE) which must only contain 1 file.
+If sub = NA and replace = TRUE then the names of the
+subdirectories are used irrespective of whether they include files and existing
+flobs are deleted if the corresponding subdirectory is empty.
+If sub = TRUE or sub = NA then recursion is just one subfolder deep.}
 
 \item{exists}{A logical scalar specifying whether the column must (TRUE) or
 mustn't (FALSE) already exist or whether it doesn't matter (NA).
