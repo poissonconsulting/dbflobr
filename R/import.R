@@ -62,7 +62,6 @@ import_flobs <- function(column_name, table_name, conn,
       files <- dirs
     }
   }
-  print(files)
 
   key <- table_pk_df(table_name, conn)
 
