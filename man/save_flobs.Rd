@@ -4,7 +4,15 @@
 \alias{save_flobs}
 \title{Save flobs.}
 \usage{
-save_flobs(column_name, table_name, conn, dir = ".", sep = "_-_", sub = FALSE)
+save_flobs(
+  column_name,
+  table_name,
+  conn,
+  dir = ".",
+  sep = "_-_",
+  sub = FALSE,
+  replace = FALSE
+)
 }
 \arguments{
 \item{column_name}{A string of the name of the BLOB column.}
@@ -17,9 +25,13 @@ save_flobs(column_name, table_name, conn, dir = ".", sep = "_-_", sub = FALSE)
 
 \item{sep}{A string of the separator used to construct file names from values.}
 
-\item{sub}{A logical specifying whether to save all existing files in a subdirectory
+\item{sub}{A logical scalar specifying whether to save all existing files in a subdirectory
 of the same name (sub = TRUE) or all possible files in a subdirectory
 of the same name (sub = NA) or not nest files within a subdirectory (sub = FALSE).}
+
+\item{replace}{A flag specifying whether to replace existing files.
+If sub = TRUE (or sub = NA) and replace = TRUE then all existing files
+within a subdirectory are deleted.}
 }
 \value{
 An invisible named vector of the file names and new file names saved.

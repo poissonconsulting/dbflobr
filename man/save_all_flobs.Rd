@@ -10,6 +10,7 @@ save_all_flobs(
   dir = ".",
   sep = "_-_",
   sub = FALSE,
+  replace = FALSE,
   geometry = FALSE
 )
 }
@@ -23,9 +24,13 @@ By default all tables are included.}
 
 \item{sep}{A string of the separator used to construct file names from values.}
 
-\item{sub}{A logical specifying whether to save all existing files in a subdirectory
+\item{sub}{A logical scalar specifying whether to save all existing files in a subdirectory
 of the same name (sub = TRUE) or all possible files in a subdirectory
 of the same name (sub = NA) or not nest files within a subdirectory (sub = FALSE).}
+
+\item{replace}{A flag specifying whether to replace existing files.
+If sub = TRUE (or sub = NA) and replace = TRUE then all existing files
+within a subdirectory are deleted.}
 
 \item{geometry}{A flag specifying whether to search columns named geometry for flobs.}
 }

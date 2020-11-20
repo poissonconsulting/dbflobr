@@ -63,7 +63,11 @@ test_that("save_flobs works", {
 
   y <- save_all_flobs(conn = conn, dir = path)
   expect_identical(names(y), "df2/geometry2")
-  y <- save_all_flobs(conn = conn, dir = path, geometry = TRUE)
+  expect_error(save_all_flobs(conn = conn, dir = path, geometry = TRUE),
+               "already exists")
+
+  y <- save_all_flobs(conn = conn, dir = path, geometry = TRUE, replace = TRUE)
+
   expect_identical(names(y), c("df/geometry", "df2/geometry", "df2/geometry2"))
   z <- y$`df/geometry`
   names(z) <- NULL
@@ -79,8 +83,12 @@ test_that("save_flobs works", {
                       "df/geometry/a_-_2.1.pdf", "df/geometry/b_-_1.pdf",
                       "df2/geometry/b.pdf", "df2/geometry2/a.pdf")))
 
-  x <- save_all_flobs("df2", conn, path, geometry = TRUE)
-  expect_identical(length(x), 2L)
+  expect_error(save_all_flobs("df2", conn, path, geometry = TRUE),
+               "already exists")
+
+  expect_identical(
+    save_all_flobs("df2", conn, path, geometry = TRUE, replace = TRUE),
+    list(`df2/geometry` = c(flobr.pdf = "b.pdf"), `df2/geometry2` = c(flobr.pdf = "a.pdf")))
 })
 
 test_that("save_flobs works with sub", {
