@@ -142,6 +142,8 @@ Values in file name are matched to table primary key to determine where to write
   <span class='va'>conn</span>,
   dir <span class='op'>=</span> <span class='st'>"."</span>,
   sep <span class='op'>=</span> <span class='st'>"_-_"</span>,
+  pattern <span class='op'>=</span> <span class='st'>".*"</span>,
+  sub <span class='op'>=</span> <span class='cn'>FALSE</span>,
   exists <span class='op'>=</span> <span class='cn'>FALSE</span>,
   recursive <span class='op'>=</span> <span class='cn'>FALSE</span>,
   replace <span class='op'>=</span> <span class='cn'>FALSE</span>
@@ -171,6 +173,19 @@ Values in file name are matched to table primary key to determine where to write
       <td><p>A string of the separator between values in file names.</p></td>
     </tr>
     <tr>
+      <th>pattern</th>
+      <td><p>A regular expression specifying the pattern file names must match.</p></td>
+    </tr>
+    <tr>
+      <th>sub</th>
+      <td><p>A logical scalar specifying whether to import flobs based on their filename (sub = FALSE)
+or the name of their subdirectory (sub = TRUE) which must only contain 1 file.
+If sub = NA and replace = TRUE then the names of the
+subdirectories are used irrespective of whether they include files and existing
+flobs are deleted if the corresponding subdirectory is empty.
+If sub = TRUE or sub = NA then recursion is just one subfolder deep.</p></td>
+    </tr>
+    <tr>
       <th>exists</th>
       <td><p>A logical scalar specifying whether the column must (TRUE) or
 mustn't (FALSE) already exist or whether it doesn't matter (NA).
@@ -178,11 +193,11 @@ IF FALSE, a new BLOB column is created.</p></td>
     </tr>
     <tr>
       <th>recursive</th>
-      <td><p>A logical scalar indicating whether to recurse into file directory (TRUE) or not (FALSE).</p></td>
+      <td><p>A flag indicating whether to recurse into file directory (TRUE) or not (FALSE).</p></td>
     </tr>
     <tr>
       <th>replace</th>
-      <td><p>A logical scalar indicating whether to replace existing flobs (TRUE) or not (FALSE).</p></td>
+      <td><p>A flag indicating whether to replace existing flobs (TRUE) or not (FALSE).</p></td>
     </tr>
     </table>
 
@@ -199,7 +214,7 @@ successfully written to database.</p>
 <span class='va'>dir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/write.table.html'>write.csv</a></span><span class='op'>(</span><span class='va'>key</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>dir</span>, <span class='st'>"a.csv"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>import_flobs</span><span class='op'>(</span><span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='va'>conn</span>, <span class='va'>dir</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Writing files to database</span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✔</span><span> File 1: a.csv written to database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> File 2: can't write callr-env-83a5f50b215 to database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> File 3: can't write file83a27a760c5 to database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> File 4: can't write file83a3caed269 to database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> File 5: can't write file83a7a6405a5 to database</span></div><div class='input'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>conn</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Writing files to database</span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✔</span><span> File 1: a.csv written to database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> File 2: can't write callr-env-7611eb70d97 to database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> File 3: can't write file7614f2a9e6e to database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> File 4: can't write file7617a05c3e6 to database</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> File 5: can't write file761961e511 to database</span></div><div class='input'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>conn</span><span class='op'>)</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
