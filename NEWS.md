@@ -1,26 +1,21 @@
 # dbflobr 0.2.0
 
-- Add replace = FALSE to save_flobs() and save_all_flobs()
-- import_flobs() and import_all_flobs() now check directory exists.
-- Added sub = FALSE argument to import_all_flobs().
-- Added pattern = ".*" argument to import_all_flobs().
-- Add pattern argument to import_flobs() to match to file names.
-- Require that filenames be unique when importing.
-- Added sub = FALSE to import_flobs()
-- Added sub argument to save_flobs() and save_all_flobs().
-- Added geometry = FALSE argument to save_all_flobs() to ignore columns named geometry by default.
+## New Features
 
+- Added `sub = FALSE` and `sub = FALSE` argument to `import_flobs()`, `import_all_flobs()`, `save_flobs()` and `save_all_flobs()` to import from and save to subdirectories with the name of the primary key.
+This feature means rather than renaming files users for import can use the `save` functions to create the subdirectories for the primary key(s) and then drag each file into the correctly named subdirectory and `import`.
 
-# dbflobr 0.1.0.9000
+- Added `pattern = ".*"` argument to `import_flobs()` and `import_all_flobs()` to match to file names.
 
-- Internal changes only.
-
-
-# dbflobr 0.0.1
-
-- Initial Release
+- Added `replace = FALSE` argument to `save_flobs()` and `save_all_flobs()` to specify whether to replace existing files.
+- Added `geometry = FALSE` argument to `save_all_flobs()` to ignore columns named geometry by default.
+- `import_flobs()` and `import_all_flobs()` now check directory exists.
 
 # dbflobr 0.1.0
 
 - Added save_flobs, save_all_flobs, import_flobs and import_all_flobs functions
 - Replaced checkr package with chk to upgrade argument checking and testing
+
+# dbflobr 0.0.1
+
+- Initial Release
