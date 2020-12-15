@@ -25,7 +25,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Sebastian Dalgarno \email{seb@poissonconsulting.ca} (\href{https://orcid.org/0000-0002-3658-4517}{ORCID})
+  \item Sebastian Dalgarno \email{seb@northbeachconsulting.ca} (\href{https://orcid.org/0000-0002-3658-4517}{ORCID})
 }
 
 Other contributors:
