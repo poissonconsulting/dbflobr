@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ## Batch exporting and importing flobs for an sqlite database
 
-After creating a new version of a database, it can be time consuming to re-populate flobs individually using the slobr app. dbflobr provides functionality to carry out this task automatedly with minimal user input, and provides useful console output to summarize the results.
+After creating a new version of a database, it can be time consuming to re-populate flobs individually using the slobr app. dbflobr provides functionality to carry out this task automatically with minimal user input, and provides useful console output to summarize the results.
 Lets assume you have a database containing one or more tables with Blob columns. 
 
 
