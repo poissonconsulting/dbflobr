@@ -4,7 +4,7 @@
 \alias{read_flob}
 \title{Read flob}
 \usage{
-read_flob(column_name, table_name, key, conn)
+read_flob(column_name, table_name, key, conn, blob = FALSE)
 }
 \arguments{
 \item{column_name}{A string of the name of the BLOB column.}
@@ -16,9 +16,12 @@ table to a single row (this in combination with the \code{column_name}
 argument are used to target a single cell within the table to modify).}
 
 \item{conn}{A SQLite connection object.}
+
+\item{blob}{A logical scalar specifying whether to process as blobs instead of flobs.
+If NA, the function will adapt accordingly}
 }
 \value{
-A flob.
+A flob or blob.
 }
 \description{
 Read a \code{\link[flobr]{flob}} from a SQLite database.
