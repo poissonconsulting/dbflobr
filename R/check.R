@@ -72,7 +72,7 @@ check_flob_query <- function(x, blob = FALSE) {
   } else {
     y <- x
     class(y) <- c("flob", "blob")
-    try_flob <- c(chk_flob(y), silent = TRUE)
+    try_flob <- try(chk_flob(y), silent = TRUE)
 
     if(!inherits(try_flob, "try-error")){
       class(x) <- c("flob", "blob")
