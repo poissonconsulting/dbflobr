@@ -36,6 +36,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat
+Remotes:
+    poissonconsulting/flobr@dev
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
