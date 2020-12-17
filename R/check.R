@@ -67,19 +67,17 @@ check_flob_query <- function(x, blob = FALSE) {
     class(x) <- c("flob", "blob")
     chk_flob(x)
   } else if (vld_true(blob)){
-    class(x) <- c("blob")
+    class(x) <- "blob"
     flobr::chk_blob(x)
+    class(x) <- "list"
+    x <- blob::as_blob(x)
   } else {
-    y <- x
-    class(y) <- c("flob", "blob")
-    try_flob <- try(chk_flob(y), silent = TRUE)
-
-    if(!inherits(try_flob, "try-error")){
-      class(x) <- c("flob", "blob")
-      chk_flob(x)
-    } else {
+    class(x) <- c("flob", "blob")
+    if(!vld_flob(x)){
       class(x) <- c("blob")
-      flobr::chk_blob(x)
+      chkor(flobr::chk_blob(x), chk_flob(x))
+      class(x) <- "list"
+      x <- blob::as_blob(x)
     }
   }
   invisible(x)

@@ -93,23 +93,21 @@ test_that("check_flob_query", {
   expect_error(check_flob_query(x))
 
   flob <- flobr::flob_obj
-  flob_post_db <- flob
-  class(flob_post_db) <- "list"
-  f <- check_flob_query(flob_post_db)
+  blob <- flobr:::blob_obj
 
-  expect_identical(check_flob_query(flob_post_db), flob)
-  expect_identical(class(check_flob_query(flob_post_db, blob = TRUE)), "blob")
-  expect_identical(class(check_flob_query(flob_post_db, blob = NA)), c("flob", "blob"))
+  blobbed_flob <- flob
+  class(blobbed_flob) <- "blob"
+  flobr::chk_blob(blobbed_flob)
+  class(blobbed_flob) <- "list"
+  blobbed_flob <- blob::as_blob(blobbed_flob)
 
-  blob <- flobr:::blob_obj[[1]] %>% list()
-  class(blob) <- "blob"
+  expect_identical(check_flob_query(flob, blob = FALSE), flob)
+  expect_identical(check_flob_query(flob, blob = NA), flob)
+  expect_identical(check_flob_query(flob, blob = TRUE), blobbed_flob)
 
-  blob_post_db <- blob
-  class(blob_post_db) <- "list"
-
-  expect_identical(check_flob_query(blob_post_db, blob = TRUE), blob)
-  expect_identical(check_flob_query(blob_post_db, blob = NA), blob)
-  expect_error(check_flob_query(blob_post_db, blob = FALSE), "Serialized element of `x` must inherit from S3 class 'exint'.")
+  expect_identical(check_flob_query(blob, blob = TRUE), blob)
+  expect_identical(check_flob_query(blob, blob = NA), blob)
+  expect_error(check_flob_query(blob, blob = FALSE), "Serialized element of `x` must inherit from S3 class 'exint'.")
   expect_error(check_flob_query("non-blob", blob = NA), "`x` must be a blob of a serialized object.")
 
 })
