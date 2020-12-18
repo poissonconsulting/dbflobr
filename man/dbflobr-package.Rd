@@ -26,6 +26,7 @@ Useful links:
 Authors:
 \itemize{
   \item Sebastian Dalgarno \email{seb@northbeachconsulting.ca} (\href{https://orcid.org/0000-0002-3658-4517}{ORCID})
+  \item Evan Amies-Galonski \email{evan@poissonconsulting.ca} (\href{https://orcid.org/0000-0003-1096-2089}{ORCID})
 }
 
 Other contributors:
