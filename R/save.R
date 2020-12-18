@@ -11,6 +11,8 @@
 #' @param replace A flag specifying whether to replace existing files.
 #' If sub = TRUE (or sub = NA) and replace = TRUE then all existing files
 #' within a subdirectory are deleted.
+#' @param blob_ext A string of the file extension to use if blobs are encountered.
+#' If blob_ext = NULL blobs will be ignored
 #'
 #' @return An invisible named vector of the file names and new file names saved.
 #' @export
@@ -24,8 +26,7 @@
 #' dir <- tempdir()
 #' save_flobs("BlobColumn", "Table1", conn, dir)
 #' DBI::dbDisconnect(conn)
-save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_",
-                       sub = FALSE, replace = FALSE){
+save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", sub = FALSE, replace = FALSE, blob_ext = NULL){
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = TRUE, conn)
@@ -48,20 +49,33 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_",
     key <- values[i, , drop = FALSE]
     new_file <- create_filename(key, sep = sep)
     new_file <- as.character(new_file)
-    x <- try(read_flob(column_name, table_name, key, conn), silent = TRUE)
+    x <- try(read_flob(column_name, table_name, key, conn, blob = NA), silent = TRUE)
+    if(!is_try_error(x)){
+      # flob
+      if(flobr::is_flob(x) || is.null(blob_ext)){
+        filename <- flobr::flob_name(x)
+        ext <- flobr::flob_ext(x)
+        file <- glue("{filename}.{ext}")
+        new_file_ext <- glue("{new_file}.{ext}")
+        success[i] <- new_file_ext
+        success_names[i] <- file
+      } else {
+        if(is.null(blob_ext)) err("`blob_ext` must be provided when blobs are present.")
+        filename <- "BLOB"
+        ext <- blob_ext
+        file <- glue("{filename}")
+        new_file_ext <- glue("{new_file}.{ext}")
+        success[i] <- new_file_ext
+        success_names[i] <- file
+      }
 
-     if(!is_try_error(x)){
-      filename <- flobr::flob_name(x)
-      ext <- flobr::flob_ext(x)
-      file <- glue("{filename}.{ext}")
-      new_file_ext <- glue("{new_file}.{ext}")
-      success[i] <- new_file_ext
-      success_names[i] <- file
+
       if(vld_false(sub)) {
         if(!replace && file.exists(file.path(dir, new_file_ext))) {
           stop("File '", file.path(dir, new_file), "' already exists.", call. = FALSE)
         }
-        flobr::unflob(x, dir = dir, name = new_file)
+
+        flobr::unflob(x, dir = dir, name = new_file, ext = ext, blob = NA)
       } else {
         if(!replace && length(list.files(file.path(dir, new_file)))) {
           stop("Directory '", file.path(dir, new_file), "' already contains a file.", call. = FALSE)
