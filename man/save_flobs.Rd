@@ -11,7 +11,8 @@ save_flobs(
   dir = ".",
   sep = "_-_",
   sub = FALSE,
-  replace = FALSE
+  replace = FALSE,
+  blob_ext = NULL
 )
 }
 \arguments{
@@ -32,6 +33,9 @@ of the same name (sub = NA) or not nest files within a subdirectory (sub = FALSE
 \item{replace}{A flag specifying whether to replace existing files.
 If sub = TRUE (or sub = NA) and replace = TRUE then all existing files
 within a subdirectory are deleted.}
+
+\item{blob_ext}{A string of the file extension to use if blobs are encountered.
+If blob_ext = NULL blobs will be ignored}
 }
 \value{
 An invisible named vector of the file names and new file names saved.

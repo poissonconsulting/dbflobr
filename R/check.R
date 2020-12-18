@@ -42,8 +42,8 @@ check_column_name <- function(column_name, table_name, exists, conn) {
 
 check_column_blob <- function(column_name, table_name, conn) {
   check_column_name(column_name, table_name, exists = TRUE, conn)
-  is_blob <- is_column_blob(column_name, table_name, conn)
-  if (!is_blob) {
+  is_a_blob <- is_column_blob(column_name, table_name, conn)
+  if (!is_a_blob) {
     abort_chk("`", column_name, "` must be type BLOB.")
   }
   column_name
