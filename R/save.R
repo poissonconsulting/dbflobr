@@ -50,7 +50,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
     new_file <- create_filename(key, sep = sep)
     new_file <- as.character(new_file)
     x <- try(read_flob(column_name, table_name, key, conn, blob = NA), silent = TRUE)
-    if(!is_try_error(x)){
+    if(!is_try_error(x) && !(blob::is_blob(x) && is.null(blob_ext))){
       # flob
       if(flobr::is_flob(x) || is.null(blob_ext)){
         filename <- flobr::flob_name(x)
