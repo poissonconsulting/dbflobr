@@ -65,12 +65,13 @@ check_flob_query <- function(x, blob = FALSE) {
 
   if(vld_false(blob)){
     class(x) <- c("flob", "blob")
-    chk_flob(x)
+    chk_flob(x) # this is a problem when x is a blob and blob = FALSE
   } else if (vld_true(blob)){
     class(x) <- "blob"
     flobr::chk_blob(x)
     class(x) <- "list"
     x <- blob::as_blob(x)
+    names(x) <- NULL
   } else {
     class(x) <- c("flob", "blob")
     if(!vld_flob(x)){
@@ -78,6 +79,7 @@ check_flob_query <- function(x, blob = FALSE) {
       chkor(flobr::chk_blob(x), chk_flob(x))
       class(x) <- "list"
       x <- blob::as_blob(x)
+      names(x) <- NULL
     }
   }
   invisible(x)
