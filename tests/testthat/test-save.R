@@ -184,3 +184,45 @@ test_that("save_flobs works with sub", {
   expect_identical(list.files(path, recursive = TRUE, include.dirs = TRUE),
                    sort(c("df2", "df2/geometry2", "df2/geometry2/a", "df2/geometry2/b")))
 })
+
+
+test_that("save_flob's blob compatibility", {
+
+  conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+  teardown(DBI::dbDisconnect(conn))
+
+  DBI::dbExecute(conn,
+                "CREATE TABLE df (
+                PK TEXT NOT NULL,
+                PRIMARY KEY (PK))")
+
+  flob_df <- data.frame(PK = "flob")
+  DBI::dbWriteTable(conn, "df", flob_df, append = TRUE)
+
+  add_blob_column("FlobBlob", "df", conn)
+  write_flob(flobr::flob_obj, "FlobBlob", "df", flob_df, conn)
+
+  blob_df <- data.frame(PK = "blob", FlobBlob = flobr:::blob_obj)
+  DBI::dbWriteTable(conn, "df", blob_df, append = TRUE)
+
+  path <- file.path(tempdir(), "dbflobr")
+  unlink(path, recursive = TRUE)
+  dir.create(path)
+
+  save_flobs("FlobBlob", "df", conn, dir = path, blob_ext = "pdf")
+
+  expect_identical(list.files(path, recursive = TRUE, include.dirs = TRUE),
+                   c("blob.pdf", "flob.pdf"))
+
+  path <- file.path(tempdir(), "dbflobr")
+  unlink(path, recursive = TRUE)
+  dir.create(path)
+
+  save_flobs("FlobBlob", "df", conn, dir = path, blob_ext = NULL)
+
+  expect_identical(list.files(path, recursive = TRUE, include.dirs = TRUE),
+                   c("flob.pdf"))
+})
+
+
+
