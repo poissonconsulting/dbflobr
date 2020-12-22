@@ -1,3 +1,8 @@
+# dbflobr 0.2.0.9000
+
+- Added `blob = FALSE` argument to `read_flob()` to specify whether to process as blobs instead of flobs.
+- Added `blob_ext = NULL` argument to `save_flobs()` to specify the file extension to use if blobs are encountered.
+
 # dbflobr 0.2.0
 
 ## New Features
