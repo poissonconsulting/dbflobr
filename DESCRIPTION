@@ -16,7 +16,7 @@ Authors@R:
              family = "Amies-Galonski",
              role = "aut",
              email = "evan@poissonconsulting.ca",
-             comment = c(ORCID = "https://orcid.org/0000-0003-1096-2089")),     
+             comment = c(ORCID = "https://orcid.org/0000-0003-1096-2089")),
       person(given = "Poisson Consulting",
              role = c("cph", "fnd")))
 Description: Reads and writes files to SQLite databases
@@ -42,10 +42,10 @@ Suggests:
     knitr,
     rmarkdown,
     testthat
-Remotes:
-    poissonconsulting/flobr@dev
 VignetteBuilder: 
     knitr
+Remotes:
+    poissonconsulting/flobr
 Encoding: UTF-8
 Language: en-US
 LazyData: true
