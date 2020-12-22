@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dbflobr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -141,7 +141,8 @@
   dir <span class='op'>=</span> <span class='st'>"."</span>,
   sep <span class='op'>=</span> <span class='st'>"_-_"</span>,
   sub <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  replace <span class='op'>=</span> <span class='cn'>FALSE</span>
+  replace <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  blob_ext <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -179,6 +180,11 @@ of the same name (sub = NA) or not nest files within a subdirectory (sub = FALSE
 If sub = TRUE (or sub = NA) and replace = TRUE then all existing files
 within a subdirectory are deleted.</p></td>
     </tr>
+    <tr>
+      <th>blob_ext</th>
+      <td><p>A string of the file extension to use if blobs are encountered.
+If blob_ext = NULL blobs will be ignored</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -194,7 +200,7 @@ within a subdirectory are deleted.</p></td>
 <span class='fu'><a href='write_flob.html'>write_flob</a></span><span class='op'>(</span><span class='va'>flob</span>, <span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='va'>key</span>, <span class='va'>conn</span>, exists <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 <span class='va'>dir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='fu'>save_flobs</span><span class='op'>(</span><span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='va'>conn</span>, <span class='va'>dir</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Saving files to <span style='color: #0000BB;'>'/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpGMFZTJ'</span><span></span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> Row 1: no file found</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Row 2: file flobr.pdf renamed to 2.pdf</span></div><div class='input'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>conn</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Saving files to <span style='color: #0000BB;'>'/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmp7h152V'</span><span></span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> Row 1: no file found</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Row 2: file flobr.pdf renamed to 2.pdf</span></div><div class='input'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>conn</span><span class='op'>)</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -207,7 +213,7 @@ within a subdirectory are deleted.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Sebastian Dalgarno, Joe Thorley, Poisson Consulting.</p>
+  <p>Developed by Sebastian Dalgarno, Joe Thorley, Evan Amies-Galonski, Poisson Consulting.</p>
 </div>
 
 <div class="pkgdown">

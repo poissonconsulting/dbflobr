@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dbflobr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -134,7 +134,7 @@
     <p>Read a <code><a href='https://rdrr.io/pkg/flobr/man/flob.html'>flob</a></code> from a SQLite database.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>read_flob</span><span class='op'>(</span><span class='va'>column_name</span>, <span class='va'>table_name</span>, <span class='va'>key</span>, <span class='va'>conn</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>read_flob</span><span class='op'>(</span><span class='va'>column_name</span>, <span class='va'>table_name</span>, <span class='va'>key</span>, <span class='va'>conn</span>, blob <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,11 +157,16 @@ argument are used to target a single cell within the table to modify).</p></td>
       <th>conn</th>
       <td><p>A SQLite connection object.</p></td>
     </tr>
+    <tr>
+      <th>blob</th>
+      <td><p>A logical scalar specifying whether to process as blobs instead of flobs.
+If NA, the function will adapt accordingly</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A flob.</p>
+    <p>A flob or blob.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>flob</span> <span class='op'>&lt;-</span> <span class='fu'>flobr</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/flobr/man/flob_obj.html'>flob_obj</a></span>
@@ -183,7 +188,7 @@ argument are used to target a single cell within the table to modify).</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Sebastian Dalgarno, Joe Thorley, Poisson Consulting.</p>
+  <p>Developed by Sebastian Dalgarno, Joe Thorley, Evan Amies-Galonski, Poisson Consulting.</p>
 </div>
 
 <div class="pkgdown">
