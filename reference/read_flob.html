@@ -134,7 +134,7 @@
     <p>Read a <code><a href='https://rdrr.io/pkg/flobr/man/flob.html'>flob</a></code> from a SQLite database.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>read_flob</span><span class='op'>(</span><span class='va'>column_name</span>, <span class='va'>table_name</span>, <span class='va'>key</span>, <span class='va'>conn</span>, blob <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>read_flob</span><span class='op'>(</span><span class='va'>column_name</span>, <span class='va'>table_name</span>, <span class='va'>key</span>, <span class='va'>conn</span>, slob <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,9 +158,9 @@ argument are used to target a single cell within the table to modify).</p></td>
       <td><p>A SQLite connection object.</p></td>
     </tr>
     <tr>
-      <th>blob</th>
-      <td><p>A logical scalar specifying whether to process as blobs instead of flobs.
-If NA, the function will adapt accordingly</p></td>
+      <th>slob</th>
+      <td><p>A logical scalar specifying whether to process as slobs (serialized blobs) instead of flobs.
+If NA, the function will adapt accordingly.</p></td>
     </tr>
     </table>
 
