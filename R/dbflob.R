@@ -53,8 +53,8 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = NA) {
 #' Read a \code{\link[flobr]{flob}} from a SQLite database.
 #'
 #' @inheritParams write_flob
-#' @param blob A logical scalar specifying whether to process as blobs instead of flobs.
-#' If NA, the function will adapt accordingly
+#' @param slob A logical scalar specifying whether to process as slobs (serialized blobs) instead of flobs.
+#' If NA, the function will adapt accordingly.
 #'
 #' @return A flob or blob.
 #' @export
@@ -66,14 +66,15 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = NA) {
 #' write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 #' read_flob("BlobColumn", "Table1", key, conn)
 #' DBI::dbDisconnect(conn)
-read_flob <- function(column_name, table_name, key, conn, blob = FALSE) {
+read_flob <- function(column_name, table_name, key, conn, slob = FALSE) {
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_blob(column_name, table_name, conn)
   check_key(table_name, key, conn)
+  chk_lgl(slob)
 
   x <- query_flob(column_name, table_name, key, conn)
-  check_flob_query(x, blob = blob)
+  check_flob_query(x, slob = slob)
 }
 
 #' Delete flob

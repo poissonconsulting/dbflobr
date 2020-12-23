@@ -186,7 +186,7 @@ test_that("save_flobs works with sub", {
 })
 
 
-test_that("save_flob's blob compatibility", {
+test_that("save_flob's slob compatibility", {
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
@@ -202,14 +202,14 @@ test_that("save_flob's blob compatibility", {
   add_blob_column("FlobBlob", "df", conn)
   write_flob(flobr::flob_obj, "FlobBlob", "df", flob_df, conn)
 
-  blob_df <- data.frame(PK = "blob", FlobBlob = flobr:::blob_obj)
+  blob_df <- data.frame(PK = "blob", FlobBlob = flobr:::slob_obj)
   DBI::dbWriteTable(conn, "df", blob_df, append = TRUE)
 
   path <- file.path(tempdir(), "dbflobr")
   unlink(path, recursive = TRUE)
   dir.create(path)
 
-  save_flobs("FlobBlob", "df", conn, dir = path, blob_ext = "pdf")
+  save_flobs("FlobBlob", "df", conn, dir = path, slob_ext = "pdf")
 
   expect_identical(list.files(path, recursive = TRUE, include.dirs = TRUE),
                    c("blob.pdf", "flob.pdf"))
@@ -218,7 +218,7 @@ test_that("save_flob's blob compatibility", {
   unlink(path, recursive = TRUE)
   dir.create(path)
 
-  save_flobs("FlobBlob", "df", conn, dir = path, blob_ext = NULL)
+  save_flobs("FlobBlob", "df", conn, dir = path, slob_ext = NULL)
 
   expect_identical(list.files(path, recursive = TRUE, include.dirs = TRUE),
                    c("flob.pdf"))
