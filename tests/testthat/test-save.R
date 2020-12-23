@@ -245,6 +245,3 @@ test_that("save_flob's slob compatibility", {
                    c("flob", "flob/flob.pdf"))
 
 })
-
-
-

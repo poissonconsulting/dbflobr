@@ -73,14 +73,14 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
           stop("File '", file.path(dir, new_file), "' already exists.", call. = FALSE)
         }
 
-        flobr::unflob(x, dir = dir, name = new_file, ext = ext, slob = NA)
+        flobr::unflob(x, dir = dir, name = new_file, ext = ext, slob = NA, check = FALSE)
       } else {
         if(!replace && length(list.files(file.path(dir, new_file)))) {
           stop("Directory '", file.path(dir, new_file), "' already contains a file.", call. = FALSE)
         }
         unlink(file.path(dir, new_file), recursive = TRUE)
         dir.create(file.path(dir, new_file), recursive = TRUE)
-        flobr::unflob(x, dir = file.path(dir, new_file), name = new_file, ext = ext, slob = NA)
+        flobr::unflob(x, dir = file.path(dir, new_file), name = new_file, ext = ext, slob = NA, check = FALSE)
       }
       ui_done(glue("Row {i}: file {file} renamed to {new_file_ext}"))
     } else {
