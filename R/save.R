@@ -51,7 +51,6 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
     new_file <- as.character(new_file)
     x <- try(read_flob(column_name, table_name, key, conn, slob = NA), silent = TRUE)
     if(!is_try_error(x) && !(blob::is_blob(x) && is.null(slob_ext))){
-      # flob
       if(flobr::is_flob(x) || is.null(slob_ext)){
         filename <- flobr::flob_name(x)
         ext <- flobr::flob_ext(x)
@@ -69,7 +68,6 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
         success_names[i] <- file
       }
 
-
       if(vld_false(sub)) {
         if(!replace && file.exists(file.path(dir, new_file_ext))) {
           stop("File '", file.path(dir, new_file), "' already exists.", call. = FALSE)
@@ -82,7 +80,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
         }
         unlink(file.path(dir, new_file), recursive = TRUE)
         dir.create(file.path(dir, new_file), recursive = TRUE)
-        flobr::unflob(x, dir = file.path(dir, new_file), name = new_file)
+        flobr::unflob(x, dir = file.path(dir, new_file), name = new_file, ext = ext, slob = NA)
       }
       ui_done(glue("Row {i}: file {file} renamed to {new_file_ext}"))
     } else {

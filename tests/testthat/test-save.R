@@ -214,6 +214,7 @@ test_that("save_flob's slob compatibility", {
   expect_identical(list.files(path, recursive = TRUE, include.dirs = TRUE),
                    c("blob.pdf", "flob.pdf"))
 
+
   path <- file.path(tempdir(), "dbflobr")
   unlink(path, recursive = TRUE)
   dir.create(path)
@@ -222,6 +223,27 @@ test_that("save_flob's slob compatibility", {
 
   expect_identical(list.files(path, recursive = TRUE, include.dirs = TRUE),
                    c("flob.pdf"))
+
+
+  path <- file.path(tempdir(), "dbflobr")
+  unlink(path, recursive = TRUE)
+  dir.create(path)
+
+  save_flobs("FlobBlob", "df", conn, dir = path, slob_ext = "pdf", sub = TRUE)
+
+  expect_identical(list.files(path, recursive = TRUE, include.dirs = TRUE),
+                   c("blob", "blob/blob.pdf", "flob", "flob/flob.pdf"))
+
+
+  path <- file.path(tempdir(), "dbflobr")
+  unlink(path, recursive = TRUE)
+  dir.create(path)
+
+  save_flobs("FlobBlob", "df", conn, dir = path, slob_ext = NULL, sub = TRUE)
+
+  expect_identical(list.files(path, recursive = TRUE, include.dirs = TRUE),
+                   c("flob", "flob/flob.pdf"))
+
 })
 
 
