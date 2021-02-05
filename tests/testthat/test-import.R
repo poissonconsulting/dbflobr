@@ -268,6 +268,9 @@ test_that("import_flobs works with subdirectory", {
   expect_identical(list.files(path, recursive = TRUE),
                    c("a_-_1/data.csv", "b_-_2/data.csv", "b_-_3/data.csv"))
 
+  expect_identical(list_files(path),
+                   file.path(path, c("a_-_1/data.csv", "b_-_2/data.csv", "b_-_3/data.csv")))
+
   expect_identical(import_flobs("New", "df", conn, path, sub = TRUE),
                    c(`a_-_1` = TRUE, `b_-_2` = TRUE, `b_-_3` = TRUE))
 
