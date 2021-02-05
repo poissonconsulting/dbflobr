@@ -58,17 +58,17 @@ check_key <- function(table_name, key, conn) {
   key
 }
 
-check_flob_query <- function(x, blob = FALSE) {
+check_flob_query <- function(x, slob = FALSE) {
   if (is.null(unlist(x))) {
     abort_chk("Can't find flob in that location.")
   }
 
-  if(vld_false(blob)){
+  if(vld_false(slob)){
     class(x) <- c("flob", "blob")
     chk_flob(x) # this is a problem when x is a blob and blob = FALSE
-  } else if (vld_true(blob)){
+  } else if (vld_true(slob)){
     class(x) <- "blob"
-    flobr::chk_blob(x)
+    flobr::chk_slob(x)
     class(x) <- "list"
     x <- blob::as_blob(x)
     names(x) <- NULL
@@ -76,7 +76,7 @@ check_flob_query <- function(x, blob = FALSE) {
     class(x) <- c("flob", "blob")
     if(!vld_flob(x)){
       class(x) <- c("blob")
-      chkor(flobr::chk_blob(x), chk_flob(x))
+      chkor(flobr::chk_slob(x), chk_flob(x))
       class(x) <- "list"
       x <- blob::as_blob(x)
       names(x) <- NULL
