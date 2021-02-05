@@ -1,4 +1,6 @@
 test_that("save_flobs works", {
+  path <- withr::local_tempdir()
+
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
 
@@ -28,8 +30,6 @@ test_that("save_flobs works", {
 
   expect_identical(table_pk("df", conn), c("char", "num"))
   expect_identical(table_pk("df2", conn), c("char"))
-
-  path <- withr::local_tempdir()
 
   # custom err messages
   expect_error(save_flobs("yup", "df", conn, path), class = "chk_error")
@@ -87,6 +87,8 @@ test_that("save_flobs works", {
 })
 
 test_that("save_flobs works with sub", {
+  path <- withr::local_tempdir()
+
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
 
@@ -112,8 +114,6 @@ test_that("save_flobs works with sub", {
   flob <- flobr::flob_obj
   write_flob(flob, "geometry", "df", key = data.frame(char = "a", num = 1), conn)
   write_flob(flob, "geometry", "df", key = data.frame(char = "b"), conn)
-
-  path <- withr::local_tempdir()
 
   x <- save_flobs("geometry", "df", conn, path)
   expect_identical(names(x), c("flobr.pdf", "flobr.pdf"))
@@ -177,6 +177,7 @@ test_that("save_flobs works with sub", {
 
 
 test_that("save_flob's slob compatibility", {
+  path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
@@ -194,8 +195,6 @@ test_that("save_flob's slob compatibility", {
 
   blob_df <- data.frame(PK = "blob", FlobBlob = flobr:::slob_obj)
   DBI::dbWriteTable(conn, "df", blob_df, append = TRUE)
-
-  path <- withr::local_tempdir()
 
   save_flobs("FlobBlob", "df", conn, dir = path, slob_ext = "pdf")
 

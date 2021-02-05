@@ -99,6 +99,7 @@ test_that("import_flobs works", {
 })
 
 test_that("import_all_flobs works", {
+  path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
@@ -126,8 +127,6 @@ test_that("import_all_flobs works", {
   write_flob(flob, "New2", "df", key = data.frame(char = "a", num = 2.1), conn)
   write_flob(flob, "New", "df", key = data.frame(char = "b"), conn)
   write_flob(flob, "New", "df2", key = data.frame(char = "b"), conn)
-
-  path <- withr::local_tempdir()
 
   save_all_flobs(conn = conn, dir = path)
 
@@ -161,6 +160,7 @@ test_that("import_all_flobs works", {
 })
 
 test_that("import_all_flobs requires unique", {
+  path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
@@ -179,8 +179,6 @@ test_that("import_all_flobs requires unique", {
 
   flob <- flobr::flob_obj
   write_flob(flob, "New", "df", key = data.frame(char = "a", num = 1), conn)
-
-  path <- withr::local_tempdir()
 
   expect_identical(save_all_flobs(conn = conn, dir = path), list(`df/New` = c(flobr.pdf = "a_-_1.pdf")))
 
@@ -211,6 +209,7 @@ test_that("import_all_flobs requires unique", {
 })
 
 test_that("import_all_flobs is actually recursive", {
+  path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
@@ -230,8 +229,6 @@ test_that("import_all_flobs is actually recursive", {
   flob <- flobr::flob_obj
   write_flob(flob, "New", "df", key = data.frame(char = "a", num = 1), conn)
 
-  path <- withr::local_tempdir()
-
   expect_identical(save_all_flobs(conn = conn, dir = file.path(path, "sub")), list(`df/New` = c(flobr.pdf = "a_-_1.pdf")))
 
   expect_identical(import_flobs("New", "df", conn = conn, dir = path, exists = TRUE, replace = TRUE, recursive = TRUE),
@@ -239,7 +236,6 @@ test_that("import_all_flobs is actually recursive", {
 })
 
 test_that("import_flobs works with subdirectory", {
-
   path <- withr::local_tempdir()
 
   dir.create(file.path(path, "a_-_1"))
@@ -289,7 +285,6 @@ test_that("import_flobs works with subdirectory", {
 })
 
 test_that("import_flobs does not recurse beyond 1", {
-
   path <- withr::local_tempdir()
 
   dir.create(file.path(path, "extra", "a_-_1"), recursive = TRUE)
@@ -328,6 +323,8 @@ test_that("import_flobs does not recurse beyond 1", {
 
 
 test_that("import_flobs sub = TRUE", {
+  path <- withr::local_tempdir()
+
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
 
@@ -354,8 +351,6 @@ test_that("import_flobs sub = TRUE", {
   write_flob(flob, "geometry", "df", key = data.frame(char = "a", num = 1), conn)
   write_flob(flob, "geometry", "df", key = data.frame(char = "b"), conn)
 
-  path <- withr::local_tempdir()
-
   x <- save_all_flobs(conn = conn, dir = file.path(path, "dump"), sub = TRUE, geometry = TRUE)
   expect_identical(x, list(`df/geometry` = c(flobr.pdf = "a_-_1.pdf", flobr.pdf = "b_-_1.pdf"
   ), `df2/geometry2` = structure(logical(0), .Names = character(0))))
@@ -370,6 +365,8 @@ test_that("import_flobs sub = TRUE", {
 })
 
 test_that("import_flobs sub = NA", {
+  path <- withr::local_tempdir()
+
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
 
@@ -388,8 +385,6 @@ test_that("import_flobs sub = NA", {
   flob <- flobr::flob_obj
   write_flob(flob, "geometry", "df", key = data.frame(char = "a", num = 1), conn)
   write_flob(flob, "geometry", "df", key = data.frame(char = "b"), conn)
-
-  path <- withr::local_tempdir()
 
   x <- save_all_flobs(conn = conn, dir = file.path(path, "dump"), sub = NA, geometry = TRUE)
   expect_identical(x, list(`df/geometry` = c(flobr.pdf = "a_-_1.pdf", flobr.pdf = "b_-_1.pdf"
@@ -412,6 +407,7 @@ test_that("import_flobs sub = NA", {
 })
 
 test_that("import_all_flobs works", {
+  path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
@@ -440,8 +436,6 @@ test_that("import_all_flobs works", {
   write_flob(flob, "New", "df", key = data.frame(char = "b"), conn)
   write_flob(flob, "New", "df2", key = data.frame(char = "b"), conn)
 
-  path <- withr::local_tempdir()
-
   save_all_flobs(conn = conn, dir = path, sub = NA)
 
   expect_identical(import_all_flobs(conn, path, exists = TRUE, sub = TRUE),
@@ -468,6 +462,7 @@ test_that("import_all_flobs works", {
 })
 
 test_that("import_all_flobs works with .", {
+  path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
   teardown(DBI::dbDisconnect(conn))
@@ -495,8 +490,6 @@ test_that("import_all_flobs works with .", {
   write_flob(flob, "New2", "df", key = data.frame(char = "a", num = 2.1), conn)
   write_flob(flob, "New", "df", key = data.frame(char = "b"), conn)
   write_flob(flob, "New", "df2", key = data.frame(char = "b"), conn)
-
-  path <- withr::local_tempdir()
 
   save_all_flobs(conn = conn, dir = path, sub = NA)
 
