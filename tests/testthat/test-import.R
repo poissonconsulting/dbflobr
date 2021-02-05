@@ -1,10 +1,6 @@
 test_that("import_flobs works", {
+  path <- withr::local_tempdir()
 
-  teardown(unlink(file.path(tempdir(), "dbflobr")))
-
-  path <- file.path(tempdir(), "dbflobr")
-  unlink(path, recursive = TRUE)
-  dir.create(path)
   inner_path <- file.path(path, "dir1")
   inner_path2 <- file.path(inner_path, "dir2")
   inner_path3 <- file.path(path, "dir3")
@@ -131,12 +127,7 @@ test_that("import_all_flobs works", {
   write_flob(flob, "New", "df", key = data.frame(char = "b"), conn)
   write_flob(flob, "New", "df2", key = data.frame(char = "b"), conn)
 
-  ### works when pk length 2
-  teardown(unlink(file.path(tempdir(), "dbflobr")))
-
-  path <- file.path(tempdir(), "dbflobr")
-  unlink(path, recursive = TRUE)
-  dir.create(path)
+  path <- withr::local_tempdir()
 
   save_all_flobs(conn = conn, dir = path)
 
@@ -189,12 +180,7 @@ test_that("import_all_flobs requires unique", {
   flob <- flobr::flob_obj
   write_flob(flob, "New", "df", key = data.frame(char = "a", num = 1), conn)
 
-  ### works when pk length 2
-  teardown(unlink(file.path(tempdir(), "dbflobr")))
-
-  path <- file.path(tempdir(), "dbflobr")
-  unlink(path, recursive = TRUE)
-  dir.create(path)
+  path <- withr::local_tempdir()
 
   expect_identical(save_all_flobs(conn = conn, dir = path), list(`df/New` = c(flobr.pdf = "a_-_1.pdf")))
 
@@ -244,12 +230,7 @@ test_that("import_all_flobs is actually recursive", {
   flob <- flobr::flob_obj
   write_flob(flob, "New", "df", key = data.frame(char = "a", num = 1), conn)
 
-  ### works when pk length 2
-  teardown(unlink(file.path(tempdir(), "dbflobr")))
-
-  path <- file.path(tempdir(), "dbflobr")
-  unlink(path, recursive = TRUE)
-  dir.create(path)
+  path <- withr::local_tempdir()
 
   expect_identical(save_all_flobs(conn = conn, dir = file.path(path, "sub")), list(`df/New` = c(flobr.pdf = "a_-_1.pdf")))
 
@@ -259,11 +240,8 @@ test_that("import_all_flobs is actually recursive", {
 
 test_that("import_flobs works with subdirectory", {
 
-  teardown(unlink(file.path(tempdir(), "dbflobr")))
+  path <- withr::local_tempdir()
 
-  path <- file.path(tempdir(), "dbflobr")
-  unlink(path, recursive = TRUE)
-  dir.create(path)
   dir.create(file.path(path, "a_-_1"))
   dir.create(file.path(path, "b_-_2"))
   dir.create(file.path(path, "b_-_3"))
@@ -312,10 +290,8 @@ test_that("import_flobs works with subdirectory", {
 
 test_that("import_flobs does not recurse beyond 1", {
 
-  teardown(unlink(file.path(tempdir(), "dbflobr")))
+  path <- withr::local_tempdir()
 
-  path <- file.path(tempdir(), "dbflobr")
-  unlink(path, recursive = TRUE)
   dir.create(file.path(path, "extra", "a_-_1"), recursive = TRUE)
   dir.create(file.path(path, "extra", "b_-_2"), recursive = TRUE)
   dir.create(file.path(path, "extra", "b_-_3"), recursive = TRUE)
@@ -378,12 +354,7 @@ test_that("import_flobs sub = TRUE", {
   write_flob(flob, "geometry", "df", key = data.frame(char = "a", num = 1), conn)
   write_flob(flob, "geometry", "df", key = data.frame(char = "b"), conn)
 
-  path <- file.path(tempdir(), "dbflobr")
-  unlink(path, recursive = TRUE)
-  dir.create(path)
-
-  unlink(path, recursive = TRUE)
-  dir.create(path)
+  path <- withr::local_tempdir()
 
   x <- save_all_flobs(conn = conn, dir = file.path(path, "dump"), sub = TRUE, geometry = TRUE)
   expect_identical(x, list(`df/geometry` = c(flobr.pdf = "a_-_1.pdf", flobr.pdf = "b_-_1.pdf"
@@ -418,9 +389,7 @@ test_that("import_flobs sub = NA", {
   write_flob(flob, "geometry", "df", key = data.frame(char = "a", num = 1), conn)
   write_flob(flob, "geometry", "df", key = data.frame(char = "b"), conn)
 
-  path <- file.path(tempdir(), "dbflobr")
-  unlink(path, recursive = TRUE)
-  dir.create(path)
+  path <- withr::local_tempdir()
 
   x <- save_all_flobs(conn = conn, dir = file.path(path, "dump"), sub = NA, geometry = TRUE)
   expect_identical(x, list(`df/geometry` = c(flobr.pdf = "a_-_1.pdf", flobr.pdf = "b_-_1.pdf"
@@ -471,9 +440,7 @@ test_that("import_all_flobs works", {
   write_flob(flob, "New", "df", key = data.frame(char = "b"), conn)
   write_flob(flob, "New", "df2", key = data.frame(char = "b"), conn)
 
-  path <- file.path(tempdir(), "dbflobr")
-  unlink(path, recursive = TRUE)
-  dir.create(path)
+  path <- withr::local_tempdir()
 
   save_all_flobs(conn = conn, dir = path, sub = NA)
 
@@ -529,9 +496,7 @@ test_that("import_all_flobs works with .", {
   write_flob(flob, "New", "df", key = data.frame(char = "b"), conn)
   write_flob(flob, "New", "df2", key = data.frame(char = "b"), conn)
 
-  path <- file.path(tempdir(), "dbflobr")
-  unlink(path, recursive = TRUE)
-  dir.create(path)
+  path <- withr::local_tempdir()
 
   save_all_flobs(conn = conn, dir = path, sub = NA)
 
