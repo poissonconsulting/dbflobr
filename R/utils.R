@@ -29,8 +29,9 @@ list_files <- function(path, recursive = TRUE, pattern = ".*"){
   dirs <- list.dirs(path, recursive = !vld_false(recursive), full.names = TRUE)
 
   # just those files nested in a subdirectory
+  # the file.path(dirname(), basename()) is  hack to get it to work on windows
   if(is.na(recursive)) {
-    files <- files[dirname(dirname(files)) == path]
+    files <- files[dirname(dirname(files)) == file.path(dirname(path),basename(path))]
   }
   setdiff(files, dirs)
 }
