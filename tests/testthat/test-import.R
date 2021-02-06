@@ -271,6 +271,11 @@ test_that("import_flobs works with subdirectory", {
   expect_identical(list_files(path),
                    file.path(path, c("a_-_1/data.csv", "b_-_2/data.csv", "b_-_3/data.csv")))
 
+  files <- list.files(path, recursive = TRUE, pattern = ".*", full.names = TRUE)
+  print(files)
+  print(dirname(files))
+  print(dirname(dirname(files)))
+
   expect_identical(list_files(path, recursive = NA),
                    file.path(path, c("a_-_1/data.csv", "b_-_2/data.csv", "b_-_3/data.csv")))
 
