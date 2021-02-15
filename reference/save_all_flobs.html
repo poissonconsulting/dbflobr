@@ -66,9 +66,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -197,7 +203,7 @@ within a subdirectory are deleted.</p></td>
 <span class='fu'><a href='write_flob.html'>write_flob</a></span><span class='op'>(</span><span class='va'>flob</span>, <span class='st'>"BlobColumn"</span>, <span class='st'>"Table1"</span>, <span class='va'>key</span>, <span class='va'>conn</span>, exists <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 <span class='va'>dir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='fu'>save_all_flobs</span><span class='op'>(</span>conn <span class='op'>=</span> <span class='va'>conn</span>, dir <span class='op'>=</span> <span class='va'>dir</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Table name: <span style='color: #0000BB;'>'Table1'</span><span></span></div><div class='output co'>#&gt; <span class='message'>Column name: </span><span style='color: #0000BB;'>'BlobColumn'</span><span></span></div><div class='output co'>#&gt; <span class='message'>Saving files to </span><span style='color: #0000BB;'>'/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpuuFZbt/Table1/BlobColumn'</span><span></span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> Row 1: no file found</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Row 2: file flobr.pdf renamed to 2.pdf</span></div><div class='output co'>#&gt; </div><div class='input'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>conn</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Table name: <span style='color: #0000BB;'>'Table1'</span><span></span></div><div class='output co'>#&gt; <span class='message'>Column name: </span><span style='color: #0000BB;'>'BlobColumn'</span><span></span></div><div class='output co'>#&gt; <span class='message'>Saving files to </span><span style='color: #0000BB;'>'/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpUjeJDH/Table1/BlobColumn'</span><span></span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BB0000;'>✖</span><span> Row 1: no file found</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Row 2: file flobr.pdf renamed to 2.pdf</span></div><div class='output co'>#&gt; </div><div class='input'><span class='fu'>DBI</span><span class='fu'>::</span><span class='fu'><a href='https://dbi.r-dbi.org/reference/dbDisconnect.html'>dbDisconnect</a></span><span class='op'>(</span><span class='va'>conn</span><span class='op'>)</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -222,6 +228,8 @@ within a subdirectory are deleted.</p></td>
 
   
 
+
+  
 
   </body>
 </html>
