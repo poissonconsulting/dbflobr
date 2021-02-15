@@ -1,5 +1,3 @@
-context("db")
-
 # borrowed from readwritesqlite
 test_that("unquoted table names case insensitive in RSQLite", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")

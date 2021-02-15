@@ -1,5 +1,3 @@
-context("check")
-
 test_that("check_sqlite_connection", {
   expect_error(
     check_sqlite_connection(1), class = "chk_error")
