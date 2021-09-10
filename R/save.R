@@ -121,7 +121,9 @@ save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_",
                            sub = FALSE, replace = FALSE,
                            geometry = FALSE){
   check_sqlite_connection(conn)
-  chkor(check_table_name(table_name, conn), chk_null(table_name))
+  if(!is.null(table_name)) {
+    check_table_name(table_name, conn)
+}
   chk_flag(geometry)
   chk_string(dir)
   chk_string(sep)
