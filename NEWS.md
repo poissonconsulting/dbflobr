@@ -1,3 +1,10 @@
+<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
+
+# dbflobr 0.2.1
+
+- Same as previous version.
+
+
 # dbflobr 0.2.0.9000
 
 - Added `blob = FALSE` argument to `read_flob()` to specify whether to process as blobs instead of flobs.
