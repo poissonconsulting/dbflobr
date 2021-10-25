@@ -1,7 +1,7 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1.9001
-pkgdown_sha: 705ff7c650bb1c7d46d35e72f27ad093689e2f29
+pkgdown: 1.9000.9000.9000
+pkgdown_sha: 7a43f1fa4c7f3127d49da4545c83721fbdd5f22d
 articles:
   vignette: vignette.html
-last_built: 2021-09-10T22:43Z
+last_built: 2021-10-25T17:59Z
 
