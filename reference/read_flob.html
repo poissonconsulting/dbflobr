@@ -54,7 +54,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Read flob</h1>
-    <small class="dont-index">Source: <a href="https://github.com/poissonconsulting/dbflobr/blob/master/R/dbflob.R" class="external-link"><code>R/dbflob.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/poissonconsulting/dbflobr/blob/HEAD/R/dbflob.R" class="external-link"><code>R/dbflob.R</code></a></small>
     <div class="hidden name"><code>read_flob.Rd</code></div>
     </div>
 
@@ -67,15 +67,18 @@
     <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    
-
-<dl><dt>column_name</dt><dd><p>A string of the name of the BLOB column.</p></dd>
-</dl><dl><dt>table_name</dt><dd><p>A string of the name of the existing table.</p></dd>
-</dl><dl><dt>key</dt><dd><p>A data.frame whose columns and values are used to filter the
+    <dl><dt>column_name</dt>
+<dd><p>A string of the name of the BLOB column.</p></dd>
+<dt>table_name</dt>
+<dd><p>A string of the name of the existing table.</p></dd>
+<dt>key</dt>
+<dd><p>A data.frame whose columns and values are used to filter the
 table to a single row (this in combination with the <code>column_name</code>
 argument are used to target a single cell within the table to modify).</p></dd>
-</dl><dl><dt>conn</dt><dd><p>A SQLite connection object.</p></dd>
-</dl><dl><dt>slob</dt><dd><p>A logical scalar specifying whether to process as slobs (serialized blobs) instead of flobs.
+<dt>conn</dt>
+<dd><p>A SQLite connection object.</p></dd>
+<dt>slob</dt>
+<dd><p>A logical scalar specifying whether to process as slobs (serialized blobs) instead of flobs.
 If NA, the function will adapt accordingly.</p></dd>
 </dl></div>
     <div id="value">
