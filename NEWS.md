@@ -2,7 +2,7 @@
 
 # dbflobr 0.2.1
 
-- Same as previous version.
+- Change maintainer
 
 
 # dbflobr 0.2.0.9000
