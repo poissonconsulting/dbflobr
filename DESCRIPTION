@@ -43,8 +43,6 @@ Suggests:
     rmarkdown,
     testthat,
     withr
-Remotes:
-    poissonconsulting/flobr
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
