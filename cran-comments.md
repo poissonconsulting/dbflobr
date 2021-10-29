@@ -10,4 +10,13 @@ release 4.1.0
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 note
+
+New maintainer:
+  Evan Amies-Galonski <evan@poissonconsulting.ca>
+Old maintainer(s):
+  Sebastian Dalgarno <seb@poissonconsulting.ca>
+
+seb@poissonconsulting.ca is no longer a valid email address.
+Sebastian Dalgarno has sent an email from seb.dalgarno@gmail.com
+to CRAN-submissions@R-project.org confirming this change.
