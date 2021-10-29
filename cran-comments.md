@@ -17,6 +17,6 @@ New maintainer:
 Old maintainer(s):
   Sebastian Dalgarno <seb@poissonconsulting.ca>
 
-seb@poissonconsulting.ca is no longer a valid email address.
-Sebastian Dalgarno has sent an email from seb.dalgarno@gmail.com
-to CRAN-submissions@R-project.org confirming this change.
+seb@poissonconsulting.ca is no longer a valid email address. Sebastian Dalgarno has sent an email from seb.dalgarno@gmail.com to CRAN-submissions@R-project.org confirming this change.
+
+The note on the package check page: "'LazyData' is specified without a 'data' directory" has been resolved in this version.
