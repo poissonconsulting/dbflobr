@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# dbflobr 0.2.2
+
+- Internal changes only.
+
+
 # dbflobr 0.2.1
 
 - Change maintainer
