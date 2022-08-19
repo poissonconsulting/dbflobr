@@ -67,29 +67,37 @@ Values in file names are matched to table primary key to determine where to writ
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">import_all_flobs</span><span class="op">(</span>
-  <span class="va">conn</span>,
-  dir <span class="op">=</span> <span class="st">"."</span>,
-  sep <span class="op">=</span> <span class="st">"_-_"</span>,
-  pattern <span class="op">=</span> <span class="st">".*"</span>,
-  sub <span class="op">=</span> <span class="cn">FALSE</span>,
-  exists <span class="op">=</span> <span class="cn">FALSE</span>,
-  replace <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">import_all_flobs</span><span class="op">(</span></span>
+<span>  <span class="va">conn</span>,</span>
+<span>  dir <span class="op">=</span> <span class="st">"."</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">"_-_"</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="st">".*"</span>,</span>
+<span>  sub <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  exists <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  replace <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>conn</dt>
 <dd><p>A SQLite connection object.</p></dd>
+
+
 <dt>dir</dt>
 <dd><p>A string of the path to the directory to import the files from.
 Files need to be within nested folders like 'table1/column1/a.csv'.
 This structure is created automatically if save_all_flobs() function is used.</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>A string of the separator between values in file names.</p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>A regular expression specifying the pattern file names must match.</p></dd>
+
+
 <dt>sub</dt>
 <dd><p>A logical scalar specifying whether to import flobs based on their filename (sub = FALSE)
 or the name of their subdirectory (sub = TRUE) which must only contain 1 file.
@@ -97,43 +105,50 @@ If sub = NA and replace = TRUE then the names of the
 subdirectories are used irrespective of whether they include files and existing
 flobs are deleted if the corresponding subdirectory is empty.
 If sub = TRUE or sub = NA then recursion is just one subfolder deep.</p></dd>
+
+
 <dt>exists</dt>
 <dd><p>A logical scalar specifying whether the column must (TRUE) or
 mustn't (FALSE) already exist or whether it doesn't matter (NA).
 IF FALSE, a new BLOB column is created.</p></dd>
+
+
 <dt>replace</dt>
 <dd><p>A flag indicating whether to replace existing flobs (TRUE) or not (FALSE).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An invisible named list indicating directory path,
+    
+
+<p>An invisible named list indicating directory path,
 file names and whether files were successfully written to database.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">":memory:"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"CREATE TABLE Table1 (CharColumn TEXT PRIMARY KEY NOT NULL)"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">":memory:"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbGetQuery.html" class="external-link">dbGetQuery</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"CREATE TABLE Table1 (CharColumn TEXT PRIMARY KEY NOT NULL)"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>SQL statements must be issued with dbExecute() or dbSendStatement() instead of dbGetQuery() or dbSendQuery().</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data frame with 0 columns and 0 rows</span>
-<span class="r-in"><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"Table1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CharColumn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span><span class="op">)</span>, append <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">flob</span> <span class="op">&lt;-</span> <span class="fu">flobr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/flobr/man/flob_obj.html" class="external-link">flob_obj</a></span></span>
-<span class="r-in"><span class="fu"><a href="write_flob.html">write_flob</a></span><span class="op">(</span><span class="va">flob</span>, <span class="st">"BlobColumn"</span>, <span class="st">"Table1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CharColumn <span class="op">=</span> <span class="st">"a"</span><span class="op">)</span>, <span class="va">conn</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"import_all"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="save_all_flobs.html">save_all_flobs</a></span><span class="op">(</span>conn <span class="op">=</span> <span class="va">conn</span>, dir <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"Table1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CharColumn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span><span class="op">)</span>, append <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">flob</span> <span class="op">&lt;-</span> <span class="fu">flobr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/flobr/man/flob_obj.html" class="external-link">flob_obj</a></span></span></span>
+<span class="r-in"><span><span class="fu"><a href="write_flob.html">write_flob</a></span><span class="op">(</span><span class="va">flob</span>, <span class="st">"BlobColumn"</span>, <span class="st">"Table1"</span>, <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>CharColumn <span class="op">=</span> <span class="st">"a"</span><span class="op">)</span>, <span class="va">conn</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"import_all"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="save_all_flobs.html">save_all_flobs</a></span><span class="op">(</span>conn <span class="op">=</span> <span class="va">conn</span>, dir <span class="op">=</span> <span class="va">dir</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Table name: <span style="color: #0000BB;">'Table1'</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Column name: <span style="color: #0000BB;">'BlobColumn'</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving files to <span style="color: #0000BB;">'/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpEE7yTJ/import_all/Table1/BlobColumn'</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving files to <span style="color: #0000BB;">'/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//RtmpCW9cDz/import_all/Table1/BlobColumn'</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Row 1: file flobr.pdf renamed to a.pdf</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Row 2: no file found</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">import_all_flobs</span><span class="op">(</span><span class="va">conn</span>, <span class="va">dir</span>, exists <span class="op">=</span> <span class="cn">TRUE</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">import_all_flobs</span><span class="op">(</span><span class="va">conn</span>, <span class="va">dir</span>, exists <span class="op">=</span> <span class="cn">TRUE</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Table name: <span style="color: #0000BB;">'Table1'</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Column name: <span style="color: #0000BB;">'BlobColumn'</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Writing files to database</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> File 1: a.pdf written to database</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -148,7 +163,7 @@ file names and whether files were successfully written to database.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
 </div>
 
       </footer></div>
