@@ -8,7 +8,7 @@ parse_filename <- function(x, sep){
 }
 
 collapse_flob <- function(x) {
-  chk_flob(x)
+  flobr::chk_flob(x)
   y <- glue_collapse(unlist(x), "")
   glue("x'{y}'")
 }
