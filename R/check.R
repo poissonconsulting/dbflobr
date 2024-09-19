@@ -76,7 +76,7 @@ check_flob_query <- function(x, slob = FALSE) {
     class(x) <- c("flob", "blob")
     if(!flobr::vld_flob(x)){
       class(x) <- c("blob")
-      chkor(flobr::chk_slob(x), chk_flob(x))
+      chkor_vld(vld_slob(x), flobr::vld_flob(x))
       class(x) <- "list"
       x <- blob::as_blob(x)
       names(x) <- NULL
