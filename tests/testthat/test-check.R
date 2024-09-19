@@ -107,7 +107,7 @@ test_that("check_flob_query", {
   expect_identical(check_flob_query(slob_obj, slob = TRUE), slob_obj)
   expect_identical(check_flob_query(slob_obj, slob = NA), slob_obj)
 
-  expect_error(check_flob_query("non-blob", slob = NA), "`x` must be a blob of a serialized object.")
+  expect_error(check_flob_query("non-blob", slob = TRUE), "`x` must be a blob of a serialized object.")
   # this is not ideal behavior
   expect_error(check_flob_query(slob_obj, slob = FALSE), "Serialized element of `x` must inherit from S3 class 'exint'.")
 

@@ -65,7 +65,7 @@ check_flob_query <- function(x, slob = FALSE) {
 
   if(vld_false(slob)){
     class(x) <- c("flob", "blob")
-    chk_flob(x) # this is a problem when x is a blob and blob = FALSE
+    flobr::chk_flob(x) # this is a problem when x is a blob and blob = FALSE
   } else if (vld_true(slob)){
     class(x) <- "blob"
     flobr::chk_slob(x)
@@ -74,9 +74,9 @@ check_flob_query <- function(x, slob = FALSE) {
     names(x) <- NULL
   } else {
     class(x) <- c("flob", "blob")
-    if(!vld_flob(x)){
+    if(!flobr::vld_flob(x)){
       class(x) <- c("blob")
-      chkor(flobr::chk_slob(x), chk_flob(x))
+      chkor_vld(vld_slob(x), flobr::vld_flob(x))
       class(x) <- "list"
       x <- blob::as_blob(x)
       names(x) <- NULL
