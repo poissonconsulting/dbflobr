@@ -50,14 +50,14 @@ An invisible named vector indicating file name and whether the file was
 successfully written to database.
 }
 \description{
-Import \code{\link[flobr]{flob}}s to SQLite database column from directory.
+Import \code{\link[flobr:flob]{flobr::flob()}}s to SQLite database column from directory.
 Values in file name are matched to table primary key to determine where to write flob.
 }
 \examples{
 conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 DBI::dbGetQuery(conn, "CREATE TABLE Table1 (CharColumn TEXT PRIMARY KEY NOT NULL)")
 DBI::dbWriteTable(conn, "Table1", data.frame(CharColumn = c("a", "b")), append = TRUE)
-key <- data.frame(CharColumn = "a", stringsAsFactors = FALSE)[0,,drop = FALSE]
+key <- data.frame(CharColumn = "a", stringsAsFactors = FALSE)[0, , drop = FALSE]
 dir <- tempdir()
 write.csv(key, file.path(dir, "a.csv"))
 import_flobs("BlobColumn", "Table1", conn, dir)

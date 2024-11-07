@@ -1,6 +1,6 @@
 #' Save flobs.
 #'
-#' Rename \code{\link[flobr]{flob}}s from a SQLite database BLOB column and save to directory.
+#' Rename [flobr::flob()]s from a SQLite database BLOB column and save to directory.
 #'
 #' @inheritParams write_flob
 #' @param dir A string of the path to the directory to save the files in.
@@ -26,7 +26,7 @@
 #' dir <- tempdir()
 #' save_flobs("BlobColumn", "Table1", conn, dir)
 #' DBI::dbDisconnect(conn)
-save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", sub = FALSE, replace = FALSE, slob_ext = NULL){
+save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", sub = FALSE, replace = FALSE, slob_ext = NULL) {
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = TRUE, conn)
@@ -45,13 +45,13 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
   success <- vector()
   success_names <- vector()
 
-  for(i in 1:nrow(values)){
+  for (i in seq_len(nrow(values))) {
     key <- values[i, , drop = FALSE]
     new_file <- create_filename(key, sep = sep)
     new_file <- as.character(new_file)
     x <- try(read_flob(column_name, table_name, key, conn, slob = NA), silent = TRUE)
-    if(!is_try_error(x) && !(blob::is_blob(x) && is.null(slob_ext))){
-      if(flobr::is_flob(x) || is.null(slob_ext)){
+    if (!is_try_error(x) && !(blob::is_blob(x) && is.null(slob_ext))) {
+      if (flobr::is_flob(x) || is.null(slob_ext)) {
         filename <- flobr::flob_name(x)
         ext <- flobr::flob_ext(x)
         file <- glue("{filename}.{ext}")
@@ -59,7 +59,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
         success[i] <- new_file_ext
         success_names[i] <- file
       } else {
-        if(is.null(slob_ext)) err("`slob_ext` must be provided when slobs are present.")
+        if (is.null(slob_ext)) err("`slob_ext` must be provided when slobs are present.")
         filename <- "BLOB"
         ext <- slob_ext
         file <- glue("{filename}")
@@ -68,14 +68,14 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
         success_names[i] <- file
       }
 
-      if(vld_false(sub)) {
-        if(!replace && file.exists(file.path(dir, new_file_ext))) {
+      if (vld_false(sub)) {
+        if (!replace && file.exists(file.path(dir, new_file_ext))) {
           stop("File '", file.path(dir, new_file), "' already exists.", call. = FALSE)
         }
 
         flobr::unflob(x, dir = dir, name = new_file, ext = ext, slob = NA, check = FALSE)
       } else {
-        if(!replace && length(list.files(file.path(dir, new_file)))) {
+        if (!replace && length(list.files(file.path(dir, new_file)))) {
           stop("Directory '", file.path(dir, new_file), "' already contains a file.", call. = FALSE)
         }
         unlink(file.path(dir, new_file), recursive = TRUE)
@@ -84,7 +84,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
       }
       ui_done(glue("Row {i}: file {file} renamed to {new_file_ext}"))
     } else {
-      if(is.na(sub)) {
+      if (is.na(sub)) {
         dir.create(file.path(dir, new_file), recursive = TRUE)
       }
       ui_oops(glue("Row {i}: no file found"))
@@ -97,7 +97,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
 
 #' Save all flobs.
 #'
-#' Rename \code{\link[flobr]{flob}}s from a SQLite database and save to directory.
+#' Rename [flobr::flob()]s from a SQLite database and save to directory.
 #'
 #' @inheritParams save_flobs
 #' @inheritParams write_flob
@@ -119,36 +119,39 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
 #' DBI::dbDisconnect(conn)
 save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_",
                            sub = FALSE, replace = FALSE,
-                           geometry = FALSE){
+                           geometry = FALSE) {
   check_sqlite_connection(conn)
-  if(!is.null(table_name)) {
+  if (!is.null(table_name)) {
     check_table_name(table_name, conn)
-}
+  }
   chk_flag(geometry)
   chk_string(dir)
   chk_string(sep)
   chk_lgl(sub)
   chk_flag(replace)
 
-  if(is.null(table_name)){
+  if (is.null(table_name)) {
     table_name <- table_names(conn)
   }
 
   success <- vector(mode = "list")
   success_names <- vector()
 
-  for(i in table_name){
+  for (i in table_name) {
     cols <- blob_columns(i, conn)
-    if(!geometry) cols <- cols[cols != "geometry"]
-    for(j in cols){
+    if (!geometry) cols <- cols[cols != "geometry"]
+    for (j in cols) {
       name <- file.path(i, j)
       path <- file.path(dir, name)
-      if(!dir.exists(path))
+      if (!dir.exists(path)) {
         dir.create(path, recursive = TRUE)
+      }
       ui_line(glue("Table name: {ui_value(i)}"))
       ui_line(glue("Column name: {ui_value(j)}"))
-      success[[name]] <- save_flobs(j, i, conn, path, sep = sep, sub = sub,
-                                    replace = replace)
+      success[[name]] <- save_flobs(j, i, conn, path,
+        sep = sep, sub = sub,
+        replace = replace
+      )
       ui_line("")
     }
   }

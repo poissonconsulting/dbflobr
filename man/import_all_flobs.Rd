@@ -43,7 +43,7 @@ An invisible named list indicating directory path,
 file names and whether files were successfully written to database.
 }
 \description{
-Import \code{\link[flobr]{flob}}s to SQLite database from directory.
+Import \code{\link[flobr:flob]{flobr::flob()}}s to SQLite database from directory.
 Table and column names are matched to directory names within main directory.
 Values in file names are matched to table primary key to determine where to write flob.
 }

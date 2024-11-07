@@ -34,18 +34,18 @@ table_info <- function(table_name, conn) {
   table_info
 }
 
-table_pk <- function(table_name, conn){
+table_pk <- function(table_name, conn) {
   info <- table_info(table_name, conn)
   info$name[info$pk > 0]
 }
 
-table_pk_df <- function(table_name, conn){
+table_pk_df <- function(table_name, conn) {
   info <- table_info(table_name, conn)
   pk <- info$name[info$pk > 0]
   key <- data.frame(matrix(ncol = length(pk), nrow = 1, dimnames = list(NULL, pk)))
-  for(i in pk){
+  for (i in pk) {
     type <- info$type[info$name == i]
-    x <- switch (type,
+    x <- switch(type,
       "TEXT" = character(),
       "INTEGER" = integer(),
       "BOOLEAN" = logical(),
@@ -54,10 +54,10 @@ table_pk_df <- function(table_name, conn){
     )
     key[i] <- x
   }
-  key[0,,drop = FALSE]
+  key[0, , drop = FALSE]
 }
 
-sql_pk <- function(x){
+sql_pk <- function(x) {
   paste0("`", paste(x, collapse = "`, `"), "`")
 }
 
@@ -70,7 +70,7 @@ is_column_blob <- function(column_name, table_name, conn) {
   toupper(table_column_type(column_name, table_name, conn)) == "BLOB"
 }
 
-blob_columns <- function(table_name, conn){
+blob_columns <- function(table_name, conn) {
   table_info <- table_info(table_name, conn)
   table_info$name[table_info$type == "BLOB"]
 }

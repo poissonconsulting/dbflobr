@@ -63,10 +63,10 @@ check_flob_query <- function(x, slob = FALSE) {
     abort_chk("Can't find flob in that location.")
   }
 
-  if(vld_false(slob)){
+  if (vld_false(slob)) {
     class(x) <- c("flob", "blob")
     flobr::chk_flob(x) # this is a problem when x is a blob and blob = FALSE
-  } else if (vld_true(slob)){
+  } else if (vld_true(slob)) {
     class(x) <- "blob"
     flobr::chk_slob(x)
     class(x) <- "list"
@@ -74,7 +74,7 @@ check_flob_query <- function(x, slob = FALSE) {
     names(x) <- NULL
   } else {
     class(x) <- c("flob", "blob")
-    if(!flobr::vld_flob(x)){
+    if (!flobr::vld_flob(x)) {
       class(x) <- c("blob")
       chkor_vld(vld_slob(x), flobr::vld_flob(x))
       class(x) <- "list"
@@ -85,9 +85,9 @@ check_flob_query <- function(x, slob = FALSE) {
   invisible(x)
 }
 
-check_pk <- function(table_name, conn){
+check_pk <- function(table_name, conn) {
   pk <- table_pk(table_name, conn)
-  if(!length(pk)){
+  if (!length(pk)) {
     abort_chk("Table `", table_name, "` must have a primary key.")
   }
   return(pk)

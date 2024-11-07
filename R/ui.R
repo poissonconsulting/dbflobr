@@ -23,5 +23,3 @@ ui_value <- function(x) {
   x <- crayon::blue(x)
   x
 }
-
-

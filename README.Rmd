@@ -49,7 +49,7 @@ library(dbflobr)
 flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
 str(flob)
 
-# create a SQLite database connection 
+# create a SQLite database connection
 conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 
 # create a table 'Table1' of data
@@ -57,7 +57,7 @@ DBI::dbWriteTable(conn, "Table1", data.frame(IntColumn = c(1L, 2L)))
 
 DBI::dbReadTable(conn, "Table1")
 
-# specify which row to add the flob to by providing a key 
+# specify which row to add the flob to by providing a key
 key <- data.frame(IntColumn = 2L)
 
 # write the flob to the database in column 'BlobColumn'

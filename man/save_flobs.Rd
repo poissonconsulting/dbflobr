@@ -41,7 +41,7 @@ If slob_ext = NULL slobs will be ignored.}
 An invisible named vector of the file names and new file names saved.
 }
 \description{
-Rename \code{\link[flobr]{flob}}s from a SQLite database BLOB column and save to directory.
+Rename \code{\link[flobr:flob]{flobr::flob()}}s from a SQLite database BLOB column and save to directory.
 }
 \examples{
 flob <- flobr::flob_obj

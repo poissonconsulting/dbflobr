@@ -24,7 +24,7 @@ If NA, the function will adapt accordingly.}
 A flob or blob.
 }
 \description{
-Read a \code{\link[flobr]{flob}} from a SQLite database.
+Read a \code{\link[flobr:flob]{flobr::flob()}} from a SQLite database.
 }
 \examples{
 flob <- flobr::flob_obj
