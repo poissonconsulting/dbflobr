@@ -45,7 +45,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
   success <- vector()
   success_names <- vector()
 
-  for (i in 1:nrow(values)) {
+  for (i in seq_len(nrow(values))) {
     key <- values[i, , drop = FALSE]
     new_file <- create_filename(key, sep = sep)
     new_file <- as.character(new_file)
