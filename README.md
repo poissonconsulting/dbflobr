@@ -1,15 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# dbflobr <img src="man/figures/logo.png" align="right" />
+# dbflobr \<img src=“man/figures/logo.png” style=’text-align: right; /\>
 
 <!-- badges: start -->
 
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![R-CMD-check](https://github.com/poissonconsulting/dbflobr/workflows/R-CMD-check/badge.svg)](https://github.com/poissonconsulting/dbflobr/actions)
+[![R-CMD-check](https://github.com/poissonconsulting/dbflobr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/poissonconsulting/dbflobr/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/poissonconsulting/dbflobr/branch/master/graph/badge.svg)](https://app.codecov.io/gh/poissonconsulting/dbflobr?branch=master)
+coverage](https://codecov.io/gh/poissonconsulting/dbflobr/graph/badge.svg)](https://app.codecov.io/gh/poissonconsulting/dbflobr)
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![CRAN
@@ -47,7 +47,7 @@ library(dbflobr)
 flob <- flobr::flob(system.file("extdata", "flobr.pdf", package = "flobr"))
 str(flob)
 #> List of 1
-#>  $ /Library/Frameworks/R.framework/Versions/4.1/Resources/library/flobr/extdata/flobr.pdf: raw [1:133851] 58 0a 00 00 ...
+#>  $ /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library/flobr/extdata/flobr.pdf: raw [1:133851] 58 0a 00 00 ...
 #>  - attr(*, "class")= chr [1:2] "flob" "blob"
 
 # create a SQLite database connection 
@@ -93,8 +93,8 @@ DBI::dbDisconnect(conn)
 
 ## Inspiration
 
--   [blob](https://github.com/tidyverse/blob)
--   [flobr](https://github.com/poissonconsulting/flobr)
+- [blob](https://github.com/tidyverse/blob)
+- [flobr](https://github.com/poissonconsulting/flobr)
 
 ## Contribution
 
