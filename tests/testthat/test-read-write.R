@@ -22,42 +22,54 @@ test_that("write_flob works", {
   flob <- flobr::flob_obj
 
   expect_error(write_flob(1, "flob",
-                          table_name = "df",
-                          exists = FALSE, key = key, conn = conn
+    table_name = "df",
+    exists = FALSE, key = key, conn = conn
   ), class = "chk_error")
   expect_error(
     write_flob(flob, "flob",
-               table_name = "test",
-               exists = FALSE, key = key, conn = conn
-    ), class = "chk_error")
+      table_name = "test",
+      exists = FALSE, key = key, conn = conn
+    ),
+    class = "chk_error"
+  )
   expect_error(
     write_flob(flob, "flob",
-               table_name = "df",
-               exists = TRUE, key = key, conn = conn
-    ), class = "chk_error")
+      table_name = "df",
+      exists = TRUE, key = key, conn = conn
+    ),
+    class = "chk_error"
+  )
   expect_error(
     write_flob(flob, "char",
-               table_name = "df",
-               exists = TRUE, key = key, conn = conn
-    ), class = "chk_error")
+      table_name = "df",
+      exists = TRUE, key = key, conn = conn
+    ),
+    class = "chk_error"
+  )
   expect_error(
     write_flob(flob, "flob",
-               table_name = "df",
-               exists = FALSE, key = "a", conn = conn
-    ), class = "chk_error")
+      table_name = "df",
+      exists = FALSE, key = "a", conn = conn
+    ),
+    class = "chk_error"
+  )
   expect_error(
     write_flob(flob, "flob",
-               table_name = "df",
-               exists = FALSE, key = key2, conn = conn
-    ), class = "chk_error")
+      table_name = "df",
+      exists = FALSE, key = key2, conn = conn
+    ),
+    class = "chk_error"
+  )
   expect_error(
     write_flob(flob, "flob",
-               table_name = "df",
-               exists = TRUE, key = key2, conn = conn
-    ), class = "chk_error")
+      table_name = "df",
+      exists = TRUE, key = key2, conn = conn
+    ),
+    class = "chk_error"
+  )
   expect_is(write_flob(flob, "flob",
-                       table_name = "df",
-                       exists = TRUE, key = key, conn = conn
+    table_name = "df",
+    exists = TRUE, key = key, conn = conn
   ), "flob")
 
   df2 <- DBI::dbReadTable(conn, "df")
@@ -65,13 +77,21 @@ test_that("write_flob works", {
 
   ### read flob
   expect_error(
-    read_flob("flob", table_name = "test", key = key, conn = conn), class = "chk_error")
+    read_flob("flob", table_name = "test", key = key, conn = conn),
+    class = "chk_error"
+  )
   expect_error(
-    read_flob("blob", table_name = "df", key = key, conn = conn), class = "chk_error")
+    read_flob("blob", table_name = "df", key = key, conn = conn),
+    class = "chk_error"
+  )
   expect_error(
-    read_flob("flob", table_name = "df", key = key2, conn = conn), class = "chk_error")
+    read_flob("flob", table_name = "df", key = key2, conn = conn),
+    class = "chk_error"
+  )
   expect_error(
-    read_flob("flob", table_name = "df", key = key3, conn = conn), class = "chk_error")
+    read_flob("flob", table_name = "df", key = key3, conn = conn),
+    class = "chk_error"
+  )
 
   flob2 <- read_flob("flob", table_name = "df", key = key, conn = conn)
   expect_identical(flobr::flob_ext(flob2), flobr::flob_ext(flob))
@@ -79,21 +99,30 @@ test_that("write_flob works", {
 
   ### delete flobs
   expect_error(
-    delete_flob("flob", table_name = "test", key = key, conn = conn), class = "chk_error")
+    delete_flob("flob", table_name = "test", key = key, conn = conn),
+    class = "chk_error"
+  )
   expect_error(
-    delete_flob("blob", table_name = "df", key = key, conn = conn), class = "chk_error")
+    delete_flob("blob", table_name = "df", key = key, conn = conn),
+    class = "chk_error"
+  )
   expect_error(
-    delete_flob("flob", table_name = "df", key = key2, conn = conn), class = "chk_error")
+    delete_flob("flob", table_name = "df", key = key2, conn = conn),
+    class = "chk_error"
+  )
 
   expect_is(delete_flob("flob",
-                        table_name = "df",
-                        key = key, conn = conn
+    table_name = "df",
+    key = key, conn = conn
   ), "flob")
   expect_error(
-    read_flob("flob", table_name = "df", key = key, conn = conn), class = "chk_error")
+    read_flob("flob", table_name = "df", key = key, conn = conn),
+    class = "chk_error"
+  )
   expect_error(
-    delete_flob("flob", table_name = "df", key = key, conn = conn), class = "chk_error")
-
+    delete_flob("flob", table_name = "df", key = key, conn = conn),
+    class = "chk_error"
+  )
 })
 
 test_that("write_flob column exists", {
@@ -105,12 +134,16 @@ test_that("write_flob column exists", {
 
   flob <- flobr::flob_obj
   expect_error(
-    write_flob(flob, "New", "df", key, conn, exists = TRUE), class = "chk_error")
+    write_flob(flob, "New", "df", key, conn, exists = TRUE),
+    class = "chk_error"
+  )
   expect_is(write_flob(flob, "New", "df", key, conn), "flob")
   expect_is(write_flob(flob, "New", "df", key, conn), "flob")
   expect_is(write_flob(flob, "New", "df", key, conn, exists = TRUE), "flob")
   expect_error(
-    write_flob(flob, "New", "df", key, conn, exists = FALSE), class = "chk_error")
+    write_flob(flob, "New", "df", key, conn, exists = FALSE),
+    class = "chk_error"
+  )
 })
 
 test_that("add_blob_column works", {
@@ -123,7 +156,9 @@ test_that("add_blob_column works", {
 
   ## add blob_column
   expect_error(
-    add_blob_column(table_name = "df", column_name = "x", conn = conn), class = "chk_error")
+    add_blob_column(table_name = "df", column_name = "x", conn = conn),
+    class = "chk_error"
+  )
   expect_true(add_blob_column(table_name = "df", column_name = "flob", conn = conn))
 
   df2 <- DBI::dbReadTable(conn, "df")
@@ -140,4 +175,3 @@ test_that("add_blob_column works", {
   expect_is(x, "character")
   expect_length(x, 1L)
 })
-

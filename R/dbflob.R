@@ -137,11 +137,10 @@ add_blob_column <- function(column_name, table_name, conn) {
 
   sql <- "ALTER TABLE ?table_name ADD ?column_name BLOB"
   sql <- sql_interpolate(sql, conn,
-                         table_name = table_name,
-                         column_name = column_name
+    table_name = table_name,
+    column_name = column_name
   )
 
   execute(sql, conn)
   invisible(TRUE)
 }
-

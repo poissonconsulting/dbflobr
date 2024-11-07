@@ -22,7 +22,7 @@
 #' conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
 #' DBI::dbGetQuery(conn, "CREATE TABLE Table1 (CharColumn TEXT PRIMARY KEY NOT NULL)")
 #' DBI::dbWriteTable(conn, "Table1", data.frame(CharColumn = c("a", "b")), append = TRUE)
-#' key <- data.frame(CharColumn = "a", stringsAsFactors = FALSE)[0,,drop = FALSE]
+#' key <- data.frame(CharColumn = "a", stringsAsFactors = FALSE)[0, , drop = FALSE]
 #' dir <- tempdir()
 #' write.csv(key, file.path(dir, "a.csv"))
 #' import_flobs("BlobColumn", "Table1", conn, dir)
@@ -30,7 +30,7 @@
 import_flobs <- function(column_name, table_name, conn,
                          dir = ".", sep = "_-_", pattern = ".*", sub = FALSE,
                          exists = FALSE, recursive = FALSE,
-                         replace = FALSE){
+                         replace = FALSE) {
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = exists, conn)
@@ -44,17 +44,19 @@ import_flobs <- function(column_name, table_name, conn,
   chk_string(pattern)
 
 
-  if(vld_false(sub)) {
+  if (vld_false(sub)) {
     files <- list_files(dir, recursive = recursive, pattern = pattern)
     names(files) <- basename(files)
-    if(anyDuplicated(names(files)))
+    if (anyDuplicated(names(files))) {
       stop("File names must be unique.", call. = FALSE)
+    }
   } else {
     files <- list_files(dir, recursive = NA, pattern = pattern)
     names(files) <- basename(dirname(files))
-    if(anyDuplicated(names(files)))
+    if (anyDuplicated(names(files))) {
       stop("Directory names must be unique.", call. = FALSE)
-    if(is.na(sub)) {
+    }
+    if (is.na(sub)) {
       dirs <- list_dirs(dir, recursive = NA, pattern = pattern)
       names(dirs) <- basename(dirs)
       dirs[names(files)] <- files
@@ -66,41 +68,44 @@ import_flobs <- function(column_name, table_name, conn,
   key <- table_pk_df(table_name, conn)
 
   column_exists <- column_exists(column_name, table_name, conn = conn)
-  if(!exists && !column_exists)
+  if (!exists && !column_exists) {
     add_blob_column(column_name, table_name, conn)
+  }
 
   ui_line(glue("Writing files to database"))
 
   success <- rep(FALSE, length = length(files))
   names(success) <- names(files)
 
-  for(i in seq_along(files)){
+  for (i in seq_along(files)) {
     values <- parse_filename(names(files)[i], sep)
 
-    if(is_length_unequal(values, key)){
+    if (is_length_unequal(values, key)) {
       ui_oops(glue("File {i}: can't write {names(files)[i]} to database. The number of hyphen-separated values must be identical to the number of columns in `key`."))
       next
     }
 
-    for(j in seq_along(values)){
+    for (j in seq_along(values)) {
       key[i, j] <- values[j]
     }
 
-    y <- try(read_flob(column_name, table_name, key[i,, drop = FALSE], conn), silent = TRUE)
-    if(!replace && !is_try_error(y)){
+    y <- try(read_flob(column_name, table_name, key[i, , drop = FALSE], conn), silent = TRUE)
+    if (!replace && !is_try_error(y)) {
       ui_oops(glue("File {i}: can't write {names(files)[i]} to database. Flob already exists in that location and replace = FALSE"))
       next
     }
 
-    if(!is.na(files[i])) {
+    if (!is.na(files[i])) {
       flob <- flobr::flob(files[i])
-      x <- try(write_flob(flob, key = key[i,,drop = FALSE],
-                          column_name = column_name,
-                          table_name = table_name,
-                          conn = conn,
-                          exists = TRUE), silent = TRUE)
+      x <- try(write_flob(flob,
+        key = key[i, , drop = FALSE],
+        column_name = column_name,
+        table_name = table_name,
+        conn = conn,
+        exists = TRUE
+      ), silent = TRUE)
 
-      if(!is_try_error(x)){
+      if (!is_try_error(x)) {
         success[i] <- TRUE
         ui_done(glue("File {i}: {names(files)[i]} written to database"))
       } else {
@@ -109,16 +114,18 @@ import_flobs <- function(column_name, table_name, conn,
       next
     }
 
-    if(is_try_error(y)) {
+    if (is_try_error(y)) {
       ui_done(glue("File {i}: {names(files)[i]} already absent from database."))
       success[i] <- TRUE
       next
     }
-    x <- try(delete_flob(key = key[i,,drop = FALSE],
-                         column_name = column_name,
-                         table_name = table_name,
-                         conn = conn))
-    if(!is_try_error(x)){
+    x <- try(delete_flob(
+      key = key[i, , drop = FALSE],
+      column_name = column_name,
+      table_name = table_name,
+      conn = conn
+    ))
+    if (!is_try_error(x)) {
       success[i] <- TRUE
       ui_done(glue("File {i}: {names(files)[i]} deleted in database."))
     } else {
@@ -154,7 +161,7 @@ import_flobs <- function(column_name, table_name, conn,
 #' DBI::dbDisconnect(conn)
 import_all_flobs <- function(conn, dir = ".", sep = "_-_", pattern = ".*",
                              sub = FALSE,
-                             exists = FALSE, replace = FALSE){
+                             exists = FALSE, replace = FALSE) {
   check_sqlite_connection(conn)
   chk_dir(dir)
   chk_string(sep)
@@ -166,17 +173,19 @@ import_all_flobs <- function(conn, dir = ".", sep = "_-_", pattern = ".*",
   dirs <- dir_tree(dir, sub)
   success <- vector(mode = "list", length = length(dirs))
 
-  for(i in seq_along(dirs)){
+  for (i in seq_along(dirs)) {
     x <- dirs[[i]]
     table_name <- x[1]
     column_name <- x[2]
     inner_dir <- file.path(dir, table_name, column_name)
     ui_line(glue("Table name: {ui_value(table_name)}"))
     ui_line(glue("Column name: {ui_value(column_name)}"))
-    success[[i]] <- import_flobs(column_name = x[2], table_name = x[1],
-                                 conn = conn, dir = inner_dir, sep = sep,
-                                 pattern = pattern, sub = sub,
-                                 exists = exists, replace = replace)
+    success[[i]] <- import_flobs(
+      column_name = x[2], table_name = x[1],
+      conn = conn, dir = inner_dir, sep = sep,
+      pattern = pattern, sub = sub,
+      exists = exists, replace = replace
+    )
     ui_line("")
   }
 
