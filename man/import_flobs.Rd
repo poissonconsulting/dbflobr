@@ -50,7 +50,7 @@ An invisible named vector indicating file name and whether the file was
 successfully written to database.
 }
 \description{
-Import \code{\link[flobr]{flob}}s to SQLite database column from directory.
+Import \code{\link[flobr:flob]{flobr::flob()}}s to SQLite database column from directory.
 Values in file name are matched to table primary key to determine where to write flob.
 }
 \examples{

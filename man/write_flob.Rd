@@ -27,7 +27,7 @@ IF FALSE, a new BLOB column is created.}
 An invisible copy of flob.
 }
 \description{
-Write a \code{\link[flobr]{flob}} to a SQLite database.
+Write a \code{\link[flobr:flob]{flobr::flob()}} to a SQLite database.
 }
 \examples{
 flob <- flobr::flob_obj

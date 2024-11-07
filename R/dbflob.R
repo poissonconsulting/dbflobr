@@ -1,6 +1,6 @@
 #' Write flob
 #'
-#' Write a \code{\link[flobr]{flob}} to a SQLite database.
+#' Write a [flobr::flob()] to a SQLite database.
 #'
 #' @param flob A flob.
 #' @param column_name A string of the name of the BLOB column.
@@ -50,7 +50,7 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = NA) {
 
 #' Read flob
 #'
-#' Read a \code{\link[flobr]{flob}} from a SQLite database.
+#' Read a [flobr::flob()] from a SQLite database.
 #'
 #' @inheritParams write_flob
 #' @param slob A logical scalar specifying whether to process as slobs (serialized blobs) instead of flobs.

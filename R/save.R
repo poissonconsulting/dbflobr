@@ -1,6 +1,6 @@
 #' Save flobs.
 #'
-#' Rename \code{\link[flobr]{flob}}s from a SQLite database BLOB column and save to directory.
+#' Rename [flobr::flob()]s from a SQLite database BLOB column and save to directory.
 #'
 #' @inheritParams write_flob
 #' @param dir A string of the path to the directory to save the files in.
@@ -97,7 +97,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
 
 #' Save all flobs.
 #'
-#' Rename \code{\link[flobr]{flob}}s from a SQLite database and save to directory.
+#' Rename [flobr::flob()]s from a SQLite database and save to directory.
 #'
 #' @inheritParams save_flobs
 #' @inheritParams write_flob

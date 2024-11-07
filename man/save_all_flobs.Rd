@@ -38,7 +38,7 @@ within a subdirectory are deleted.}
 An invisible named list of named vectors of the file names and new file names saved.
 }
 \description{
-Rename \code{\link[flobr]{flob}}s from a SQLite database and save to directory.
+Rename \code{\link[flobr:flob]{flobr::flob()}}s from a SQLite database and save to directory.
 }
 \examples{
 flob <- flobr::flob_obj

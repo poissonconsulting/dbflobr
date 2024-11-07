@@ -1,6 +1,6 @@
 #' Import flobs.
 #'
-#' Import \code{\link[flobr]{flob}}s to SQLite database column from directory.
+#' Import [flobr::flob()]s to SQLite database column from directory.
 #' Values in file name are matched to table primary key to determine where to write flob.
 #'
 #' @inheritParams write_flob
@@ -130,7 +130,7 @@ import_flobs <- function(column_name, table_name, conn,
 
 #' Import all flobs.
 #'
-#' Import \code{\link[flobr]{flob}}s to SQLite database from directory.
+#' Import [flobr::flob()]s to SQLite database from directory.
 #' Table and column names are matched to directory names within main directory.
 #' Values in file names are matched to table primary key to determine where to write flob.
 #'
