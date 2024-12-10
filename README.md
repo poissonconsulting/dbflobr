@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# dbflobr \<img src=“man/figures/logo.png” style=’text-align: right; /\>
+# dbflobr \<img src=“man/figures/logo.png” style=’text-align: right;' /\>
 
 <!-- badges: start -->
 

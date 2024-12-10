@@ -14,6 +14,7 @@ Reads and writes files to SQLite databases \url{https://www.sqlite.org/index.htm
 Useful links:
 \itemize{
   \item \url{https://github.com/poissonconsulting/dbflobr}
+  \item \url{https://poissonconsulting.github.io/dbflobr/}
   \item Report bugs at \url{https://github.com/poissonconsulting/dbflobr/issues}
 }
 
