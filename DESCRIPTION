@@ -30,15 +30,13 @@ Depends:
 Imports:
     blob,
     chk,
-    clisymbols,
-    crayon,
+    cli,
     DBI,
     flobr,
     glue,
     rlang,
     RSQLite
 Suggests: 
-    covr,
     knitr,
     rmarkdown,
     testthat,
