@@ -72,7 +72,7 @@ import_flobs <- function(column_name, table_name, conn,
     add_blob_column(column_name, table_name, conn)
   }
 
-  ui_line(glue("Writing files to database"))
+  cli::cli_inform("Writing files to database")
 
   success <- rep(FALSE, length = length(files))
   names(success) <- names(files)
@@ -81,7 +81,9 @@ import_flobs <- function(column_name, table_name, conn,
     values <- parse_filename(names(files)[i], sep)
 
     if (is_length_unequal(values, key)) {
-      ui_oops(glue("File {i}: can't write {names(files)[i]} to database. The number of hyphen-separated values must be identical to the number of columns in `key`."))
+      cli::cli_inform(c(
+        "x" = "File {i}: can't write {names(files)[i]} to database. The number of hyphen-separated values must be identical to the number of columns in `key`."
+      ))
       next
     }
 
@@ -91,7 +93,9 @@ import_flobs <- function(column_name, table_name, conn,
 
     y <- try(read_flob(column_name, table_name, key[i, , drop = FALSE], conn), silent = TRUE)
     if (!replace && !is_try_error(y)) {
-      ui_oops(glue("File {i}: can't write {names(files)[i]} to database. Flob already exists in that location and replace = FALSE"))
+      cli::cli_inform(c(
+        "x" = "File {i}: can't write {names(files)[i]} to database. Flob already exists in that location and replace = FALSE"
+      ))
       next
     }
 
@@ -107,15 +111,21 @@ import_flobs <- function(column_name, table_name, conn,
 
       if (!is_try_error(x)) {
         success[i] <- TRUE
-        ui_done(glue("File {i}: {names(files)[i]} written to database"))
+        cli::cli_inform(c(
+          "v" = "File {i}: {names(files)[i]} written to database"
+        ))
       } else {
-        ui_oops(glue("File {i}: can't write {names(files)[i]} to database"))
+        cli::cli_inform(c(
+          "x" = "File {i}: can't write {names(files)[i]} to database"
+        ))
       }
       next
     }
 
     if (is_try_error(y)) {
-      ui_done(glue("File {i}: {names(files)[i]} already absent from database."))
+      cli::cli_inform(c(
+        "v" = "File {i}: {names(files)[i]} already absent from database."
+      ))
       success[i] <- TRUE
       next
     }
@@ -127,9 +137,13 @@ import_flobs <- function(column_name, table_name, conn,
     ))
     if (!is_try_error(x)) {
       success[i] <- TRUE
-      ui_done(glue("File {i}: {names(files)[i]} deleted in database."))
+      cli::cli_inform(c(
+        "v" = "File {i}: {names(files)[i]} deleted in database."
+      ))
     } else {
-      ui_oops(glue("File {i}: can't delete {names(files)[i]} in database."))
+      cli::cli_inform(c(
+        "v" = "File {i}: can't delete {names(files)[i]} in database."
+      ))
     }
   }
   return(invisible(success))
@@ -178,15 +192,17 @@ import_all_flobs <- function(conn, dir = ".", sep = "_-_", pattern = ".*",
     table_name <- x[1]
     column_name <- x[2]
     inner_dir <- file.path(dir, table_name, column_name)
-    ui_line(glue("Table name: {ui_value(table_name)}"))
-    ui_line(glue("Column name: {ui_value(column_name)}"))
+    cli::cli_inform(c(
+      "Table name: {.val {table_name}}",
+      "Column name: {.val {column_name}}"
+    ))
     success[[i]] <- import_flobs(
       column_name = x[2], table_name = x[1],
       conn = conn, dir = inner_dir, sep = sep,
       pattern = pattern, sub = sub,
       exists = exists, replace = replace
     )
-    ui_line("")
+    cli::cat_line()
   }
 
   names(success) <- sapply(dirs, glue_collapse, "/")

@@ -40,7 +40,7 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
   sql <- glue("SELECT {sql_pk(pk)} FROM ('{table_name}');")
   values <- get_query(sql, conn)
 
-  ui_line(glue("Saving files to {ui_value(dir)}"))
+  cli::cli_inform(("Saving files to {.path {dir}}"))
 
   success <- vector()
   success_names <- vector()
@@ -82,12 +82,16 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
         dir.create(file.path(dir, new_file), recursive = TRUE)
         flobr::unflob(x, dir = file.path(dir, new_file), name = new_file, ext = ext, slob = NA, check = FALSE)
       }
-      ui_done(glue("Row {i}: file {file} renamed to {new_file_ext}"))
+      cli::cli_inform(c(
+        "v" = "Row {i}: file {file} renamed to {new_file_ext}"
+      ))
     } else {
       if (is.na(sub)) {
         dir.create(file.path(dir, new_file), recursive = TRUE)
       }
-      ui_oops(glue("Row {i}: no file found"))
+      cli::cli_inform(c(
+        "x" = "Row {i}: no file found"
+      ))
     }
   }
   names(success) <- success_names
@@ -146,13 +150,15 @@ save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_",
       if (!dir.exists(path)) {
         dir.create(path, recursive = TRUE)
       }
-      ui_line(glue("Table name: {ui_value(i)}"))
-      ui_line(glue("Column name: {ui_value(j)}"))
+      cli::cli_inform(c(
+        "Table name: {.val {i}}",
+        "Column name: {.val {j}}"
+      ))
       success[[name]] <- save_flobs(j, i, conn, path,
         sep = sep, sub = sub,
         replace = replace
       )
-      ui_line("")
+      cli::cat_line()
     }
   }
   return(invisible(success))

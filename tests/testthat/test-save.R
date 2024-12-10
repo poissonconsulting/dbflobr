@@ -2,7 +2,7 @@ test_that("save_flobs works", {
   path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(
@@ -104,7 +104,7 @@ test_that("save_flobs works with sub", {
   path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(
@@ -216,7 +216,7 @@ test_that("save_flob's slob compatibility", {
   path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   DBI::dbExecute(
     conn,

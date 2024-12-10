@@ -23,7 +23,7 @@ test_that("check_sqlite_connection", {
 
 test_that("check_table_name", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   local <- data.frame(x = 1:2)
   expect_true(DBI::dbCreateTable(conn, "local", local))
@@ -41,7 +41,7 @@ test_that("check_table_name", {
 
 test_that("check_column_name", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   local <- data.frame(test = 1:2)
   expect_true(DBI::dbCreateTable(conn, "local", local))
@@ -68,7 +68,7 @@ test_that("check_column_name", {
 
 test_that("check_column_blob", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   local <- data.frame(test = 1:2)
   expect_true(DBI::dbCreateTable(conn, "local", local))
@@ -85,7 +85,7 @@ test_that("check_column_blob", {
 
 test_that("check_key", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   df <- data.frame(
     char = c("a", "b", "b"),

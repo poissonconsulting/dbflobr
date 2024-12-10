@@ -1,7 +1,7 @@
 # borrowed from readwritesqlite
 test_that("unquoted table names case insensitive in RSQLite", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   local <- data.frame(x = as.character(1:3))
 
@@ -20,7 +20,7 @@ test_that("unquoted table names case insensitive in RSQLite", {
 
 test_that("columns exist", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   local <- data.frame(x = as.character(1:3))
 
@@ -32,7 +32,7 @@ test_that("columns exist", {
 
 test_that("columns type blob", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   local <- data.frame(x = as.character(1:3))
   expect_true(DBI::dbCreateTable(conn, "local", local))
@@ -49,7 +49,7 @@ test_that("columns type blob", {
 
 test_that("filter key", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   df <- data.frame(
     "char" = c("a", "b", "b"),
@@ -64,7 +64,7 @@ test_that("filter key", {
   ## safe_key
   key <- df[1, ]
   x <- safe_key(key, conn)
-  expect_is(x, "glue")
+  expect_s3_class(x, "glue")
   expect_length(x, 1L)
 
   x <- filter_key("df", key, conn)
@@ -76,7 +76,7 @@ test_that("filter key", {
 # borrowed from readwritesqlite
 test_that("table_info", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   local <- data.frame(
     logical = TRUE,
@@ -87,7 +87,7 @@ test_that("table_info", {
   expect_true(DBI::dbCreateTable(conn, "local", local))
 
   table_info <- table_info("local", conn)
-  expect_is(table_info, "data.frame")
+  expect_s3_class(table_info, "data.frame")
   expect_identical(
     colnames(table_info),
     c("cid", "name", "type", "notnull", "dflt_value", "pk")
