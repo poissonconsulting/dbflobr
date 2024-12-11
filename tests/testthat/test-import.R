@@ -17,7 +17,7 @@ test_that("import_flobs works", {
   write.csv(df, file.path(inner_path, "b_-_3_-_2.csv"))
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(
@@ -114,7 +114,7 @@ test_that("import_all_flobs works", {
   path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(
@@ -186,7 +186,7 @@ test_that("import_all_flobs requires unique", {
   path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(
@@ -252,7 +252,7 @@ test_that("import_all_flobs is actually recursive", {
   path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(
@@ -294,7 +294,7 @@ test_that("import_flobs works with subdirectory", {
   write.csv(df, file.path(path, "b_-_3", "data.csv"))
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(
@@ -363,7 +363,7 @@ test_that("import_flobs does not recurse beyond 1", {
   write.csv(df, file.path(path, "extra", "b_-_3", "data.csv"))
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(
@@ -400,7 +400,7 @@ test_that("import_flobs sub = TRUE", {
   path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(
@@ -454,7 +454,7 @@ test_that("import_flobs sub = NA", {
   path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(
@@ -490,7 +490,7 @@ test_that("import_flobs sub = NA", {
 
   unlink(file.path(path, "dump", "df", "geometry", "b_-_1", "b_-_1.pdf"))
 
-  expect_is(read_flob("geometry", "df", conn = conn, key = data.frame(char = "b", num = 1)), "flob")
+  expect_s3_class(read_flob("geometry", "df", conn = conn, key = data.frame(char = "b", num = 1)), "flob")
 
   expect_identical(
     import_flobs("geometry", "df", conn = conn, dir = file.path(path, "dump", "df", "geometry"), sub = NA, exists = TRUE, replace = TRUE),
@@ -504,7 +504,7 @@ test_that("import_all_flobs works", {
   path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(
@@ -572,7 +572,7 @@ test_that("import_all_flobs works with .", {
   path <- withr::local_tempdir()
 
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   # 2 column pk
   DBI::dbExecute(

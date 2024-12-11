@@ -23,25 +23,23 @@ Description: Reads and writes files to SQLite databases
     <https://www.sqlite.org/index.html> as flobs (a flob is a blob that
     preserves the file extension).
 License: MIT + file LICENSE
-URL: https://github.com/poissonconsulting/dbflobr
+URL: https://github.com/poissonconsulting/dbflobr, https://poissonconsulting.github.io/dbflobr/
 BugReports: https://github.com/poissonconsulting/dbflobr/issues
 Depends: 
     R (>= 3.5)
 Imports:
     blob,
     chk,
-    clisymbols,
-    crayon,
+    cli,
     DBI,
     flobr,
     glue,
     rlang,
     RSQLite
 Suggests: 
-    covr,
     knitr,
     rmarkdown,
-    testthat,
+    testthat (>= 3.0.0),
     withr
 VignetteBuilder: 
     knitr
@@ -49,3 +47,5 @@ Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Config/testthat/edition: 3
+Config/Needs/website: poissonconsulting/poissontemplate

@@ -1,1 +1,7 @@
+url: https://poissonconsulting.github.io/dbflobr/
+
 destination: docs
+
+template:
+  bootstrap: 5
+  package: poissontemplate

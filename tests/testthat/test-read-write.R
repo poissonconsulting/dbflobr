@@ -1,6 +1,6 @@
 test_that("write_flob works", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   df <- data.frame(
     char = c("a", "b", "b"),
@@ -67,13 +67,13 @@ test_that("write_flob works", {
     ),
     class = "chk_error"
   )
-  expect_is(write_flob(flob, "flob",
+  expect_s3_class(write_flob(flob, "flob",
     table_name = "df",
     exists = TRUE, key = key, conn = conn
   ), "flob")
 
   df2 <- DBI::dbReadTable(conn, "df")
-  expect_equal(df2$flob[1], flob, check.names = FALSE, check.attributes = FALSE)
+  expect_equal(df2$flob[1], flob, ignore_attr = c("names", "class", "ptype"))
 
   ### read flob
   expect_error(
@@ -111,7 +111,7 @@ test_that("write_flob works", {
     class = "chk_error"
   )
 
-  expect_is(delete_flob("flob",
+  expect_s3_class(delete_flob("flob",
     table_name = "df",
     key = key, conn = conn
   ), "flob")
@@ -127,7 +127,7 @@ test_that("write_flob works", {
 
 test_that("write_flob column exists", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
   expect_true(DBI::dbWriteTable(conn, "df", data.frame(Index = 1)))
 
   key <- data.frame(Index = 1)
@@ -137,9 +137,9 @@ test_that("write_flob column exists", {
     write_flob(flob, "New", "df", key, conn, exists = TRUE),
     class = "chk_error"
   )
-  expect_is(write_flob(flob, "New", "df", key, conn), "flob")
-  expect_is(write_flob(flob, "New", "df", key, conn), "flob")
-  expect_is(write_flob(flob, "New", "df", key, conn, exists = TRUE), "flob")
+  expect_s3_class(write_flob(flob, "New", "df", key, conn), "flob")
+  expect_s3_class(write_flob(flob, "New", "df", key, conn), "flob")
+  expect_s3_class(write_flob(flob, "New", "df", key, conn, exists = TRUE), "flob")
   expect_error(
     write_flob(flob, "New", "df", key, conn, exists = FALSE),
     class = "chk_error"
@@ -148,7 +148,7 @@ test_that("write_flob column exists", {
 
 test_that("add_blob_column works", {
   conn <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
-  teardown(DBI::dbDisconnect(conn))
+  withr::defer(DBI::dbDisconnect(conn))
 
   df <- data.frame(x = 1)
 
@@ -163,7 +163,7 @@ test_that("add_blob_column works", {
 
   df2 <- DBI::dbReadTable(conn, "df")
   expect_identical(colnames(df2), c(colnames(df), c("flob")))
-  expect_is(df2$flob, "blob")
+  expect_s3_class(df2$flob, "blob")
 
   result <- DBI::dbSendQuery(conn = conn, statement = paste("SELECT flob FROM df LIMIT 1"))
   expect_identical(DBI::dbColumnInfo(result)$type, "list")
@@ -172,6 +172,6 @@ test_that("add_blob_column works", {
   ## flob
   flob <- flobr::flob_obj
   x <- collapse_flob(flob)
-  expect_is(x, "character")
+  expect_type(x, "character")
   expect_length(x, 1L)
 })
