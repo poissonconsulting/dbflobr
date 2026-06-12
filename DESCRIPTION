@@ -15,7 +15,7 @@ Authors@R:
       person(given = "Evan",
              family = "Amies-Galonski",
              role = c("aut", "cre"),
-             email = "evan@poissonconsulting.ca",
+             email = "evanamiesgalonski@gmail.com",
              comment = c(ORCID = "0000-0003-1096-2089")),
       person(given = "Poisson Consulting",
              role = c("cph", "fnd")))
