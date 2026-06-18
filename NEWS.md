@@ -1,5 +1,11 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# dbflobr 0.2.2.9000
+
+* Add fledge-bump workflow
+* Add fledge-tag-on-merge workflow
+
+
 # dbflobr 0.2.2
 
 - Internal changes only.
