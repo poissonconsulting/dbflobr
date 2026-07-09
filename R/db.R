@@ -42,10 +42,15 @@ table_pk <- function(table_name, conn) {
 table_pk_df <- function(table_name, conn) {
   info <- table_info(table_name, conn)
   pk <- info$name[info$pk > 0]
-  key <- data.frame(matrix(ncol = length(pk), nrow = 1, dimnames = list(NULL, pk)))
+  key <- data.frame(matrix(
+    ncol = length(pk),
+    nrow = 1,
+    dimnames = list(NULL, pk)
+  ))
   for (i in pk) {
     type <- info$type[info$name == i]
-    x <- switch(type,
+    x <- switch(
+      type,
       "TEXT" = character(),
       "INTEGER" = integer(),
       "BOOLEAN" = logical(),
@@ -84,23 +89,20 @@ safe_key <- function(key, conn) {
     if (is.na(value)) {
       return(sql_interpolate(sql_null, conn))
     }
-    sql_interpolate(sql, conn,
-      value = value
-    )
+    sql_interpolate(sql, conn, value = value)
   })
   glue_collapse(key, " AND ")
 }
 
 filter_key <- function(table_name, key, conn) {
   sql <- glue("SELECT * FROM ?table_name WHERE {safe_key(key, conn)}")
-  sql <- sql_interpolate(sql, conn,
-    table_name = table_name
-  )
+  sql <- sql_interpolate(sql, conn, table_name = table_name)
   get_query(sql, conn)
 }
 
 query_flob <- function(column_name, table_name, key, conn) {
-  sql <- glue_sql("SELECT {`column_name`} FROM {`table_name`} WHERE",
+  sql <- glue_sql(
+    "SELECT {`column_name`} FROM {`table_name`} WHERE",
     column_name = column_name,
     table_name = table_name,
     .con = conn

@@ -31,13 +31,16 @@ write_flob <- function(flob, column_name, table_name, key, conn, exists = NA) {
 
   if (vld_true(exists)) {
     check_column_blob(column_name, table_name, conn)
-  } else if (vld_false(exists) || !column_exists(column_name, table_name, conn)) {
+  } else if (
+    vld_false(exists) || !column_exists(column_name, table_name, conn)
+  ) {
     add_blob_column(column_name, table_name, conn)
   }
 
   check_key(table_name, key, conn)
 
-  sql <- glue_sql("UPDATE {`table_name`} SET {`column_name`}",
+  sql <- glue_sql(
+    "UPDATE {`table_name`} SET {`column_name`}",
     column_name = column_name,
     table_name = table_name,
     .con = conn
@@ -104,7 +107,8 @@ delete_flob <- function(column_name, table_name, key, conn) {
   x <- query_flob(column_name, table_name, key, conn)
   x <- check_flob_query(x)
 
-  sql <- glue_sql("UPDATE {`table_name`} SET {`column_name`}",
+  sql <- glue_sql(
+    "UPDATE {`table_name`} SET {`column_name`}",
     column_name = column_name,
     table_name = table_name,
     .con = conn
@@ -136,7 +140,9 @@ add_blob_column <- function(column_name, table_name, conn) {
   check_column_name(column_name, table_name, exists = FALSE, conn)
 
   sql <- "ALTER TABLE ?table_name ADD ?column_name BLOB"
-  sql <- sql_interpolate(sql, conn,
+  sql <- sql_interpolate(
+    sql,
+    conn,
     table_name = table_name,
     column_name = column_name
   )

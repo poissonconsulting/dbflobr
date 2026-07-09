@@ -21,15 +21,29 @@ test_that("save_flobs works", {
   )
 
   # one column pk with two blob cols
-  DBI::dbWriteTable(conn, "df",
+  DBI::dbWriteTable(
+    conn,
+    "df",
     data.frame(char = c("a", "a", "b"), num = c(1, 2.1, 1)),
     append = TRUE
   )
   DBI::dbWriteTable(conn, "df2", data.frame(char = c("a", "b")), append = TRUE)
 
   flob <- flobr::flob_obj
-  write_flob(flob, "geometry", "df", key = data.frame(char = "a", num = 1), conn)
-  write_flob(flob, "geometry", "df", key = data.frame(char = "a", num = 2.1), conn)
+  write_flob(
+    flob,
+    "geometry",
+    "df",
+    key = data.frame(char = "a", num = 1),
+    conn
+  )
+  write_flob(
+    flob,
+    "geometry",
+    "df",
+    key = data.frame(char = "a", num = 2.1),
+    conn
+  )
   write_flob(flob, "geometry", "df", key = data.frame(char = "b"), conn)
   write_flob(flob, "geometry", "df2", key = data.frame(char = "b"), conn)
 
@@ -54,12 +68,15 @@ test_that("save_flobs works", {
   names(y) <- NULL
   expect_identical(y, "b.pdf")
   # regardless of order
-  expect_true(all(list.files(path, pattern = "pdf") %in% c(
-    "a_-_1.pdf",
-    "a_-_2.1.pdf",
-    "b.pdf",
-    "b_-_1.pdf"
-  )))
+  expect_true(all(
+    list.files(path, pattern = "pdf") %in%
+      c(
+        "a_-_1.pdf",
+        "a_-_2.1.pdf",
+        "b.pdf",
+        "b_-_1.pdf"
+      )
+  ))
 
   write_flob(flob, "geometry2", "df2", key = data.frame(char = "a"), conn)
 
@@ -81,13 +98,20 @@ test_that("save_flobs works", {
   expect_error(save_all_flobs("df", "conn", path), class = "chk_error")
   expect_error(save_all_flobs("df", conn, 2), class = "chk_error")
 
-  expect_true(all(list.files(path, pattern = "pdf", recursive = TRUE) %in%
-    c(
-      "a_-_1.pdf", "a_-_2.1.pdf",
-      "b_-_1.pdf", "b.pdf", "df/geometry/a_-_1.pdf",
-      "df/geometry/a_-_2.1.pdf", "df/geometry/b_-_1.pdf",
-      "df2/geometry/b.pdf", "df2/geometry2/a.pdf"
-    )))
+  expect_true(all(
+    list.files(path, pattern = "pdf", recursive = TRUE) %in%
+      c(
+        "a_-_1.pdf",
+        "a_-_2.1.pdf",
+        "b_-_1.pdf",
+        "b.pdf",
+        "df/geometry/a_-_1.pdf",
+        "df/geometry/a_-_2.1.pdf",
+        "df/geometry/b_-_1.pdf",
+        "df2/geometry/b.pdf",
+        "df2/geometry2/a.pdf"
+      )
+  ))
 
   expect_error(
     save_all_flobs("df2", conn, path, geometry = TRUE),
@@ -96,7 +120,10 @@ test_that("save_flobs works", {
 
   expect_identical(
     save_all_flobs("df2", conn, path, geometry = TRUE, replace = TRUE),
-    list(`df2/geometry` = c(flobr.pdf = "b.pdf"), `df2/geometry2` = c(flobr.pdf = "a.pdf"))
+    list(
+      `df2/geometry` = c(flobr.pdf = "b.pdf"),
+      `df2/geometry2` = c(flobr.pdf = "a.pdf")
+    )
   )
 })
 
@@ -124,14 +151,22 @@ test_that("save_flobs works with sub", {
   )
 
   # one column pk with two blob cols
-  DBI::dbWriteTable(conn, "df",
+  DBI::dbWriteTable(
+    conn,
+    "df",
     data.frame(char = c("a", "a", "b"), num = c(1, 2.1, 1)),
     append = TRUE
   )
   DBI::dbWriteTable(conn, "df2", data.frame(char = c("a", "b")), append = TRUE)
 
   flob <- flobr::flob_obj
-  write_flob(flob, "geometry", "df", key = data.frame(char = "a", num = 1), conn)
+  write_flob(
+    flob,
+    "geometry",
+    "df",
+    key = data.frame(char = "a", num = 1),
+    conn
+  )
   write_flob(flob, "geometry", "df", key = data.frame(char = "b"), conn)
 
   x <- save_flobs("geometry", "df", conn, path)
@@ -164,7 +199,6 @@ test_that("save_flobs works with sub", {
     sort(c("a_-_1", "a_-_1/a_-_1.pdf", "a_-_2.1", "b_-_1", "b_-_1/b_-_1.pdf"))
   )
 
-
   unlink(path, recursive = TRUE)
   dir.create(path)
   y <- save_all_flobs(conn = conn, dir = path, geometry = TRUE)
@@ -172,8 +206,12 @@ test_that("save_flobs works with sub", {
   expect_identical(
     list.files(path, recursive = TRUE, include.dirs = TRUE),
     sort(c(
-      "df", "df/geometry", "df/geometry/a_-_1.pdf", "df/geometry/b_-_1.pdf",
-      "df2", "df2/geometry2"
+      "df",
+      "df/geometry",
+      "df/geometry/a_-_1.pdf",
+      "df/geometry/b_-_1.pdf",
+      "df2",
+      "df2/geometry2"
     ))
   )
 
@@ -183,7 +221,16 @@ test_that("save_flobs works with sub", {
   expect_identical(names(y), sort(c("df/geometry", "df2/geometry2")))
   expect_identical(
     list.files(path, recursive = TRUE, include.dirs = TRUE),
-    sort(c("df", "df/geometry", "df/geometry/a_-_1", "df/geometry/a_-_1/a_-_1.pdf", "df/geometry/b_-_1", "df/geometry/b_-_1/b_-_1.pdf", "df2", "df2/geometry2"))
+    sort(c(
+      "df",
+      "df/geometry",
+      "df/geometry/a_-_1",
+      "df/geometry/a_-_1/a_-_1.pdf",
+      "df/geometry/b_-_1",
+      "df/geometry/b_-_1/b_-_1.pdf",
+      "df2",
+      "df2/geometry2"
+    ))
   )
 
   unlink(path, recursive = TRUE)
@@ -193,11 +240,17 @@ test_that("save_flobs works with sub", {
   expect_identical(
     list.files(path, recursive = TRUE, include.dirs = TRUE),
     sort(c(
-      "df", "df/geometry", "df/geometry/a_-_1",
+      "df",
+      "df/geometry",
+      "df/geometry/a_-_1",
       "df/geometry/a_-_1/a_-_1.pdf",
-      "df/geometry/a_-_2.1", "df/geometry/b_-_1",
+      "df/geometry/a_-_2.1",
+      "df/geometry/b_-_1",
       "df/geometry/b_-_1/b_-_1.pdf",
-      "df2", "df2/geometry2", "df2/geometry2/a", "df2/geometry2/b"
+      "df2",
+      "df2/geometry2",
+      "df2/geometry2/a",
+      "df2/geometry2/b"
     ))
   )
 

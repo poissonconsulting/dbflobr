@@ -69,7 +69,11 @@ test_that("filter key", {
 
   x <- filter_key("df", key, conn)
   expect_identical(nrow(x), 1L)
-  x <- filter_key("df", key = data.frame(char = "a", num = 2.2, stringsAsFactors = FALSE), conn)
+  x <- filter_key(
+    "df",
+    key = data.frame(char = "a", num = 2.2, stringsAsFactors = FALSE),
+    conn
+  )
   expect_identical(nrow(x), 0L)
 })
 

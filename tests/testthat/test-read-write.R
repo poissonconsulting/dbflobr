@@ -14,63 +14,102 @@ test_that("write_flob works", {
 
   key <- df[1, ]
   key2 <- data.frame(
-    char = "a", num = 2.2,
+    char = "a",
+    num = 2.2,
     stringsAsFactors = FALSE
   )
   key3 <- data.frame(key = 3)
 
   flob <- flobr::flob_obj
 
-  expect_error(write_flob(1, "flob",
-    table_name = "df",
-    exists = FALSE, key = key, conn = conn
-  ), class = "chk_error")
   expect_error(
-    write_flob(flob, "flob",
+    write_flob(
+      1,
+      "flob",
+      table_name = "df",
+      exists = FALSE,
+      key = key,
+      conn = conn
+    ),
+    class = "chk_error"
+  )
+  expect_error(
+    write_flob(
+      flob,
+      "flob",
       table_name = "test",
-      exists = FALSE, key = key, conn = conn
+      exists = FALSE,
+      key = key,
+      conn = conn
     ),
     class = "chk_error"
   )
   expect_error(
-    write_flob(flob, "flob",
+    write_flob(
+      flob,
+      "flob",
       table_name = "df",
-      exists = TRUE, key = key, conn = conn
+      exists = TRUE,
+      key = key,
+      conn = conn
     ),
     class = "chk_error"
   )
   expect_error(
-    write_flob(flob, "char",
+    write_flob(
+      flob,
+      "char",
       table_name = "df",
-      exists = TRUE, key = key, conn = conn
+      exists = TRUE,
+      key = key,
+      conn = conn
     ),
     class = "chk_error"
   )
   expect_error(
-    write_flob(flob, "flob",
+    write_flob(
+      flob,
+      "flob",
       table_name = "df",
-      exists = FALSE, key = "a", conn = conn
+      exists = FALSE,
+      key = "a",
+      conn = conn
     ),
     class = "chk_error"
   )
   expect_error(
-    write_flob(flob, "flob",
+    write_flob(
+      flob,
+      "flob",
       table_name = "df",
-      exists = FALSE, key = key2, conn = conn
+      exists = FALSE,
+      key = key2,
+      conn = conn
     ),
     class = "chk_error"
   )
   expect_error(
-    write_flob(flob, "flob",
+    write_flob(
+      flob,
+      "flob",
       table_name = "df",
-      exists = TRUE, key = key2, conn = conn
+      exists = TRUE,
+      key = key2,
+      conn = conn
     ),
     class = "chk_error"
   )
-  expect_s3_class(write_flob(flob, "flob",
-    table_name = "df",
-    exists = TRUE, key = key, conn = conn
-  ), "flob")
+  expect_s3_class(
+    write_flob(
+      flob,
+      "flob",
+      table_name = "df",
+      exists = TRUE,
+      key = key,
+      conn = conn
+    ),
+    "flob"
+  )
 
   df2 <- DBI::dbReadTable(conn, "df")
   expect_equal(df2$flob[1], flob, ignore_attr = c("names", "class", "ptype"))
@@ -111,10 +150,10 @@ test_that("write_flob works", {
     class = "chk_error"
   )
 
-  expect_s3_class(delete_flob("flob",
-    table_name = "df",
-    key = key, conn = conn
-  ), "flob")
+  expect_s3_class(
+    delete_flob("flob", table_name = "df", key = key, conn = conn),
+    "flob"
+  )
   expect_error(
     read_flob("flob", table_name = "df", key = key, conn = conn),
     class = "chk_error"
@@ -139,7 +178,10 @@ test_that("write_flob column exists", {
   )
   expect_s3_class(write_flob(flob, "New", "df", key, conn), "flob")
   expect_s3_class(write_flob(flob, "New", "df", key, conn), "flob")
-  expect_s3_class(write_flob(flob, "New", "df", key, conn, exists = TRUE), "flob")
+  expect_s3_class(
+    write_flob(flob, "New", "df", key, conn, exists = TRUE),
+    "flob"
+  )
   expect_error(
     write_flob(flob, "New", "df", key, conn, exists = FALSE),
     class = "chk_error"
@@ -159,13 +201,20 @@ test_that("add_blob_column works", {
     add_blob_column(table_name = "df", column_name = "x", conn = conn),
     class = "chk_error"
   )
-  expect_true(add_blob_column(table_name = "df", column_name = "flob", conn = conn))
+  expect_true(add_blob_column(
+    table_name = "df",
+    column_name = "flob",
+    conn = conn
+  ))
 
   df2 <- DBI::dbReadTable(conn, "df")
   expect_identical(colnames(df2), c(colnames(df), c("flob")))
   expect_s3_class(df2$flob, "blob")
 
-  result <- DBI::dbSendQuery(conn = conn, statement = paste("SELECT flob FROM df LIMIT 1"))
+  result <- DBI::dbSendQuery(
+    conn = conn,
+    statement = paste("SELECT flob FROM df LIMIT 1")
+  )
   expect_identical(DBI::dbColumnInfo(result)$type, "list")
   DBI::dbClearResult(result)
 
