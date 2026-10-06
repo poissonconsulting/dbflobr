@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# dbflobr 0.2.2.9003
+
+- Same as previous version.
+
+
 # dbflobr 0.2.2.9002
 
 - Same as previous version.
