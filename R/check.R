@@ -1,5 +1,6 @@
 vld_sqlite_conn <- function(x, connected = NA) {
-  vld_s4_class(x, "SQLiteConnection") && (is.na(connected) || connected == dbIsValid(x))
+  vld_s4_class(x, "SQLiteConnection") &&
+    (is.na(connected) || connected == dbIsValid(x))
 }
 
 # copied from readwritesqlite
@@ -7,9 +8,13 @@ check_sqlite_connection <- function(x, connected = NA, x_name = NULL) {
   if (vld_sqlite_conn(x, connected)) {
     return(invisible())
   }
-  if (is.null(x_name)) x_name <- deparse_backtick_chk(substitute(x))
+  if (is.null(x_name)) {
+    x_name <- deparse_backtick_chk(substitute(x))
+  }
   chk_s4_class(x, "SQLiteConnection", x_name = x_name)
-  if (vld_true(connected)) abort_chk(x_name, " must be connected.")
+  if (vld_true(connected)) {
+    abort_chk(x_name, " must be connected.")
+  }
   abort_chk(x_name, " must be disconnected.")
 }
 
@@ -32,10 +37,22 @@ check_column_name <- function(column_name, table_name, exists, conn) {
 
   column_exists <- column_exists(column_name, table_name, conn)
   if (vld_true(exists) && !column_exists) {
-    abort_chk("Can't find column `", column_name, "` in table `", table_name, "`.")
+    abort_chk(
+      "Can't find column `",
+      column_name,
+      "` in table `",
+      table_name,
+      "`."
+    )
   }
   if (vld_false(exists) && column_exists) {
-    abort_chk("`", column_name, "` must not already exist in table `", table_name, "`.")
+    abort_chk(
+      "`",
+      column_name,
+      "` must not already exist in table `",
+      table_name,
+      "`."
+    )
   }
   column_name
 }

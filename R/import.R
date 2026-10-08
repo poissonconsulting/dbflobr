@@ -27,10 +27,18 @@
 #' write.csv(key, file.path(dir, "a.csv"))
 #' import_flobs("BlobColumn", "Table1", conn, dir)
 #' DBI::dbDisconnect(conn)
-import_flobs <- function(column_name, table_name, conn,
-                         dir = ".", sep = "_-_", pattern = ".*", sub = FALSE,
-                         exists = FALSE, recursive = FALSE,
-                         replace = FALSE) {
+import_flobs <- function(
+  column_name,
+  table_name,
+  conn,
+  dir = ".",
+  sep = "_-_",
+  pattern = ".*",
+  sub = FALSE,
+  exists = FALSE,
+  recursive = FALSE,
+  replace = FALSE
+) {
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = exists, conn)
@@ -42,7 +50,6 @@ import_flobs <- function(column_name, table_name, conn,
   check_pk(table_name, conn)
   chk_lgl(sub)
   chk_string(pattern)
-
 
   if (vld_false(sub)) {
     files <- list_files(dir, recursive = recursive, pattern = pattern)
@@ -91,7 +98,10 @@ import_flobs <- function(column_name, table_name, conn,
       key[i, j] <- values[j]
     }
 
-    y <- try(read_flob(column_name, table_name, key[i, , drop = FALSE], conn), silent = TRUE)
+    y <- try(
+      read_flob(column_name, table_name, key[i, , drop = FALSE], conn),
+      silent = TRUE
+    )
     if (!replace && !is_try_error(y)) {
       cli::cli_inform(c(
         "x" = "File {i}: can't write {names(files)[i]} to database. Flob already exists in that location and replace = FALSE"
@@ -101,13 +111,17 @@ import_flobs <- function(column_name, table_name, conn,
 
     if (!is.na(files[i])) {
       flob <- flobr::flob(files[i])
-      x <- try(write_flob(flob,
-        key = key[i, , drop = FALSE],
-        column_name = column_name,
-        table_name = table_name,
-        conn = conn,
-        exists = TRUE
-      ), silent = TRUE)
+      x <- try(
+        write_flob(
+          flob,
+          key = key[i, , drop = FALSE],
+          column_name = column_name,
+          table_name = table_name,
+          conn = conn,
+          exists = TRUE
+        ),
+        silent = TRUE
+      )
 
       if (!is_try_error(x)) {
         success[i] <- TRUE
@@ -173,9 +187,15 @@ import_flobs <- function(column_name, table_name, conn,
 #' save_all_flobs(conn = conn, dir = dir)
 #' import_all_flobs(conn, dir, exists = TRUE, replace = TRUE)
 #' DBI::dbDisconnect(conn)
-import_all_flobs <- function(conn, dir = ".", sep = "_-_", pattern = ".*",
-                             sub = FALSE,
-                             exists = FALSE, replace = FALSE) {
+import_all_flobs <- function(
+  conn,
+  dir = ".",
+  sep = "_-_",
+  pattern = ".*",
+  sub = FALSE,
+  exists = FALSE,
+  replace = FALSE
+) {
   check_sqlite_connection(conn)
   chk_dir(dir)
   chk_string(sep)
@@ -197,10 +217,15 @@ import_all_flobs <- function(conn, dir = ".", sep = "_-_", pattern = ".*",
       "Column name: {.val {column_name}}"
     ))
     success[[i]] <- import_flobs(
-      column_name = x[2], table_name = x[1],
-      conn = conn, dir = inner_dir, sep = sep,
-      pattern = pattern, sub = sub,
-      exists = exists, replace = replace
+      column_name = x[2],
+      table_name = x[1],
+      conn = conn,
+      dir = inner_dir,
+      sep = sep,
+      pattern = pattern,
+      sub = sub,
+      exists = exists,
+      replace = replace
     )
     cli::cat_line()
   }

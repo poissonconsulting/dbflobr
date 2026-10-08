@@ -62,8 +62,14 @@ test_that("check_column_name", {
     check_column_name("e", table_name = "local", exists = TRUE, conn),
     class = "chk_error"
   )
-  expect_identical(check_column_name("test", table_name = "local", exists = TRUE, conn), "test")
-  expect_identical(check_column_name("e", table_name = "local", exists = FALSE, conn), "e")
+  expect_identical(
+    check_column_name("test", table_name = "local", exists = TRUE, conn),
+    "test"
+  )
+  expect_identical(
+    check_column_name("e", table_name = "local", exists = FALSE, conn),
+    "e"
+  )
 })
 
 test_that("check_column_blob", {
@@ -80,7 +86,10 @@ test_that("check_column_blob", {
   expect_error(
     check_column_blob("x", table_name = "local", conn)
   )
-  expect_identical(check_column_blob("blob", table_name = "local", conn), "blob")
+  expect_identical(
+    check_column_blob("blob", table_name = "local", conn),
+    "blob"
+  )
 })
 
 test_that("check_key", {
@@ -129,7 +138,13 @@ test_that("check_flob_query", {
   expect_identical(check_flob_query(slob_obj, slob = TRUE), slob_obj)
   expect_identical(check_flob_query(slob_obj, slob = NA), slob_obj)
 
-  expect_error(check_flob_query("non-blob", slob = TRUE), "`x` must be a blob of a serialized object.")
+  expect_error(
+    check_flob_query("non-blob", slob = TRUE),
+    "`x` must be a blob of a serialized object."
+  )
   # this is not ideal behavior
-  expect_error(check_flob_query(slob_obj, slob = FALSE), "Serialized element of `x` must inherit from S3 class 'exint'.")
+  expect_error(
+    check_flob_query(slob_obj, slob = FALSE),
+    "Serialized element of `x` must inherit from S3 class 'exint'."
+  )
 })

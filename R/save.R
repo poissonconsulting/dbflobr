@@ -26,7 +26,16 @@
 #' dir <- tempdir()
 #' save_flobs("BlobColumn", "Table1", conn, dir)
 #' DBI::dbDisconnect(conn)
-save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", sub = FALSE, replace = FALSE, slob_ext = NULL) {
+save_flobs <- function(
+  column_name,
+  table_name,
+  conn,
+  dir = ".",
+  sep = "_-_",
+  sub = FALSE,
+  replace = FALSE,
+  slob_ext = NULL
+) {
   check_sqlite_connection(conn)
   check_table_name(table_name, conn)
   check_column_name(column_name, table_name, exists = TRUE, conn)
@@ -49,7 +58,10 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
     key <- values[i, , drop = FALSE]
     new_file <- create_filename(key, sep = sep)
     new_file <- as.character(new_file)
-    x <- try(read_flob(column_name, table_name, key, conn, slob = NA), silent = TRUE)
+    x <- try(
+      read_flob(column_name, table_name, key, conn, slob = NA),
+      silent = TRUE
+    )
     if (!is_try_error(x) && !(blob::is_blob(x) && is.null(slob_ext))) {
       if (flobr::is_flob(x) || is.null(slob_ext)) {
         filename <- flobr::flob_name(x)
@@ -59,7 +71,9 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
         success[i] <- new_file_ext
         success_names[i] <- file
       } else {
-        if (is.null(slob_ext)) err("`slob_ext` must be provided when slobs are present.")
+        if (is.null(slob_ext)) {
+          err("`slob_ext` must be provided when slobs are present.")
+        }
         filename <- "BLOB"
         ext <- slob_ext
         file <- glue("{filename}")
@@ -70,17 +84,41 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
 
       if (vld_false(sub)) {
         if (!replace && file.exists(file.path(dir, new_file_ext))) {
-          stop("File '", file.path(dir, new_file), "' already exists.", call. = FALSE)
+          stop(
+            "File '",
+            file.path(dir, new_file),
+            "' already exists.",
+            call. = FALSE
+          )
         }
 
-        flobr::unflob(x, dir = dir, name = new_file, ext = ext, slob = NA, check = FALSE)
+        flobr::unflob(
+          x,
+          dir = dir,
+          name = new_file,
+          ext = ext,
+          slob = NA,
+          check = FALSE
+        )
       } else {
         if (!replace && length(list.files(file.path(dir, new_file)))) {
-          stop("Directory '", file.path(dir, new_file), "' already contains a file.", call. = FALSE)
+          stop(
+            "Directory '",
+            file.path(dir, new_file),
+            "' already contains a file.",
+            call. = FALSE
+          )
         }
         unlink(file.path(dir, new_file), recursive = TRUE)
         dir.create(file.path(dir, new_file), recursive = TRUE)
-        flobr::unflob(x, dir = file.path(dir, new_file), name = new_file, ext = ext, slob = NA, check = FALSE)
+        flobr::unflob(
+          x,
+          dir = file.path(dir, new_file),
+          name = new_file,
+          ext = ext,
+          slob = NA,
+          check = FALSE
+        )
       }
       cli::cli_inform(c(
         "v" = "Row {i}: file {file} renamed to {new_file_ext}"
@@ -121,9 +159,15 @@ save_flobs <- function(column_name, table_name, conn, dir = ".", sep = "_-_", su
 #' dir <- tempdir()
 #' save_all_flobs(conn = conn, dir = dir)
 #' DBI::dbDisconnect(conn)
-save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_",
-                           sub = FALSE, replace = FALSE,
-                           geometry = FALSE) {
+save_all_flobs <- function(
+  table_name = NULL,
+  conn,
+  dir = ".",
+  sep = "_-_",
+  sub = FALSE,
+  replace = FALSE,
+  geometry = FALSE
+) {
   check_sqlite_connection(conn)
   if (!is.null(table_name)) {
     check_table_name(table_name, conn)
@@ -143,7 +187,9 @@ save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_",
 
   for (i in table_name) {
     cols <- blob_columns(i, conn)
-    if (!geometry) cols <- cols[cols != "geometry"]
+    if (!geometry) {
+      cols <- cols[cols != "geometry"]
+    }
     for (j in cols) {
       name <- file.path(i, j)
       path <- file.path(dir, name)
@@ -154,8 +200,13 @@ save_all_flobs <- function(table_name = NULL, conn, dir = ".", sep = "_-_",
         "Table name: {.val {i}}",
         "Column name: {.val {j}}"
       ))
-      success[[name]] <- save_flobs(j, i, conn, path,
-        sep = sep, sub = sub,
+      success[[name]] <- save_flobs(
+        j,
+        i,
+        conn,
+        path,
+        sep = sep,
+        sub = sub,
         replace = replace
       )
       cli::cat_line()
