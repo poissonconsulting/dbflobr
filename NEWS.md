@@ -1,4 +1,11 @@
-<!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
+<!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
+
+# dbflobr 0.2.2.9004
+
+## Chore
+
+- Format with air (#38).
+
 
 # dbflobr 0.2.2.9003
 
