@@ -1,5 +1,18 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# dbflobr 0.2.2.9005
+
+## Chore
+
+- Format with air (#38).
+
+## Uncategorized
+
+- Merge pull request #41 from poissonconsulting/joethorley-patch-1.
+
+  Update CODEOWNERS
+
+
 # dbflobr 0.2.2.9004
 
 ## Chore
