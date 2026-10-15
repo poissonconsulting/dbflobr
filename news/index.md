@@ -1,0 +1,113 @@
+# Changelog
+
+## dbflobr 0.2.2.9005
+
+### Chore
+
+- Format with air
+  ([\#38](https://github.com/poissonconsulting/dbflobr/issues/38)).
+
+### Uncategorized
+
+- Merge pull request
+  [\#41](https://github.com/poissonconsulting/dbflobr/issues/41) from
+  poissonconsulting/joethorley-patch-1.
+
+  Update CODEOWNERS
+
+## dbflobr 0.2.2.9004
+
+### Chore
+
+- Format with air
+  ([\#38](https://github.com/poissonconsulting/dbflobr/issues/38)).
+
+## dbflobr 0.2.2.9003
+
+- Same as previous version.
+
+## dbflobr 0.2.2.9002
+
+- Same as previous version.
+
+## dbflobr 0.2.2.9001
+
+- Same as previous version.
+
+## dbflobr 0.2.2.9000
+
+- Add fledge-bump workflow
+- Add fledge-tag-on-merge workflow
+
+## dbflobr 0.2.2
+
+CRAN release: 2022-08-19
+
+- Internal changes only.
+
+## dbflobr 0.2.1
+
+CRAN release: 2021-10-30
+
+- Change maintainer
+
+## dbflobr 0.2.0.9000
+
+- Added `blob = FALSE` argument to
+  [`read_flob()`](https://poissonconsulting.github.io/dbflobr/reference/read_flob.md)
+  to specify whether to process as blobs instead of flobs.
+- Added `blob_ext = NULL` argument to
+  [`save_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/save_flobs.md)
+  to specify the file extension to use if blobs are encountered.
+
+## dbflobr 0.2.0
+
+### New Features
+
+- Added `sub = FALSE` and `sub = FALSE` argument to
+  [`import_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/import_flobs.md),
+  [`import_all_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/import_all_flobs.md),
+  [`save_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/save_flobs.md)
+  and
+  [`save_all_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/save_all_flobs.md)
+  to import from and save to subdirectories with the name of the primary
+  key. This feature means rather than renaming files users for import
+  can use the `save` functions to create the subdirectories for the
+  primary key(s) and then drag each file into the correctly named
+  subdirectory and `import`.
+
+- Added `pattern = ".*"` argument to
+  [`import_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/import_flobs.md)
+  and
+  [`import_all_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/import_all_flobs.md)
+  to match to file names.
+
+- Added `replace = FALSE` argument to
+  [`save_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/save_flobs.md)
+  and
+  [`save_all_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/save_all_flobs.md)
+  to specify whether to replace existing files.
+
+- Added `geometry = FALSE` argument to
+  [`save_all_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/save_all_flobs.md)
+  to ignore columns named geometry by default.
+
+- [`import_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/import_flobs.md)
+  and
+  [`import_all_flobs()`](https://poissonconsulting.github.io/dbflobr/reference/import_all_flobs.md)
+  now check directory exists.
+
+## dbflobr 0.1.0
+
+CRAN release: 2020-05-13
+
+- Added save_flobs, save_all_flobs, import_flobs and import_all_flobs
+  functions
+- Replaced checkr package with chk to upgrade argument checking and
+  testing
+
+## dbflobr 0.0.1
+
+CRAN release: 2019-08-24
+
+- Initial Release
