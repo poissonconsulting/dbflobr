@@ -1,5 +1,10 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# dbflobr 0.2.2.9006
+
+- Same as previous version.
+
+
 # dbflobr 0.2.2.9005
 
 ## Chore

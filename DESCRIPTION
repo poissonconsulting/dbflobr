@@ -1,6 +1,6 @@
 Package: dbflobr
 Title: Read and Write Files to SQLite Databases
-Version: 0.2.2.9005
+Version: 0.2.2.9006
 Authors@R: c(
     person("Sebastian", "Dalgarno", , "seb@northbeachconsulting.ca", role = "aut",
            comment = c(ORCID = "0000-0002-3658-4517")),
