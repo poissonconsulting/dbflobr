@@ -22,13 +22,13 @@ Source:
 [`DESCRIPTION`](https://github.com/poissonconsulting/dbflobr/blob/main/DESCRIPTION)
 
 Dalgarno S, Thorley J, Amies-Galonski E (2026). *dbflobr: Read and Write
-Files to SQLite Databases*. R package version 0.2.2.9005,
+Files to SQLite Databases*. R package version 0.2.2.9006,
 <https://github.com/poissonconsulting/dbflobr>.
 
     @Manual{,
       title = {dbflobr: Read and Write Files to SQLite Databases},
       author = {Sebastian Dalgarno and Joe Thorley and Evan Amies-Galonski},
       year = {2026},
-      note = {R package version 0.2.2.9005},
+      note = {R package version 0.2.2.9006},
       url = {https://github.com/poissonconsulting/dbflobr},
     }

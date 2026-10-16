@@ -1,5 +1,9 @@
 # Changelog
 
+## dbflobr 0.2.2.9006
+
+- Same as previous version.
+
 ## dbflobr 0.2.2.9005
 
 ### Chore
