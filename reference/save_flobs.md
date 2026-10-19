@@ -75,7 +75,7 @@ key <- data.frame(IntColumn = 2L)
 write_flob(flob, "BlobColumn", "Table1", key, conn, exists = FALSE)
 dir <- tempdir()
 save_flobs("BlobColumn", "Table1", conn, dir)
-#> Saving files to /tmp/RtmpF6H7Wl
+#> Saving files to /tmp/RtmpGq3pTv
 #> ✖ Row 1: no file found
 #> ✔ Row 2: file flobr.pdf renamed to 2.pdf
 DBI::dbDisconnect(conn)

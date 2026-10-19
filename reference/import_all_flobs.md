@@ -80,7 +80,7 @@ dir <- file.path(tempdir(), "import_all")
 save_all_flobs(conn = conn, dir = dir)
 #> Table name: "Table1"
 #> Column name: "BlobColumn"
-#> Saving files to /tmp/RtmpF6H7Wl/import_all/Table1/BlobColumn
+#> Saving files to /tmp/RtmpGq3pTv/import_all/Table1/BlobColumn
 #> ✔ Row 1: file flobr.pdf renamed to a.pdf
 #> ✖ Row 2: no file found
 #> 
