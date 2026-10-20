@@ -1,5 +1,13 @@
 # Changelog
 
+## dbflobr 0.2.2.9007
+
+- Merge pull request
+  [\#43](https://github.com/poissonconsulting/dbflobr/issues/43) from
+  poissonconsulting/f-ci.
+
+  Standardize CI (tier: important)
+
 ## dbflobr 0.2.2.9006
 
 - Same as previous version.

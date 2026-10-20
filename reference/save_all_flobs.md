@@ -73,7 +73,7 @@ dir <- tempdir()
 save_all_flobs(conn = conn, dir = dir)
 #> Table name: "Table1"
 #> Column name: "BlobColumn"
-#> Saving files to /tmp/RtmpGq3pTv/Table1/BlobColumn
+#> Saving files to /tmp/RtmpJwYNuW/Table1/BlobColumn
 #> ✖ Row 1: no file found
 #> ✔ Row 2: file flobr.pdf renamed to 2.pdf
 #> 

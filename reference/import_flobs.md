@@ -92,7 +92,7 @@ write.csv(key, file.path(dir, "a.csv"))
 import_flobs("BlobColumn", "Table1", conn, dir)
 #> Writing files to database
 #> ✔ File 1: a.csv written to database
-#> ✖ File 2: can't write file19b53e7e0126 to database
-#> ✖ File 3: can't write file19b55ff4fd70 to database
+#> ✖ File 2: can't write file19a2195c84c2 to database
+#> ✖ File 3: can't write file19a2473b0a8d to database
 DBI::dbDisconnect(conn)
 ```
